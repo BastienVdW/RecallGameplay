@@ -18,6 +18,7 @@ public class RecallGridSelection : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core",
 			"CoreUObject",
+			"MassCore",
 			"MassEntity",
 			"MassSpawner",
 			"RecallCore",

@@ -24,6 +24,7 @@ public class RecallInteractModule : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core",
 			"CoreUObject",
+			"MassCore",
 			"MassEntity",
 			"MassSpawner",
 			"RecallSimulation",

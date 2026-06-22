@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Mass/EntityElementTypes.h"
+#include "Mass/ExternalSubsystemTraits.h"
 #include "Simulation/Navigation/RecallPathFollowingSettings.h"
 #include "Simulation/Crowd/RecallCrowdAgentCollisionSettings.h"
 
@@ -228,6 +229,10 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	uint8 bMoveSegmentDirty : 1 = 0;
 };
+
+template <>
+struct TMassFragmentTraits<FRecallPathFollowerFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };
 
 /**
  * Shared constant fragment for path following configuration

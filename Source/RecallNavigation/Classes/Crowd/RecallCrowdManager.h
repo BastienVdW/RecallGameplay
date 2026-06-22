@@ -13,9 +13,7 @@
 #include "AI/Navigation/NavigationTypes.h"
 #include "Tickable.h"
 #include "DrawDebugHelpers.h"
-#if UE_ENABLE_INCLUDE_ORDER_DEPRECATED_IN_5_4
 #include "NavFilters/NavigationQueryFilter.h"
-#endif
 #include "RecallCrowdManager.generated.h"
 
 class ANavigationData;

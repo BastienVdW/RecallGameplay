@@ -15,7 +15,8 @@ namespace UnrealBuildTool.Rules
 			PublicDependencyModuleNames.AddRange(
 				new string[] {
 				"Engine", 
-				"MassEntity", 
+				"MassCore",
+				"MassEntity",
 				"RecallCore", 
 				"RecallGameplayCore"
 			});
