@@ -231,7 +231,7 @@ URecallConversationDeinitializer::URecallConversationDeinitializer()
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedTypes.Add(FRecallConversationFragment::StaticStruct());
-	ObservedOperations = EMassObservedOperationFlags::RemoveElement;
+	ObservedOperations = EMassObservedOperationFlags::Remove;
 }
 
 void URecallConversationDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
