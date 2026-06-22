@@ -1,0 +1,43 @@
+﻿// Copyright (C) 2024 Van de Walle Bastien
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+
+#pragma once
+
+#include "CoreMinimal.h"
+
+struct FMassExtendedEntityHandle;
+struct FMassExtendedEntityManager;
+struct FMassExtendedExecutionContext;
+struct FRecallPhysicsBodyFragment;
+struct FRecallTransformFragment;
+class URecallDeviceAsset;
+class URecallEntitySubsystem;
+class URecallPhysicsSubsystem;
+class URecallRepresentationEventSubsystem;
+class UMassExtendedEntityConfigAsset;
+
+namespace Recall::Device::Utils
+{
+
+RECALLDEVICEMODULE_API FVector GetDevicePosition(const UMassExtendedEntityConfigAsset* EntityConfigAsset,
+	const FRecallTransformFragment& TransformFragment, const FRecallPhysicsBodyFragment* BodyFragmentPtr = nullptr,
+	bool bSnapToGrid = true, float GridSize = 100.0f);	
+RECALLDEVICEMODULE_API extern bool CheckDevicePosition(const FMassExtendedEntityManager& EntityManager, const URecallPhysicsSubsystem& PhysicsSystem,
+	const FMassExtendedEntityHandle& DeviceEntity, const FVector& Position);
+	
+RECALLDEVICEMODULE_API extern void RequestChangeDeviceColor(const FMassExtendedEntityManager& EntityManager,
+	const FMassExtendedEntityHandle& DeviceEntity, const FName& ParameterName, const FColor& Color,
+	URecallRepresentationEventSubsystem& RepresentationEventSystem);
+RECALLDEVICEMODULE_API extern void SpawnDevicePlaceEntity(const FMassExtendedExecutionContext& Context, const FMassExtendedEntityHandle& OwnerEntity,
+	const UMassExtendedEntityConfigAsset* DeviceEntityConfig, const FVector& DevicePosition, const FName& ColorParameterName, const FColor& Color,
+	URecallEntitySubsystem& EntitySystem, URecallRepresentationEventSubsystem& RepresentationEventSystem);
+
+RECALLDEVICEMODULE_API bool EvaluateDeviceCost(const UWorld* World, const FMassExtendedEntityHandle& OwnerEntity,
+	const TObjectPtr<const URecallDeviceAsset>& DeviceAsset);
+RECALLDEVICEMODULE_API void ConsumeDeviceCost(const UWorld* World, const FMassExtendedEntityHandle& OwnerEntity,
+	const TObjectPtr<const URecallDeviceAsset>& DeviceAsset);
+	
+} // namespace Recall::Device::Utils

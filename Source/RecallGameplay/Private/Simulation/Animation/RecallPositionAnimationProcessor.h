@@ -1,0 +1,32 @@
+// Copyright (C) 2024 Van de Walle Bastien
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+
+#pragma once
+
+#include "MassExtendedProcessor.h"
+#include "MassExtendedEntityQuery.h"
+
+#include "RecallPositionAnimationProcessor.generated.h"
+
+/**
+ * Processor that animates entity positions over time
+ * Removes animation fragment when complete
+ */
+UCLASS()
+class URecallPositionAnimationProcessor : public UMassExtendedProcessor
+{
+    GENERATED_BODY()
+
+public:
+    URecallPositionAnimationProcessor();
+
+protected:
+    virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override;
+    virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override;
+
+private:
+    FMassExtendedEntityQuery EntityQuery;
+};

@@ -1,0 +1,90 @@
+﻿// Copyright (C) 2024 Van de Walle Bastien
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+
+
+#include "RecallTrackProcessors.h"
+
+#include "MassExtendedExecutionContext.h"
+#include "Actor/RecallTrackEntityActor.h"
+#include "Physics/Common/RecallPhysicsCommonShapeTypes.h"
+#include "Simulation/Physics/RecallPhysicsBodyFragment.h"
+#include "Simulation/Track/RecallTrackFragments.h" 
+#include "System/Physics/RecallPhysicsSubsystem.h"
+#include "System/Track/RecallTrackSubsystem.h"
+#include "Track/RecallTrackTypes.h"
+#include "Utility/Physics/RecallPhysicsUtils.h"
+
+//----------------------------------------------------------------------//
+// URecallTrackFragmentConstructor
+//----------------------------------------------------------------------//
+URecallTrackFragmentConstructor::URecallTrackFragmentConstructor()
+	: EntityQuery(*this)
+{
+	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ObservedType = FRecallTrackFragment::StaticStruct();
+	Operation = EMassExtendedObservedOperation::Add;
+}
+
+void URecallTrackFragmentConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+{
+	Super::InitializeInternal(Owner, InEntityManager);
+}
+
+void URecallTrackFragmentConstructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+{
+	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallTrackFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddConstSharedRequirement<FRecallTrackConstSharedFragment>();
+	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallTrackSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+}
+
+void URecallTrackFragmentConstructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+{
+	QUICK_SCOPE_CYCLE_COUNTER(Recall_TrackInit_Execute);
+
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	{
+		const URecallTrackSubsystem& TrackSystem = Context.GetSubsystemChecked<URecallTrackSubsystem>();
+		URecallPhysicsSubsystem& PhysicsSystem = Context.GetMutableSubsystemChecked<URecallPhysicsSubsystem>();
+
+		const FRecallTrackConstSharedFragment& TrackConstSharedFragment = Context.GetConstSharedFragment<FRecallTrackConstSharedFragment>();
+		
+		const TArrayView<FRecallPhysicsBodyFragment> BodyList = Context.GetMutableFragmentView<FRecallPhysicsBodyFragment>();
+		const TConstArrayView<FRecallTrackFragment> TrackList = Context.GetFragmentView<FRecallTrackFragment>();
+
+		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
+		{
+			const FRecallTrackFragment& TrackFragment = TrackList[EntityIndex];
+			const TWeakObjectPtr<ARecallTrackEntityActor> TrackActor = TrackSystem.GetTrackActor(TrackFragment.TrackAssetName);
+			if (!ensure(TrackActor.IsValid()))
+			{
+				continue;
+			}
+
+			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+
+			FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
+			FRecallPhysicsStaticCompoundShape StaticCompoundShape;
+			
+			for (const FRecallTrackSegment& TrackSegment : TrackActor->GetTrackSegments())
+			{
+				FRecallPhysicsStaticCompoundSubShape& MeshShape = StaticCompoundShape.SubShapes.AddDefaulted_GetRef();
+				MeshShape.MeshShape.Vertices = TrackSegment.Vertices;
+				MeshShape.MeshShape.Triangles = TrackSegment.Triangles;
+				MeshShape.MeshShape.MeshShapeSettings = TrackConstSharedFragment.MeshShapeSettings;
+				MeshShape.Position = TrackSegment.Location;
+				MeshShape.Rotation = TrackSegment.Rotation;
+			}
+
+			BodyFragment.BodyHandle = PhysicsSystem.CreateShape(
+				Entity, StaticCompoundShape, TrackConstSharedFragment.Params);
+			
+			Recall::Physics::Utils::InitializePhysicsBody(Context, Entity,
+				PhysicsSystem, BodyFragment, TrackConstSharedFragment.Params);
+		}
+	});
+}

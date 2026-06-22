@@ -1,0 +1,42 @@
+﻿// Copyright (C) 2024 Van de Walle Bastien
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+
+
+#include "RecallCharacterConditions.h"
+
+#include "StateTreeExecutionContext.h"
+#include "StateTreeLinker.h"
+#include "Kismet/KismetStringLibrary.h"
+#include "Physics/Character/RecallPhysicsCharacterVirtualObject.h"
+#include "Simulation/Physics/RecallPhysicsBodyFragment.h"
+#include "System/Physics/RecallPhysicsSubsystem.h"
+
+//----------------------------------------------------------------------//
+// FRecallCharacterStandingCondition
+//----------------------------------------------------------------------//
+bool FRecallCharacterStandingCondition::Link(FStateTreeLinker& Linker)
+{
+	Linker.LinkExternalData(BodyFragmentHandle);
+	Linker.LinkExternalData(PhysicsSystemHandle);
+	return true;
+}
+
+bool FRecallCharacterStandingCondition::TestCondition(FStateTreeExecutionContext& Context) const
+{
+	const URecallPhysicsSubsystem& PhysicsSystem = Context.GetExternalData(PhysicsSystemHandle);
+	const FRecallPhysicsBodyFragment& BodyFragment = Context.GetExternalData(BodyFragmentHandle);
+
+	bool bResult = true;
+
+	const TWeakPtr<const FRecallPhysicsCharacterVirtualBody> CharacterVirtualBody = StaticCastWeakPtr<const FRecallPhysicsCharacterVirtualBody>(
+		PhysicsSystem.GetBody(BodyFragment.BodyHandle));
+	if (CharacterVirtualBody.IsValid())
+	{
+		bResult = CharacterVirtualBody.Pin()->IsStanding();
+	}
+
+	return bResult != bInvert;
+}

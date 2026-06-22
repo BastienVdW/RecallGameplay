@@ -1,0 +1,20 @@
+﻿// Copyright (C) 2024 Van de Walle Bastien
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+
+#pragma once
+
+#include "NativeGameplayTags.h"
+
+RECALLGAMEPLAYCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Faction_Parent);
+
+RECALLGAMEPLAYCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Faction_Team1);
+RECALLGAMEPLAYCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Faction_Team2);
+RECALLGAMEPLAYCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Faction_Team3);
+RECALLGAMEPLAYCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Faction_Team4);
+RECALLGAMEPLAYCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Faction_Team5);
+RECALLGAMEPLAYCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Faction_Team6);
+RECALLGAMEPLAYCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Faction_Team7);
+RECALLGAMEPLAYCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Faction_Team8);
