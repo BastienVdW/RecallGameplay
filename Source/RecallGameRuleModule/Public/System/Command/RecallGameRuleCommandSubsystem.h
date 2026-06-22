@@ -71,3 +71,12 @@ private:
     TArray<FRecallGameRuleCommandEvent> PendingCommands;
     mutable FCriticalSection CommandQueueGuard;
 };
+
+template<>
+struct TMassExternalSubsystemTraits<URecallGameRuleCommandSubsystem> final
+{
+	enum
+	{
+		GameThreadOnly = false
+	};
+};

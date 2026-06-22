@@ -39,7 +39,6 @@ URecallInteractorSignalProcessor::URecallInteractorSignalProcessor(const FObject
 {
 	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteBefore.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
-	bRequiresGameThreadExecution = true;
 }
 
 void URecallInteractorSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

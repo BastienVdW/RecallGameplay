@@ -94,7 +94,6 @@ URecallCarryableSignalProcessor::URecallCarryableSignalProcessor(const FObjectIn
 {
 	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteAfter.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
-	bRequiresGameThreadExecution = true;
 }
 
 void URecallCarryableSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

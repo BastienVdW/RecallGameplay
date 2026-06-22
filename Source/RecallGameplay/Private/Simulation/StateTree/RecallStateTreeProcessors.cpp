@@ -253,7 +253,6 @@ URecallStateTreeUpdateProcessor::URecallStateTreeUpdateProcessor(const FObjectIn
 	ExecutionOrder.ExecuteInGroup = Recall::StateTree::ProcessorGroupNames::StateTreeUpdate;
 	ExecutionOrder.ExecuteAfter.Add(Recall::Player::ProcessorGroupNames::Input);
 	ExecutionOrder.ExecuteBefore.Add(Recall::Entity::ProcessorGroupNames::AsyncSpawn);
-	bRequiresGameThreadExecution = true;
 }
 
 struct FRecallStateTreeUpdateCacheManager
