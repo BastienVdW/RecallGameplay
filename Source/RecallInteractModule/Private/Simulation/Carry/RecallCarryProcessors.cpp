@@ -92,7 +92,6 @@ void URecallCarryableDestructor::Execute(FMassEntityManager& EntityManager, FMas
 URecallCarryableSignalProcessor::URecallCarryableSignalProcessor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteAfter.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
 }
 

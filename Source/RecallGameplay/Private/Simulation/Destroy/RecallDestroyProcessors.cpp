@@ -17,7 +17,6 @@
 URecallDestroySignalProcessor::URecallDestroySignalProcessor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 }
 
 void URecallDestroySignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

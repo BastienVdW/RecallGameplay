@@ -7,6 +7,7 @@
 
 #include "RecallCharacterTasks.h"
 
+#include "Engine/World.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
 #include "Physics/Character/RecallPhysicsCharacterVirtualObject.h"

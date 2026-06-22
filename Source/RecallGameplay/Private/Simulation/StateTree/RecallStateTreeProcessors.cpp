@@ -157,7 +157,6 @@ void URecallStateTreeActivationProcessor::Execute(FMassEntityManager& EntityMana
 URecallStateTreeStartProcessor::URecallStateTreeStartProcessor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 	ExecutionOrder.ExecuteInGroup = Recall::StateTree::ProcessorGroupNames::StateTreeStart;
 }
 
@@ -249,7 +248,6 @@ void URecallStateTreeStartProcessor::SignalEntities(FMassEntityManager& EntityMa
 URecallStateTreeUpdateProcessor::URecallStateTreeUpdateProcessor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteInGroup = Recall::StateTree::ProcessorGroupNames::StateTreeUpdate;
 	ExecutionOrder.ExecuteAfter.Add(Recall::Player::ProcessorGroupNames::Input);
 	ExecutionOrder.ExecuteBefore.Add(Recall::Entity::ProcessorGroupNames::AsyncSpawn);
