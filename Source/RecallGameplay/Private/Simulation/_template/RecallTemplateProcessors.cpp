@@ -18,8 +18,8 @@ URecallTemplateConstructor::URecallTemplateConstructor()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallTemplateFragment::StaticStruct();
-	Operation = EMassObservedOperation::Add;
+	ObservedTypes.Add(FRecallTemplateFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::AddElement;
 }
 
 void URecallTemplateConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
@@ -57,8 +57,8 @@ URecallTemplateDestructor::URecallTemplateDestructor()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallTemplateFragment::StaticStruct();
-	Operation = EMassObservedOperation::Remove;
+	ObservedTypes.Add(FRecallTemplateFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::RemoveElement;
 }
 
 void URecallTemplateDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

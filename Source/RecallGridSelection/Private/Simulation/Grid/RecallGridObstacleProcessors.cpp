@@ -18,8 +18,8 @@ URecallGridObstacleDeinitializer::URecallGridObstacleDeinitializer()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallGridObstacleFragment::StaticStruct();
-	Operation = EMassObservedOperation::Remove;
+	ObservedTypes.Add(FRecallGridObstacleFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::RemoveElement;
 }
 
 void URecallGridObstacleDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

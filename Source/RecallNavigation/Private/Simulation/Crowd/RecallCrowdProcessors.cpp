@@ -30,8 +30,8 @@ URecallCrowdAgentConstructor::URecallCrowdAgentConstructor()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallCrowdAgentFragment::StaticStruct();
-	Operation = EMassObservedOperation::Add;
+	ObservedTypes.Add(FRecallCrowdAgentFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::AddElement;
 }
 
 void URecallCrowdAgentConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
@@ -70,8 +70,8 @@ URecallCrowdAgentDestructor::URecallCrowdAgentDestructor()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallCrowdAgentFragment::StaticStruct();
-	Operation = EMassObservedOperation::Remove;
+	ObservedTypes.Add(FRecallCrowdAgentFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::RemoveElement;
 }
 
 void URecallCrowdAgentDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
@@ -110,8 +110,8 @@ URecallCrowdAgentNavLinkTraversalConstructor::URecallCrowdAgentNavLinkTraversalC
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallNavLinkTraversalTag::StaticStruct();
-	Operation = EMassObservedOperation::Add;
+	ObservedTypes.Add(FRecallNavLinkTraversalTag::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::AddElement;
 }
 
 void URecallCrowdAgentNavLinkTraversalConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
@@ -150,8 +150,8 @@ URecallCrowdAgentNavLinkTraversalDestructor::URecallCrowdAgentNavLinkTraversalDe
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallNavLinkTraversalTag::StaticStruct();
-	Operation = EMassObservedOperation::Remove;
+	ObservedTypes.Add(FRecallNavLinkTraversalTag::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::RemoveElement;
 }
 
 void URecallCrowdAgentNavLinkTraversalDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

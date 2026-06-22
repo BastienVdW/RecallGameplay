@@ -34,8 +34,8 @@ URecallGridCursorOwnerInitializer::URecallGridCursorOwnerInitializer()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallGridCursorOwnerFragment::StaticStruct();
-	Operation = EMassObservedOperation::Add;
+	ObservedTypes.Add(FRecallGridCursorOwnerFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::AddElement;
 }
 
 void URecallGridCursorOwnerInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
@@ -103,8 +103,8 @@ URecallGridCursorOwnerDeinitializer::URecallGridCursorOwnerDeinitializer()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallGridCursorOwnerFragment::StaticStruct();
-	Operation = EMassObservedOperation::Remove;
+	ObservedTypes.Add(FRecallGridCursorOwnerFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::RemoveElement;
 }
 
 void URecallGridCursorOwnerDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
@@ -152,8 +152,8 @@ URecallGridSelectionInitializer::URecallGridSelectionInitializer()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallGridSelectionFragment::StaticStruct();
-	Operation = EMassObservedOperation::Add;
+	ObservedTypes.Add(FRecallGridSelectionFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::AddElement;
 }
 
 void URecallGridSelectionInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

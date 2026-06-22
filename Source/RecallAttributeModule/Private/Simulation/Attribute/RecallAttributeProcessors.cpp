@@ -19,7 +19,7 @@ URecallAttributeInitializer::URecallAttributeInitializer()
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallAttributeFragment::StaticStruct();
-	Operation = EMassObservedOperation::Add;
+	ObservedOperations = EMassObservedOperationFlags::AddElement;
 }
 
 void URecallAttributeInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

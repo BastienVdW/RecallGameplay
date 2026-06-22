@@ -26,8 +26,8 @@ URecallEquipmentConstructor::URecallEquipmentConstructor()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallEquipmentFragment::StaticStruct();
-	Operation = EMassObservedOperation::Add;
+	ObservedTypes.Add(FRecallEquipmentFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::AddElement;
 }
 
 void URecallEquipmentConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
@@ -84,8 +84,8 @@ URecallEquipmentDestructor::URecallEquipmentDestructor()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallEquipmentFragment::StaticStruct();
-	Operation = EMassObservedOperation::Remove;
+	ObservedTypes.Add(FRecallEquipmentFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::RemoveElement;
 }
 
 void URecallEquipmentDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

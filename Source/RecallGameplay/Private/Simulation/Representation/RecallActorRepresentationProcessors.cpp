@@ -32,8 +32,8 @@ URecallActorRepresentationInitializer::URecallActorRepresentationInitializer()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallActorRepresentationFragment::StaticStruct();
-	Operation = EMassObservedOperation::Add;
+	ObservedTypes.Add(FRecallActorRepresentationFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::AddElement;
 }
 
 void URecallActorRepresentationInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
@@ -99,8 +99,8 @@ URecallActorRepresentationDeinitializer::URecallActorRepresentationDeinitializer
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallActorRepresentationFragment::StaticStruct();
-	Operation = EMassObservedOperation::Remove;
+	ObservedTypes.Add(FRecallActorRepresentationFragment::StaticStruct());
+	ObservedOperations = EMassObservedOperationFlags::RemoveElement;
 }
 
 void URecallActorRepresentationDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

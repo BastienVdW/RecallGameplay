@@ -7,11 +7,13 @@
 
 #include "System/Navigation/RecallNavigationSubsystem.h"
 
+#include "Engine/World.h"
 #include "RecallNavigationSnapshot.h"
 #include "Settings/RecallGameplaySettings.h"
+#include "Subsystems/SubsystemCollection.h"
 #include "System/Simulation/RecallMultiSimSubsystem.h"
 #include "Utility/Simulation/RecallSimulationUtils.h"
-#include "Utility/MultiWorldUtils.h"
+#include "Utility/MultiWorld/RecallMultiWorldUtils.h"
 #include "Utility/Navigation/RecallNavigationUtils.h"
 
 void URecallNavigationSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -20,7 +22,7 @@ void URecallNavigationSubsystem::Initialize(FSubsystemCollectionBase& Collection
 
 	Collection.InitializeDependency<URecallMultiSimSubsystem>();
 
-	const UWorld* MainWorld = MultiWorld::Utils::GetMainWorld(this);
+	const UWorld* MainWorld = Recall::MultiWorld::Utils::GetMainWorld(this);
 
 	if (URecallMultiSimSubsystem* MultiSimSystem = UWorld::GetSubsystem<URecallMultiSimSubsystem>(MainWorld))
 	{
@@ -40,7 +42,7 @@ void URecallNavigationSubsystem::Deinitialize()
 {
 	Super::Deinitialize();
 
-	const UWorld* MainWorld = MultiWorld::Utils::GetMainWorld(this);
+	const UWorld* MainWorld = Recall::MultiWorld::Utils::GetMainWorld(this);
 
 	if (URecallMultiSimSubsystem* MultiSimSystem = UWorld::GetSubsystem<URecallMultiSimSubsystem>(MainWorld))
 	{
