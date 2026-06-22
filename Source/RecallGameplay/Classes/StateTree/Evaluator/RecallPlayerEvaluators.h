@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "StateTree/Player/RecallPlayerEvaluatorBase.h"
 #include "StateTree/RecallStateTreeEvaluatorBase.h"
-#include "Mass/EntityElementTypes.h"
 #include "StateTreePropertyRef.h"
+#include "Engine/DataTable.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallPlayerEvaluators.generated.h"
 

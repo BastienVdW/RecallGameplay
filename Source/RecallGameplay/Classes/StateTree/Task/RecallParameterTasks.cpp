@@ -26,7 +26,7 @@ static bool SetParameter(FStateTreeExecutionContext& Context, FInstanceDataType&
 		return true;
 
 	case ERecallSetParameterSource::Payload:
-		if (const T* PayloadParameterPtr = InstanceData.PayloadValue.GetPtr<T>())
+		if (const T* PayloadParameterPtr = InstanceData.PayloadValue.template GetPtr<T>())
 		{
 			(*ParameterPtr) = (*PayloadParameterPtr);
 			return true;

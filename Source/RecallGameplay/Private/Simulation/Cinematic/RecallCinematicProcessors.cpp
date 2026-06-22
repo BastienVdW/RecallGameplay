@@ -344,7 +344,7 @@ static void BindLevelSequence(
 		return;
 	}
 
-	const UMovieScene* MovieScene = LevelSequenceActor->LevelSequenceAsset ? LevelSequenceActor->LevelSequenceAsset->GetMovieScene() : NULL;
+	UMovieScene* MovieScene = LevelSequenceActor->LevelSequenceAsset ? LevelSequenceActor->LevelSequenceAsset->GetMovieScene() : NULL;
 	if (!MovieScene)
 	{
 		return;
@@ -358,7 +358,8 @@ static void BindLevelSequence(
 			continue;
 		}
 
-		for (const FMovieSceneBinding& MovieSceneBinding : MovieScene->GetBindings())
+		const TArray<FMovieSceneBinding>& MovieSceneBindings = const_cast<const UMovieScene*>(MovieScene)->GetBindings();
+		for (const FMovieSceneBinding& MovieSceneBinding : MovieSceneBindings)
 		{
 			const FGuid& BindingGuid = MovieSceneBinding.GetObjectGuid();
 			FString BindingName;
