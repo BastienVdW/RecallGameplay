@@ -360,7 +360,17 @@ static void BindLevelSequence(
 
 		for (const FMovieSceneBinding& MovieSceneBinding : MovieScene->GetBindings())
 		{
-			if (MovieSceneBinding.GetName() != BindingOverride.Name)
+			const FGuid& BindingGuid = MovieSceneBinding.GetObjectGuid();
+			FString BindingName;
+			if (const FMovieScenePossessable* Possessable = MovieScene->FindPossessable(BindingGuid))
+			{
+				BindingName = Possessable->GetName();
+			}
+			else if (const FMovieSceneSpawnable* Spawnable = MovieScene->FindSpawnable(BindingGuid))
+			{
+				BindingName = Spawnable->GetName();
+			}
+			if (BindingName != BindingOverride.Name)
 			{
 				continue;
 			}

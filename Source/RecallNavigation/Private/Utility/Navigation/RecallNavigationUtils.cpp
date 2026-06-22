@@ -85,17 +85,19 @@ void RegisterGeneratedLinksProxy(UWorld* World)
 	public:
 		void RegisterGeneratedLinksProxy_Exposed()
 		{
-			if (!NavLinkJumpDownConfig.bLinkProxyRegistered && NavLinkJumpDownConfig.LinkProxy)
+			if (UWorld* World = GetWorld())
 			{
-				if (UWorld* World = GetWorld())
+				UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
+				if (NavSys)
 				{
-					UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
-					if (NavSys)
+					for (FNavLinkGenerationJumpConfig& Config : NavLinkJumpConfigs)
 					{
-						UE_LOG(LogNavLink, Log, TEXT("RegisterLinkProxy id: %llu ptr: 0x%p"), NavLinkJumpDownConfig.LinkProxyId.GetId(), NavLinkJumpDownConfig.LinkProxy.Get());
-
-						NavSys->RegisterCustomLink(*NavLinkJumpDownConfig.LinkProxy);
-						NavLinkJumpDownConfig.bLinkProxyRegistered = true;
+						if (!Config.bLinkProxyRegistered && Config.LinkProxy)
+						{
+							UE_LOG(LogNavLink, Log, TEXT("RegisterLinkProxy id: %llu ptr: 0x%p"), Config.LinkProxyId.GetId(), Config.LinkProxy.Get());
+							NavSys->RegisterCustomLink(*Config.LinkProxy);
+							Config.bLinkProxyRegistered = true;
+						}
 					}
 				}
 			}

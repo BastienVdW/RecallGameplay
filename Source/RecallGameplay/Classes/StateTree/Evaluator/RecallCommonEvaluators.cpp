@@ -225,7 +225,7 @@ void FRecallStateTreeEvaluator::TreeStart(FStateTreeExecutionContext& Context) c
 	FStateTreeInstanceData* StateTreeInstanceDataPtr = StateTreeSystem.GetInstanceData(InstanceData.InstanceHandle);
 
 	FRecallStateTreeExecutionContext StateTreeContext(StateTreeSystem, *StateTree, *StateTreeInstanceDataPtr, MassContext.GetEntityManager(), SignalSystem, MassContext.GetMassExecutionContext(), MassContext.GetEntity());
-	StateTreeContext.Start(nullptr, RandomSeed);
+	StateTreeContext.Start(FStateTreeExecutionContext::FStartParameters{ .RandomSeed = RandomSeed });
 
 #if RECALL_DESYNC_LOG
 	RECALL_DESYNC_LOG_INT(Context.GetWorld(), StateTreeRandomSeed, RandomSeed)

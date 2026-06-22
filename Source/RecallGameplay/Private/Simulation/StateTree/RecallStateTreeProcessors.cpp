@@ -227,7 +227,7 @@ void URecallStateTreeStartProcessor::SignalEntities(FMassEntityManager& EntityMa
 			const FRandomStream& RandomStream = RandomNumberSystem.GetRandomStream();
 			const int32 RandomSeed = FMath::RoundToInt(static_cast<float>(RAND_MAX) * RandomStream.FRand());;
 
-			StateTreeExecutionContext.Start(nullptr, RandomSeed);
+			StateTreeExecutionContext.Start(FStateTreeExecutionContext::FStartParameters{ .RandomSeed = RandomSeed });
 			StateTreeFragment.LastUpdateTimeInSeconds = TimeInSeconds;
 		});
 

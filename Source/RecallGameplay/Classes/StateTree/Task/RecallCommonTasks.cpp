@@ -352,7 +352,7 @@ EStateTreeRunStatus FRecallStateTreeTask::EnterState(FStateTreeExecutionContext&
 	FStateTreeInstanceData* StateTreeInstanceDataPtr = StateTreeSystem.GetInstanceData(InstanceData.InstanceHandle);
 
 	FRecallStateTreeExecutionContext StateTreeContext(StateTreeSystem, *StateTree, *StateTreeInstanceDataPtr, MassContext.GetEntityManager(), SignalSystem, MassContext.GetMassExecutionContext(), MassContext.GetEntity());
-	StateTreeContext.Start(nullptr, RandomSeed);
+	StateTreeContext.Start(FStateTreeExecutionContext::FStartParameters{ .RandomSeed = RandomSeed });
 
 	return Super::EnterState(Context, Transition);
 }
