@@ -18,7 +18,7 @@ URecallAttributeInitializer::URecallAttributeInitializer()
 	: EntityQuery(*this)
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
-	ObservedType = FRecallAttributeFragment::StaticStruct();
+	ObservedTypes.Add(FRecallAttributeFragment::StaticStruct());
 	ObservedOperations = EMassObservedOperationFlags::AddElement;
 }
 
