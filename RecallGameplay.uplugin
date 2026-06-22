@@ -80,11 +80,6 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "RecallVoxel",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "RecallGridSelection",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
