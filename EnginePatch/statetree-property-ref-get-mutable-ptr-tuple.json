@@ -1,0 +1,27 @@
+{
+  "patchId": "statetree-property-ref-get-mutable-ptr-tuple",
+  "description": "Fix FStateTreePropertyRef::GetMutablePtrTuple calling GetMutablePtrTupleToProperty with 5 args (ParentFrame removed in 5.8 API)",
+  "plugin": "RecallGameplay",
+  "versions": [
+    {
+      "engineVersions": ["5.8"],
+      "files": [
+        {
+          "file": "Plugins/Runtime/StateTree/Source/StateTreeModule/Public/StateTreePropertyRef.h",
+          "operations": [
+            {
+              "id": "remove-parent-frame-arg",
+              "line": 172,
+              "remove": [
+                "\t\treturn UE::StateTree::PropertyRefHelpers::GetMutablePtrTupleToProperty<T...>(*this, Context.GetMutableInstanceData()->GetMutableStorage(), Context.GetCurrentlyProcessedTemporaryStorage().Get(), *CurrentlyProcessedFrame, Context.GetCurrentlyProcessedParentFrame());"
+              ],
+              "add": [
+                "\t\treturn UE::StateTree::PropertyRefHelpers::GetMutablePtrTupleToProperty<T...>(*this, Context.GetMutableInstanceData()->GetMutableStorage(), Context.GetCurrentlyProcessedTemporaryStorage().Get(), *CurrentlyProcessedFrame);"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
