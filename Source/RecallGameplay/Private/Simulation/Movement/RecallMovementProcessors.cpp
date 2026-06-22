@@ -43,7 +43,7 @@ void URecallMovementProcessor::ConfigureQueries(const TSharedRef<FMassEntityMana
 	FMassTagBitSet InvalidTags;
 
 	// Block movement while traversing a nav link.
-	InvalidTags.Add(*FRecallNavLinkTraversalTag::StaticStruct());
+	InvalidTags.Add(FRecallNavLinkTraversalTag::StaticStruct());
 	
 	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddRequirement<FRecallMovementFragment>(EMassFragmentAccess::ReadWrite);

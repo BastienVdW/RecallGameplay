@@ -41,7 +41,7 @@ void URecallPathFollowerProcessor::InitializeInternal(UObject& Owner, const TSha
 void URecallPathFollowerProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 	FMassTagBitSet InvalidTags;
-	InvalidTags.Add(*FRecallNavLinkTraversalTag::StaticStruct());
+	InvalidTags.Add(FRecallNavLinkTraversalTag::StaticStruct());
 
 	EntityQuery.AddRequirement<FRecallPathFollowerFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddRequirement<FRecallMovementFragment>(EMassFragmentAccess::ReadWrite);

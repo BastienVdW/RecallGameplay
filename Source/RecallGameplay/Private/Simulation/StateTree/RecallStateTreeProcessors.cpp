@@ -183,10 +183,10 @@ void URecallStateTreeStartProcessor::InitializeInternal(UObject& Owner, const TS
 void URecallStateTreeStartProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 	FMassTagBitSet RequiredTags;
-	RequiredTags.Add(*FRecallStateTreeActivatedTag::StaticStruct());
+	RequiredTags.Add(FRecallStateTreeActivatedTag::StaticStruct());
 
 	FMassTagBitSet InvalidTags;
-	InvalidTags.Add(*FRecallStateTreeRunningTag::StaticStruct());
+	InvalidTags.Add(FRecallStateTreeRunningTag::StaticStruct());
 	
 	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassFragmentAccess::ReadWrite);
@@ -296,8 +296,8 @@ void URecallStateTreeUpdateProcessor::InitializeInternal(UObject& Owner, const T
 void URecallStateTreeUpdateProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 	FMassTagBitSet RequiredTags;
-	RequiredTags.Add(*FRecallStateTreeRunningTag::StaticStruct());
-	RequiredTags.Add(*FRecallStateTreeActivatedTag::StaticStruct());
+	RequiredTags.Add(FRecallStateTreeRunningTag::StaticStruct());
+	RequiredTags.Add(FRecallStateTreeActivatedTag::StaticStruct());
 	
 	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassFragmentAccess::ReadWrite);

@@ -108,7 +108,7 @@ void URecallConversationProcessor::InitializeInternal(UObject& Owner, const TSha
 void URecallConversationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 	FMassTagBitSet ActiveRequiredTags;
-	ActiveRequiredTags.Add(*FRecallConversationActiveTag::StaticStruct());
+	ActiveRequiredTags.Add(FRecallConversationActiveTag::StaticStruct());
 	
 	ProcessorRequirements.AddSubsystemRequirement<URecallConversationSubsystem>(EMassFragmentAccess::ReadWrite);
 	

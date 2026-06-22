@@ -114,7 +114,7 @@ void URecallNavLinkTraversalProcessor::InitializeInternal(UObject& Owner, const 
 void URecallNavLinkTraversalProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) 
 {
 	FMassTagBitSet RequiredTags;
-	RequiredTags.Add(*FRecallNavLinkTraversalTag::StaticStruct());
+	RequiredTags.Add(FRecallNavLinkTraversalTag::StaticStruct());
 	
 	EntityQuery.AddRequirement<FRecallNavLinkTraversalFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly);

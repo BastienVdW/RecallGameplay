@@ -7,7 +7,7 @@
 
 #include "StateTree/RecallGameRuleStateTreeSchema.h"
 
-#include "MassEntityElementTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "Simulation/StateTree/RecallStateTreeFragments.h"
 #include "StateTree/RecallGameRuleStateTreeConditionBase.h"
 #include "StateTree/RecallGameRuleStateTreeEvaluatorBase.h"

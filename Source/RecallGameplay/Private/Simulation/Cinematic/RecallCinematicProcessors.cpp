@@ -121,7 +121,7 @@ void URecallCinematicPlayingProcessor::InitializeInternal(UObject& Owner, const 
 void URecallCinematicPlayingProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 	FMassTagBitSet RequiredTags;
-	RequiredTags.Add(*FRecallCinematicPlayingTag::StaticStruct());
+	RequiredTags.Add(FRecallCinematicPlayingTag::StaticStruct());
 
 	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddRequirement<FRecallCinematicFragment>(EMassFragmentAccess::ReadWrite);
@@ -324,7 +324,7 @@ void URecallCinematicRepresentationProcessor::InitializeInternal(UObject& Owner,
 void URecallCinematicRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 	FMassTagBitSet RequiredTags;
-	RequiredTags.Add(*FRecallCinematicPlayingTag::StaticStruct());
+	RequiredTags.Add(FRecallCinematicPlayingTag::StaticStruct());
 
 	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddRequirement<FRecallCinematicFragment>(EMassFragmentAccess::ReadOnly);

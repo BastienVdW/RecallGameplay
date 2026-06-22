@@ -297,10 +297,10 @@ void URecallActorAnimationRepresentationProcessor::InitializeInternal(UObject& O
 void URecallActorAnimationRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 	FMassTagBitSet RequiredTags;
-	RequiredTags.Add(*FRecallSkeletalMeshActorRepresentationTag::StaticStruct());
+	RequiredTags.Add(FRecallSkeletalMeshActorRepresentationTag::StaticStruct());
 	
 	FMassTagBitSet InvalidTags;
-	// InvalidTags.Add(*FRecallOverrideActorAnimationRepresentationTag::StaticStruct());
+	// InvalidTags.Add(FRecallOverrideActorAnimationRepresentationTag::StaticStruct());
 	
 	EntityQuery.AddRequirement<FRecallActorRepresentationFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddRequirement<FRecallMovementFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
