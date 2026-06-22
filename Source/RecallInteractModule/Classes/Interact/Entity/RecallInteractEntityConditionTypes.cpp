@@ -7,7 +7,7 @@
 
 #include "RecallInteractEntityConditionTypes.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "Simulation/Controller/RecallControllerFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 #include "Utility/Entity/RecallEntityUtils.h"
@@ -18,8 +18,8 @@
 //----------------------------------------------------------------------//
 bool FRecallInteractHasChildrenCondition::EvaluateCondition(const FRecallInteractContext& Context, FText& OutFailedText) const
 {
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(Target);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(Target);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 	const FRecallTransformFragment& TargetTransformFragment = TargetView.GetFragmentData<FRecallTransformFragment>();
 	
 	if (TargetTransformFragment.HasChildren() != bInvert)
@@ -38,10 +38,10 @@ bool FRecallInteractHasChildrenCondition::EvaluateCondition(const FRecallInterac
 //----------------------------------------------------------------------//
 bool FRecallControlTargetCondition::EvaluateCondition(const FRecallInteractContext& Context, FText& OutFailedText) const
 {
-	FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+	FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 	
 	// Get instigator position and forward vector
-	const FMassExtendedEntityView InstigatorView(EntityManager, Context.InstigatorEntity);
+	const FMassEntityView InstigatorView(EntityManager, Context.InstigatorEntity);
 	const FVector InstigatorPosition = Recall::Entity::Utils::GetEntityTransform(EntityManager, Context.InstigatorEntity).GetLocation();
 	
 	FVector ForwardVector;

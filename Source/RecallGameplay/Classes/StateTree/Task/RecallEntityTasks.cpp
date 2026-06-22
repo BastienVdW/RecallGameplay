@@ -8,11 +8,11 @@
 #include "RecallEntityTasks.h"
 
 #include "Desync/RecallDesyncLog.h"
-#include "MassExtendedCommands.h"
-#include "MassExtendedEntityConfigAsset.h"
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassCommands.h"
+#include "MassEntityConfigAsset.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTree/RecallStateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
@@ -40,13 +40,13 @@ bool FRecallEntityLocationTask::UpdateEntityLocation(FStateTreeExecutionContext&
 	}
 
 	const FRecallStateTreeExecutionContext& MassContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityManager& EntityManager = MassContext.GetEntityManager();
+	const FMassEntityManager& EntityManager = MassContext.GetEntityManager();
 	if (!EntityManager.IsEntityValid(InstanceData.Entity))
 	{
 		return false;
 	}
 
-	const FMassExtendedEntityView EntityView(EntityManager, InstanceData.Entity);
+	const FMassEntityView EntityView(EntityManager, InstanceData.Entity);
 
 	const FRecallTransformFragment* TransformFragmentPtr = EntityView.GetFragmentDataPtr<FRecallTransformFragment>();
 	if (TransformFragmentPtr == nullptr)
@@ -107,14 +107,14 @@ EStateTreeRunStatus FRecallFilterEntityTask::EnterState(FStateTreeExecutionConte
 {	
 	const FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	
-	TArray<FMassExtendedEntityHandle> Entities = InstanceData.Entities;
+	TArray<FMassEntityHandle> Entities = InstanceData.Entities;
 	if (Entities.Num() == 0)
 	{
 		return EStateTreeRunStatus::Failed;
 	}
 	
 	const FRecallStateTreeExecutionContext& MassContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
-	const TTuple<FMassExtendedEntityHandle*, TArray<FMassExtendedEntityHandle>*> EntityTuple = InstanceData.Result.GetMutablePtrTuple(Context);
+	const TTuple<FMassEntityHandle*, TArray<FMassEntityHandle>*> EntityTuple = InstanceData.Result.GetMutablePtrTuple(Context);
 
 	for (const FInstancedStruct& Condition : Conditions)
 	{
@@ -158,7 +158,7 @@ bool FRecallDestroyEntityTask::Link(FStateTreeLinker& Linker)
 EStateTreeRunStatus FRecallDestroyEntityTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {	
 	const FInstanceDataType& InstanceData = Context.GetInstanceData(*this);	
-	const TArray<FMassExtendedEntityHandle>& Entities = InstanceData.Entities;
+	const TArray<FMassEntityHandle>& Entities = InstanceData.Entities;
 	if (Entities.Num() == 0)
 	{
 		return EStateTreeRunStatus::Failed;
@@ -190,7 +190,7 @@ EStateTreeRunStatus FRecallSpawnEntityTask::EnterState(FStateTreeExecutionContex
 	URecallEntitySubsystem& EntitySystem = Context.GetExternalData(EntitySystemHandle);
 	
 	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
-	const UMassExtendedEntityConfigAsset* EntityConfigAsset = InstanceData.EntityConfig;
+	const UMassEntityConfigAsset* EntityConfigAsset = InstanceData.EntityConfig;
 	if (!IsValid(EntityConfigAsset))
 	{
 		return EStateTreeRunStatus::Failed;
@@ -199,13 +199,13 @@ EStateTreeRunStatus FRecallSpawnEntityTask::EnterState(FStateTreeExecutionContex
 	const FVector& SpawnPosition = InstanceData.Position;
 
 	FRecallStateTreeExecutionContext& RecallContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
-	RecallContext.GetMassExecutionContext().Defer().PushCommand<FMassExtendedDeferredCreateCommand>(
-		[&EntitySystem, EntityConfigAsset, SpawnPosition](FMassExtendedEntityManager& System)
+	RecallContext.GetMassExecutionContext().Defer().PushCommand<FMassDeferredCreateCommand>(
+		[&EntitySystem, EntityConfigAsset, SpawnPosition](FMassEntityManager& System)
 	{
-		TArray<FMassExtendedEntityHandle> Entities;
+		TArray<FMassEntityHandle> Entities;
 		EntitySystem.CreateEntities(EntityConfigAsset, 1, Entities);
 
-		const FMassExtendedEntityView EntityView(System, Entities[0]);
+		const FMassEntityView EntityView(System, Entities[0]);
 		FRecallTransformFragment& TransformFragment = EntityView.GetFragmentData<FRecallTransformFragment>();
 		TransformFragment.Position = SpawnPosition;
 	});

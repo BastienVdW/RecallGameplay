@@ -9,7 +9,7 @@
 #include "StateTree/RecallGameRuleStateTreeTaskBase.h"
 #include "System/Command/RecallGameRuleCommands.h"
 #include "GameplayTagContainer.h"
-#include "InstancedStruct.h"
+#include "StructUtils/InstancedStruct.h"
 
 #include "RecallGameRuleCommandTask.generated.h"
 

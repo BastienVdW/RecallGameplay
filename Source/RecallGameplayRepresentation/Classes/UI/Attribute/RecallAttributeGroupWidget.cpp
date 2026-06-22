@@ -28,7 +28,7 @@ void URecallAttributeGroupWidget::NativeDestruct()
 	TrackedEntity.Reset();
 }
 
-void URecallAttributeGroupWidget::SetTrackedEntity_Implementation(const FMassExtendedEntityHandle& Entity)
+void URecallAttributeGroupWidget::SetTrackedEntity_Implementation(const FMassEntityHandle& Entity)
 {
 	if (TrackedEntity == Entity)
 	{
@@ -60,7 +60,7 @@ void URecallAttributeGroupWidget::OnRender()
 	SetAttributes(AttributeRepresentation.Attributes);
 }
 
-void URecallAttributeGroupWidget::SetEntity(const FMassExtendedEntityHandle& Entity)
+void URecallAttributeGroupWidget::SetEntity(const FMassEntityHandle& Entity)
 {
 	IRecallTrackerEntityInterface::Execute_SetTrackedEntity(this, Entity);
 }

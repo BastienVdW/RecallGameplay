@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "Helper/RecallGamethreadQueue.h"
 
 #include "RecallEnvQueryTypes.generated.h"
@@ -143,7 +143,7 @@ struct RECALLNAVIGATION_API FRecallEnvQueryData : public FRecallGamethreadRunner
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle OwnerEntity;
+	FMassEntityHandle OwnerEntity;
 
 	UPROPERTY(VisibleAnywhere)
 	FRecallEnvQueryRequest Request;

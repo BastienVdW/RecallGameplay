@@ -7,8 +7,8 @@
 
 #include "RecallGridCursorTasks.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "Simulation/Grid/RecallGridCursorFragments.h"
 #include "StateTreeExecutionContext.h"
@@ -38,7 +38,7 @@ EStateTreeRunStatus FRecallGridSetCursorPositionTask::EnterState(FStateTreeExecu
 	}
 
 	const FRecallStateTreeExecutionContext& MassContext = static_cast<const FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityManager& EntityManager = MassContext.GetEntityManager();
+	const FMassEntityManager& EntityManager = MassContext.GetEntityManager();
 		
 	// Get the cursor owner fragment from external data
 	FRecallGridCursorOwnerFragment& CursorOwnerFragment = Context.GetExternalData(CursorOwnerFragmentHandle);
@@ -47,7 +47,7 @@ EStateTreeRunStatus FRecallGridSetCursorPositionTask::EnterState(FStateTreeExecu
 	// Access the cursor entity and update its position
 	if (EntityManager.IsEntityValid(CursorOwnerFragment.GridSelectionEntity))
 	{
-		const FMassExtendedEntityView CursorEntityView(EntityManager, CursorOwnerFragment.GridSelectionEntity);
+		const FMassEntityView CursorEntityView(EntityManager, CursorOwnerFragment.GridSelectionEntity);
 		if (FRecallGridSelectionFragment* CursorFragment = CursorEntityView.GetFragmentDataPtr<FRecallGridSelectionFragment>())
 		{
 			CursorFragment->GridCellIndex = InstanceData.GridCellIndex;
@@ -106,7 +106,7 @@ EStateTreeRunStatus FRecallGridMoveCursorToTargetTask::Tick(FStateTreeExecutionC
 	InstanceData.MovementTimer = 0.0f;
 	
 	const FRecallStateTreeExecutionContext& MassContext = static_cast<const FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityManager& EntityManager = MassContext.GetEntityManager();
+	const FMassEntityManager& EntityManager = MassContext.GetEntityManager();
 	const FRecallGridCursorOwnerFragment& CursorOwnerFragment = Context.GetExternalData(CursorOwnerFragmentHandle);
 	
 	// Get cursor entity and current position
@@ -115,7 +115,7 @@ EStateTreeRunStatus FRecallGridMoveCursorToTargetTask::Tick(FStateTreeExecutionC
 		return EStateTreeRunStatus::Failed;
 	}
 	
-	const FMassExtendedEntityView CursorEntityView(EntityManager, CursorOwnerFragment.GridSelectionEntity);
+	const FMassEntityView CursorEntityView(EntityManager, CursorOwnerFragment.GridSelectionEntity);
 	FRecallGridSelectionFragment* CursorFragment = CursorEntityView.GetFragmentDataPtr<FRecallGridSelectionFragment>();
 	if (!CursorFragment)
 	{

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 
 #include "RecallCinematicTraits.generated.h"
 
@@ -14,12 +14,12 @@
 * Trait so this entity can trigger level sequences
 */
 UCLASS(meta=(DisplayName="RE Cinematic"))
-class RECALLGAMEPLAY_API URecallCinematicTrait : public UMassExtendedEntityTraitBase
+class RECALLGAMEPLAY_API URecallCinematicTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere, meta = (AllowedClasses = "/Script/LevelSequence.LevelSequenceActor"))

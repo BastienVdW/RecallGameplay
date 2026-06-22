@@ -65,7 +65,7 @@ EStateTreeRunStatus FRecallSetEntityParameterTask::EnterState(FStateTreeExecutio
 {
 	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	
-	if (!SetParameter<FMassExtendedEntityHandle>(Context, InstanceData))
+	if (!SetParameter<FMassEntityHandle>(Context, InstanceData))
 	{
 		return EStateTreeRunStatus::Failed;
 	}

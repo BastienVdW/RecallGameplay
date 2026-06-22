@@ -49,8 +49,8 @@ void ARecallConversationParticipantActor::EndPlay(const EEndPlayReason::Type End
 	ObserverSubjectSystem.Reset();
 }
 
-void ARecallConversationParticipantActor::SetConversationParticipant(const FMassExtendedEntityHandle& InConversationEntity,
-	const FGameplayTag& ParticipantID, const FMassExtendedEntityHandle& ParticipantEntity, const FString& PlayerID)
+void ARecallConversationParticipantActor::SetConversationParticipant(const FMassEntityHandle& InConversationEntity,
+	const FGameplayTag& ParticipantID, const FMassEntityHandle& ParticipantEntity, const FString& PlayerID)
 {
 	ConversationEntity = InConversationEntity;
 	ConversationParticipantID = ParticipantID;
@@ -66,13 +66,13 @@ void ARecallConversationParticipantActor::SetConversationParticipant(const FMass
 	ConversationNode = FConversationNodeHandle();
 }
 
-const FMassExtendedEntityHandle& ARecallConversationParticipantActor::GetConversationEntity() const
+const FMassEntityHandle& ARecallConversationParticipantActor::GetConversationEntity() const
 {
 	check(ConversationEntity.IsValid());
 	return ConversationEntity;
 }
 
-const FMassExtendedEntityHandle& ARecallConversationParticipantActor::GetParticipantEntity() const
+const FMassEntityHandle& ARecallConversationParticipantActor::GetParticipantEntity() const
 {
 	check(ConversationParticipantEntity.IsValid());
 	return ConversationParticipantEntity;

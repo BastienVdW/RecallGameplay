@@ -7,8 +7,8 @@
 
 #include "RecallInteractTasks.h"
 
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "StateTree/RecallStateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
@@ -56,10 +56,10 @@ FRecallInteractExecuteContext FRecallInteractTask::CreateInteractionExecutionCon
 float FRecallInteractTask::GetInteractionProgressTickRate(FStateTreeExecutionContext& Context) const
 {
 	const FRecallStateTreeExecutionContext& RecallContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityManager& EntityManager = RecallContext.GetEntityManager();
+	const FMassEntityManager& EntityManager = RecallContext.GetEntityManager();
 	FRecallInteractorFragment& InteractorFragment = Context.GetExternalData(InteractorFragmentHandle);
 	
-	const FMassExtendedEntityView CurrentInteractView(EntityManager, InteractorFragment.CurrentInteractEntity);
+	const FMassEntityView CurrentInteractView(EntityManager, InteractorFragment.CurrentInteractEntity);
 	const auto* InteractableConstSharedFragmentPtr = CurrentInteractView.GetConstSharedFragmentDataPtr<FRecallInteractableConstSharedFragment>();
 	const FRecallInteractableFragment& InteractableFragment = CurrentInteractView.GetFragmentData<FRecallInteractableFragment>();
 	const FRecallInteractionEvent& InteractionEvent = InteractableFragment.GetInteractEventChecked(
@@ -74,7 +74,7 @@ EStateTreeRunStatus FRecallInteractTask::EnterState(FStateTreeExecutionContext& 
 	InstanceData.bExitOnRelease = true; // Reset the flag
 	
 	const FRecallInteractExecuteContext InteractContext = CreateInteractionExecutionContext(Context);
-	const FMassExtendedEntityHandle InteractionTarget = GetInteractSelection(Context);
+	const FMassEntityHandle InteractionTarget = GetInteractSelection(Context);
 	
 	const bool bContextual = IsContextualInteraction(Context);
 	const int32 InteractEventIndex = Recall::Interact::Utils::FindInteractEventIndexByInput(
@@ -146,7 +146,7 @@ EStateTreeRunStatus FRecallInteractTask::Tick(FStateTreeExecutionContext& Contex
 	}
 }
 
-FMassExtendedEntityHandle FRecallInteractTask::GetInteractSelection(FStateTreeExecutionContext& Context) const
+FMassEntityHandle FRecallInteractTask::GetInteractSelection(FStateTreeExecutionContext& Context) const
 {
 	const FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	const FRecallInteractorFragment& InteractorFragment = Context.GetExternalData(InteractorFragmentHandle);
@@ -157,13 +157,13 @@ FMassExtendedEntityHandle FRecallInteractTask::GetInteractSelection(FStateTreeEx
 		return InteractorFragment.ClosestInteractableEntity;
 
 	case ERecallInteractSelection::Target:
-		if (const FMassExtendedEntityHandle* TargetPtr = InstanceData.Target.GetMutablePtr(Context))
+		if (const FMassEntityHandle* TargetPtr = InstanceData.Target.GetMutablePtr(Context))
 		{
 			return *TargetPtr;
 		}
 		else
 		{
-			return FMassExtendedEntityHandle();
+			return FMassEntityHandle();
 		}
 		
 	case ERecallInteractSelection::Contextual:
@@ -171,7 +171,7 @@ FMassExtendedEntityHandle FRecallInteractTask::GetInteractSelection(FStateTreeEx
 
 	default:
 		unimplemented();
-		return FMassExtendedEntityHandle();
+		return FMassEntityHandle();
 	}
 }
 
@@ -206,8 +206,8 @@ EStateTreeRunStatus FRecallFindInteractableTask::EnterState(FStateTreeExecutionC
 	FRecallAttributeFragment* const AttributeFragmentPtr = Context.GetExternalDataPtr(AttributeFragmentHandle);
 	const FRecallTransformFragment& TransformFragment = Context.GetExternalData(TransformFragmentHandle);
 
-	const FMassExtendedEntityHandle& InteractorEntity = RecallContext.GetEntity();
-	const FMassExtendedEntityManager& EntityManager = RecallContext.GetMassExecutionContext().GetEntityManagerChecked();
+	const FMassEntityHandle& InteractorEntity = RecallContext.GetEntity();
+	const FMassEntityManager& EntityManager = RecallContext.GetMassExecutionContext().GetEntityManagerChecked();
 
 	// Create interaction context for validation
 	const FRecallInteractExecuteContext InteractContext{
@@ -220,7 +220,7 @@ EStateTreeRunStatus FRecallFindInteractableTask::EnterState(FStateTreeExecutionC
 	};
 
 	// Track the best candidate
-	FMassExtendedEntityHandle BestEntity;
+	FMassEntityHandle BestEntity;
 	int32 BestPositionIndex = INDEX_NONE;
 	FVector BestInteractLocation = FVector::ZeroVector;
 	float BestDistanceSquared = FLT_MAX;
@@ -228,7 +228,7 @@ EStateTreeRunStatus FRecallFindInteractableTask::EnterState(FStateTreeExecutionC
 	const FVector InteractorLocation = TransformFragment.GetTransform().GetLocation();
 
 	// Iterate through all candidate entities
-	for (const FMassExtendedEntityHandle& CandidateEntity : InstanceData.Entities)
+	for (const FMassEntityHandle& CandidateEntity : InstanceData.Entities)
 	{
 		// Skip invalid entities
 		if (!EntityManager.IsEntityValid(CandidateEntity))
@@ -247,7 +247,7 @@ EStateTreeRunStatus FRecallFindInteractableTask::EnterState(FStateTreeExecutionC
 		}
 
 		// Get the interactable view
-		const FMassExtendedEntityView InteractableView(EntityManager, CandidateEntity);
+		const FMassEntityView InteractableView(EntityManager, CandidateEntity);
 
 		// Determine the interaction position and calculate distance
 		int32 PositionIndex = INDEX_NONE;

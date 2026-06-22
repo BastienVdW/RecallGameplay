@@ -7,7 +7,7 @@
 
 #include "RecallTrackProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Actor/RecallTrackEntityActor.h"
 #include "Physics/Common/RecallPhysicsCommonShapeTypes.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
@@ -23,30 +23,30 @@
 URecallTrackFragmentConstructor::URecallTrackFragmentConstructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallTrackFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Add;
+	Operation = EMassObservedOperation::Add;
 }
 
-void URecallTrackFragmentConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallTrackFragmentConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallTrackFragmentConstructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallTrackFragmentConstructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallTrackFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallTrackFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddConstSharedRequirement<FRecallTrackConstSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallTrackSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallTrackSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallTrackFragmentConstructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallTrackFragmentConstructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_TrackInit_Execute);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const URecallTrackSubsystem& TrackSystem = Context.GetSubsystemChecked<URecallTrackSubsystem>();
 		URecallPhysicsSubsystem& PhysicsSystem = Context.GetMutableSubsystemChecked<URecallPhysicsSubsystem>();
@@ -65,7 +65,7 @@ void URecallTrackFragmentConstructor::Execute(FMassExtendedEntityManager& Entity
 				continue;
 			}
 
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 
 			FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
 			FRecallPhysicsStaticCompoundShape StaticCompoundShape;

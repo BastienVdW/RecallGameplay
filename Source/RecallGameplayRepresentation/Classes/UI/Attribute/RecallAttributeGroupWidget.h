@@ -10,7 +10,7 @@
 #include "Observer/Representation/RecallRepresentationReactInterface.h"
 #include "Representation/Tracker/RecallTrackerEntityInterface.h"
 #include "GameplayTagContainer.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallAttributeGroupWidget.generated.h"
 
@@ -30,7 +30,7 @@ class RECALLGAMEPLAYREPRESENTATION_API URecallAttributeGroupWidget :
 	GENERATED_BODY()
 
 public:
-	void SetEntity(const FMassExtendedEntityHandle& Entity);
+	void SetEntity(const FMassEntityHandle& Entity);
 	void SetAttributes(const TMap<FGameplayTag, FRecallAttributeRepresentation>& AttributeMap) const;
 
 	// UUserWidget implementation Begin
@@ -41,7 +41,7 @@ public:
 
 	// IRecallTrackerEntityInterface implementation Begin
 protected:
-	virtual void SetTrackedEntity_Implementation(const FMassExtendedEntityHandle& Entity) override;
+	virtual void SetTrackedEntity_Implementation(const FMassEntityHandle& Entity) override;
 	// IRecallTrackerEntityInterface implementation End
 
 protected:
@@ -81,7 +81,7 @@ protected:
 	TObjectPtr<class URecallAttributeWidget> Attribute4;
 
 	UPROPERTY(Transient, BlueprintReadOnly, meta=(ExposeOnSpawn))
-	FMassExtendedEntityHandle TrackedEntity;
+	FMassEntityHandle TrackedEntity;
 	
 	URecallAttributeWidget* GetAttributeWidget(int32 Index) const;
 };

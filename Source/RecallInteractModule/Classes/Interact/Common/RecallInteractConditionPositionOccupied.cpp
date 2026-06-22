@@ -7,8 +7,8 @@
 
 #include "RecallInteractConditionPositionOccupied.h"
 
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Interact/RecallInteractFragments.h"
 #include "Utility/Interact/RecallInteractPositionUtils.h"
 
@@ -16,7 +16,7 @@
 
 bool FRecallInteractConditionPositionOccupied::EvaluateCondition(const FRecallInteractContext& Context, FText& OutFailedText) const
 {
-	FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
 
 	if (!EntityManager.IsEntityValid(Context.InteractableEntity))
 	{
@@ -24,8 +24,8 @@ bool FRecallInteractConditionPositionOccupied::EvaluateCondition(const FRecallIn
 		return false;
 	}
 
-	const FMassExtendedEntityView InteractableView(EntityManager, Context.InteractableEntity);
-	const FMassExtendedEntityView InteractorView(EntityManager, Context.InstigatorEntity);
+	const FMassEntityView InteractableView(EntityManager, Context.InteractableEntity);
+	const FMassEntityView InteractorView(EntityManager, Context.InstigatorEntity);
 
 	// Determine which position to check
 	int32 TargetPosition = PositionIndexToCheck;

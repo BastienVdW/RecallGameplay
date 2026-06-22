@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "StateTree/RecallStateTreeTaskBase.h"
 #include "StateTreePropertyRef.h"
 #include "AI/Navigation/NavAgentInterface.h"
@@ -88,7 +88,7 @@ struct RECALLGAMEPLAY_API FRecallRotateTaskInstanceData
 	FVector Location = FVector::ZeroVector;
 	
 	UPROPERTY(EditAnywhere, Category=Parameter, meta=(EditCondition="Target == ERecallRotateTaskType::TowardEntity", EditConditionHides))
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 };
 
 /**

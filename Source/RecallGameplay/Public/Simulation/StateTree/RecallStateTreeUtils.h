@@ -7,12 +7,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Simulation/StateTree/RecallStateTreeFragments.h"
 #include "StateTree/RecallStateTreeExecutionContext.h"
 #include "System/AI/RecallStateTreeSubsystem.h"
 
-struct FMassExtendedEntityManager;
+struct FMassEntityManager;
 class URecallSignalSubsystem;
 
 namespace Recall::StateTree::Behavior
@@ -20,8 +20,8 @@ namespace Recall::StateTree::Behavior
 
 template<typename TFunc>
 RECALLGAMEPLAY_API inline void ForEachEntityInChunk(
-	FMassExtendedExecutionContext& Context,
-	FMassExtendedEntityManager& EntityManager,
+	FMassExecutionContext& Context,
+	FMassEntityManager& EntityManager,
 	URecallSignalSubsystem& SignalSubsystem,
 	URecallStateTreeSubsystem& RecallStateTreeSubsystem,
 	TFunc&& Callback)
@@ -37,7 +37,7 @@ RECALLGAMEPLAY_API inline void ForEachEntityInChunk(
 
 	for (int32 EntityIndex = 0; EntityIndex < NumEntities; EntityIndex++)
 	{
-		const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+		const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 		FRecallStateTreeInstanceFragment& StateTreeFragment = StateTreeInstanceList[EntityIndex];
 		FStateTreeInstanceData* InstanceData = RecallStateTreeSubsystem.GetInstanceData(StateTreeFragment.InstanceHandle);
 		if (InstanceData != nullptr)

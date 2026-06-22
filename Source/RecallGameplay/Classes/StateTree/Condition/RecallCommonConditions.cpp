@@ -7,8 +7,8 @@
 
 #include "RecallCommonConditions.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "StateTreeExecutionContext.h"
 #include "Algo/AnyOf.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
@@ -41,11 +41,11 @@ bool FRecallGameplayTagFilterCondition::Link(FStateTreeLinker& Linker)
 bool FRecallGameplayTagFilterCondition::TestCondition(FStateTreeExecutionContext& Context) const
 {
 	const FRecallStateTreeExecutionContext& RecallContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityManager& EntityManager = RecallContext.GetEntityManager();
+	const FMassEntityManager& EntityManager = RecallContext.GetEntityManager();
 	
 	const FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	const FRecallGameplayTagCondition& GameplayTagCondition = InstanceData.GameplayTagCondition;
-	const TArray<FMassExtendedEntityHandle>& Entities = InstanceData.Entities;
+	const TArray<FMassEntityHandle>& Entities = InstanceData.Entities;
 
 	TArray<bool> bRequirements;
 	bRequirements.SetNum(Entities.Num());
@@ -53,10 +53,10 @@ bool FRecallGameplayTagFilterCondition::TestCondition(FStateTreeExecutionContext
 	ParallelFor(bRequirements.Num(),
 		[&GameplayTagCondition, &bRequirements, &EntityManager, &Entities](int32 Index)
 	{
-		const FMassExtendedEntityHandle& Entity = Entities[Index];
+		const FMassEntityHandle& Entity = Entities[Index];
 		if (EntityManager.IsEntityValid(Entity))
 		{
-			const FMassExtendedEntityView EntityView(EntityManager, Entity);
+			const FMassEntityView EntityView(EntityManager, Entity);
 			const FRecallGameplayTagFragment* GameplayTagFragmentPtr = EntityView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 
 			bRequirements[Index] = GameplayTagFragmentPtr != nullptr ? Recall::GameplayTag::Utils::EvaluateCondition(

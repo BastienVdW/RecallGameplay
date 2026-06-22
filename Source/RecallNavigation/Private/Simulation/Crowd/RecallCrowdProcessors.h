@@ -6,134 +6,134 @@
 
 #pragma once
 
-#include "MassExtendedObserverProcessor.h"
+#include "MassObserverProcessor.h"
 
 #include "RecallCrowdProcessors.generated.h"
 
 UCLASS()
-class URecallCrowdAgentConstructor : public UMassExtendedObserverProcessor
+class URecallCrowdAgentConstructor : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 public:
 	URecallCrowdAgentConstructor();
 
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };
 
 UCLASS()
-class URecallCrowdAgentDestructor : public UMassExtendedObserverProcessor
+class URecallCrowdAgentDestructor : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 public:
 	URecallCrowdAgentDestructor();
 
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };
 
 UCLASS()
-class URecallCrowdAgentNavLinkTraversalConstructor : public UMassExtendedObserverProcessor
+class URecallCrowdAgentNavLinkTraversalConstructor : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 public:
 	URecallCrowdAgentNavLinkTraversalConstructor();
 
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };
 
 UCLASS()
-class URecallCrowdAgentNavLinkTraversalDestructor : public UMassExtendedObserverProcessor
+class URecallCrowdAgentNavLinkTraversalDestructor : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 public:
 	URecallCrowdAgentNavLinkTraversalDestructor();
 
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };
 
 UCLASS()
-class URecallCrowdAgentSetBlackboardProcessor : public UMassExtendedProcessor
+class URecallCrowdAgentSetBlackboardProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallCrowdAgentSetBlackboardProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 };
 
 UCLASS()
-class URecallCrowdAgentGetBlackboardProcessor : public UMassExtendedProcessor
+class URecallCrowdAgentGetBlackboardProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallCrowdAgentGetBlackboardProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 };
 
 UCLASS()
-class URecallCrowdUpdateProcessor : public UMassExtendedProcessor
+class URecallCrowdUpdateProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallCrowdUpdateProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 	virtual bool ShouldAllowQueryBasedPruning(const bool bRuntimeMode = true) const override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 };

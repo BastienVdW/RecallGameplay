@@ -8,8 +8,8 @@
 
 #include "StateTree/RecallStateTreeConditionBase.h"
 #include "Data/GameplayTag/RecallGameplayTagConditionTypes.h"
-#include "MassExtendedEntityHandle.h"
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityHandle.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallCommonConditions.generated.h"
 
@@ -19,12 +19,12 @@ struct RECALLGAMEPLAY_API FRecallCompareEntityConditionInstanceData
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category=Input)
-	FMassExtendedEntityHandle Left;
+	FMassEntityHandle Left;
 
 	UPROPERTY(EditAnywhere, Category=Parameter)
-	FMassExtendedEntityHandle Right;
+	FMassEntityHandle Right;
 };
-STATETREE_POD_INSTANCEDATA(FRecallCompareEntityConditionInstanceData);
+UE_STATETREE_ZEROED_TRIVIALLY_COPIED_NO_DESTRUCTOR_INSTANCEDATA(FRecallCompareEntityConditionInstanceData);
 
 USTRUCT(DisplayName="Entity Compare")
 struct RECALLGAMEPLAY_API FRecallCompareEntityCondition : public FRecallStateTreeConditionBase
@@ -47,12 +47,12 @@ struct RECALLGAMEPLAY_API FRecallGameplayTagFilterConditionInstanceData
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category=Input)
-	TArray<FMassExtendedEntityHandle> Entities;
-	
+	TArray<FMassEntityHandle> Entities;
+
 	UPROPERTY(EditAnywhere, Category="Parameter")
 	FRecallGameplayTagCondition GameplayTagCondition;
 };
-STATETREE_POD_INSTANCEDATA(FRecallGameplayTagFilterConditionInstanceData);
+UE_STATETREE_CONSTRUCTED_TRIVIALLY_COPIED_NO_DESTRUCTOR_INSTANCEDATA(FRecallGameplayTagFilterConditionInstanceData);
 
 /**
  * Evaluate if any of the entities in the array meet the gameplay tag condition.

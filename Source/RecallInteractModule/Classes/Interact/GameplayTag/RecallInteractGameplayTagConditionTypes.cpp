@@ -8,7 +8,7 @@
 #include "RecallInteractGameplayTagConditionTypes.h"
 
 #include "GameplayTagsManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 #include "Utility/GameplayTag/RecallGameplayTagUtils.h"
 
@@ -18,7 +18,7 @@
 bool FRecallInteractGameplayTagCondition::EvaluateCondition(const FRecallInteractContext& Context, FText& OutFailedText) const
 {
 	// Instigator tags check
-	const FMassExtendedEntityView InstigatorView(Context.GetEntityManagerChecked(), Context.InstigatorEntity);
+	const FMassEntityView InstigatorView(Context.GetEntityManagerChecked(), Context.InstigatorEntity);
 	const FRecallGameplayTagFragment* InstigatorGameplayTagFragmentPtr = InstigatorView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 	if (InstigatorGameplayTagFragmentPtr != nullptr
 		&& !Recall::GameplayTag::Utils::EvaluateCondition(GameplayTagCondition, InstigatorGameplayTagFragmentPtr->GameplayTagCountMap))
@@ -28,7 +28,7 @@ bool FRecallInteractGameplayTagCondition::EvaluateCondition(const FRecallInterac
 	}
 
 	// Interactable tags check
-	const FMassExtendedEntityView InteractableView(Context.GetEntityManagerChecked(), Context.InteractableEntity);
+	const FMassEntityView InteractableView(Context.GetEntityManagerChecked(), Context.InteractableEntity);
 	const FRecallGameplayTagFragment* InteractableGameplayTagFragmentPtr = InteractableView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 	if (InteractableGameplayTagFragmentPtr != nullptr
 		&& !Recall::GameplayTag::Utils::EvaluateCondition(OwnerGameplayTagCondition, InteractableGameplayTagFragmentPtr->GameplayTagCountMap))
@@ -46,8 +46,8 @@ bool FRecallInteractGameplayTagCondition::EvaluateCondition(const FRecallInterac
 bool FRecallInteractGameplayTagCountCondition::EvaluateCondition(const FRecallInteractContext& Context,
 	FText& OutFailedText) const
 {
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(Target);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(Target);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 
 	const FRecallGameplayTagFragment* TargetGameplayTagFragmentPtr = TargetView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 	if (TargetGameplayTagFragmentPtr == nullptr)
@@ -118,11 +118,11 @@ bool FRecallInteractGameplayTagCountCondition::CompareValue(int32 Count) const
 bool FRecallInteractFactionComparisonCondition::EvaluateCondition(const FRecallInteractContext& Context,
 	FText& OutFailedText) const
 {
-	const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 	
-	auto GetFactionTags = [&EntityManager](const FMassExtendedEntityHandle& Entity)
+	auto GetFactionTags = [&EntityManager](const FMassEntityHandle& Entity)
 	{
-		const FMassExtendedEntityView EntityView(EntityManager, Entity);
+		const FMassEntityView EntityView(EntityManager, Entity);
 		const auto* GameplayTagFragmentPtr = EntityView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 
 		if (GameplayTagFragmentPtr != nullptr)

@@ -7,7 +7,7 @@
 
 #include "RecallTokenTasks.h"
 
-#include "MassExtendedEntityManager.h"
+#include "MassEntityManager.h"
 #include "StateTree/RecallStateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
 #include "Simulation/StateTree/RecallStateTreeTokenFragments.h"

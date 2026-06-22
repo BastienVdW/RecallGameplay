@@ -7,7 +7,7 @@
 #pragma once
 
 #include "StateTree/RecallStateTreeConditionBase.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallCharacterConditions.generated.h"
 
@@ -16,7 +16,7 @@ struct RECALLGAMEPLAY_API FRecallCharacterStandingConditionInstanceData
 {
 	GENERATED_BODY()
 };
-STATETREE_POD_INSTANCEDATA(FRecallCharacterStandingConditionInstanceData);
+UE_STATETREE_ZEROED_TRIVIALLY_COPIED_NO_DESTRUCTOR_INSTANCEDATA(FRecallCharacterStandingConditionInstanceData);
 
 USTRUCT(DisplayName="Character Standing")
 struct RECALLGAMEPLAY_API FRecallCharacterStandingCondition : public FRecallStateTreeConditionBase

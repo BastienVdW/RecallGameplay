@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Subsystems/WorldSubsystem.h"
-#include "MassExtendedExternalSubsystemTraits.h"
+#include "Mass/ExternalSubsystemTraits.h"
 #include "RecallNavigationObstacleTypes.h"
 
 #include "RecallNavigationObstacleSubsystem.generated.h"
@@ -31,7 +31,7 @@ private:
 };
 
 template<>
-struct TMassExtendedExternalSubsystemTraits<URecallNavigationObstacleSubsystem> final
+struct TMassExternalSubsystemTraits<URecallNavigationObstacleSubsystem> final
 {
 	enum
 	{

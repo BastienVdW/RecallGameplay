@@ -7,12 +7,12 @@
 
 #include "Simulation/Attribute/RecallAttributeTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Attribute/RecallAttributeFragments.h"
 
-void URecallAttributeTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallAttributeTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	BuildContext.AddFragment<FRecallAttributeFragment>();
 	

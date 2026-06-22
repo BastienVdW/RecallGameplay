@@ -7,8 +7,8 @@
 
 #include "RecallGridDeviceTasks.h"
 
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Data/Device/RecallDeviceAsset.h"
 #include "Entity/RecallGridDeviceSpawnCommand.h"
 #include "StateTreeExecutionContext.h"
@@ -42,12 +42,12 @@ EStateTreeRunStatus FRecallGridDestroyDeviceTask::EnterState(FStateTreeExecution
 	if (GridSelectionSystem.IsEntityRegistered(InstanceData.GridCellIndex))
 	{
 		const FRecallStateTreeExecutionContext& RecallContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
-		const FMassExtendedEntityManager& EntityManager = RecallContext.GetEntityManager();
+		const FMassEntityManager& EntityManager = RecallContext.GetEntityManager();
 		
-		const FMassExtendedEntityHandle CellEntity = GridSelectionSystem.GetGridCellEntity(InstanceData.GridCellIndex);
+		const FMassEntityHandle CellEntity = GridSelectionSystem.GetGridCellEntity(InstanceData.GridCellIndex);
 		if (EntityManager.IsEntityValid(CellEntity))
 		{
-			const FMassExtendedEntityView CellEntityView(EntityManager, CellEntity);
+			const FMassEntityView CellEntityView(EntityManager, CellEntity);
 			if (auto* ObstacleFragment = CellEntityView.GetFragmentDataPtr<FRecallGridObstacleFragment>())
 			{
 				ObstacleFragment->GridCellIndex = INDEX_NONE;

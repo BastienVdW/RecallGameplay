@@ -16,7 +16,7 @@ struct RECALLINTERACTMODULE_API FRecallStateTreeClosestInteractConditionInstance
 {
 	GENERATED_BODY()
 };
-STATETREE_POD_INSTANCEDATA(FRecallStateTreeClosestInteractConditionInstanceData);
+UE_STATETREE_ZEROED_TRIVIALLY_COPIED_NO_DESTRUCTOR_INSTANCEDATA(FRecallStateTreeClosestInteractConditionInstanceData);
 
 USTRUCT(DisplayName="Has Interact Target")
 struct RECALLINTERACTMODULE_API FRecallStateTreeClosestInteractCondition : public FRecallPlayerConditionBase

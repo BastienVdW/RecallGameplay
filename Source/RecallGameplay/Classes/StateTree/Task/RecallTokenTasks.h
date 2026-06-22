@@ -8,7 +8,7 @@
 
 #include "StateTree/RecallStateTreeTaskBase.h"
 #include "Simulation/StateTree/RecallStateTreeTokenHandle.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallTokenTasks.generated.h"
 
@@ -18,7 +18,7 @@ struct RECALLGAMEPLAY_API FRecallTokenTaskInstanceData
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category=Parameter)
-	FMassExtendedEntityHandle TargetEntity;
+	FMassEntityHandle TargetEntity;
 	
 	UPROPERTY(EditAnywhere, Category=Parameter, meta=(ClampMin=1))
 	int32 TokenLimit = 5;

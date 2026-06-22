@@ -7,7 +7,7 @@
 
 #include "RecallTemplateProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "Simulation/_template/RecallTemplateFragments.h"
 
@@ -17,27 +17,27 @@
 URecallTemplateConstructor::URecallTemplateConstructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallTemplateFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Add;
+	Operation = EMassObservedOperation::Add;
 }
 
-void URecallTemplateConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallTemplateConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallTemplateConstructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallTemplateConstructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTemplateFragment>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallTemplateFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddConstSharedRequirement<FRecallTemplateConstSharedFragment>();
 }
 
-void URecallTemplateConstructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallTemplateConstructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Template_Constructor);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const FRecallTemplateConstSharedFragment& TemplateSharedFragment = Context.GetConstSharedFragment<FRecallTemplateConstSharedFragment>();
 
@@ -56,28 +56,28 @@ void URecallTemplateConstructor::Execute(FMassExtendedEntityManager& EntityManag
 URecallTemplateDestructor::URecallTemplateDestructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallTemplateFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Remove;
+	Operation = EMassObservedOperation::Remove;
 }
 
-void URecallTemplateDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallTemplateDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallTemplateDestructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallTemplateDestructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTemplateFragment>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallTemplateFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddConstSharedRequirement<FRecallTemplateConstSharedFragment>();
 
 }
 
-void URecallTemplateDestructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallTemplateDestructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Template_Destructor);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const FRecallTemplateConstSharedFragment& TemplateSharedFragment = Context.GetConstSharedFragment<FRecallTemplateConstSharedFragment>();
 
@@ -98,27 +98,27 @@ URecallTemplateSignalProcessor::URecallTemplateSignalProcessor(const FObjectInit
 {
 }
 
-void URecallTemplateSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallTemplateSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
 	// SubscribeToSignal(Recall::Template::Signals::DummySignal);
 }
 
-void URecallTemplateSignalProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallTemplateSignalProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTemplateFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTemplateFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddConstSharedRequirement<FRecallTemplateConstSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallTemplateSignalProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallTemplateSignalProcessor::SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Template_Signal);
 
-	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExecutionContext& Context)
 	{
-		const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+		const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
 
 		const FRecallTemplateConstSharedFragment& TemplateConstSharedFragment = Context.GetConstSharedFragment<FRecallTemplateConstSharedFragment>();
@@ -127,7 +127,7 @@ void URecallTemplateSignalProcessor::SignalEntities(FMassExtendedEntityManager& 
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 
 			FRecallTemplateFragment& TemplateFragment = TemplateList[EntityIndex];
 		}
@@ -140,11 +140,11 @@ void URecallTemplateSignalProcessor::SignalEntities(FMassExtendedEntityManager& 
 URecallTemplateProcessor::URecallTemplateProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 }
 
-void URecallTemplateProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallTemplateProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
@@ -154,18 +154,18 @@ bool URecallTemplateProcessor::ShouldAllowQueryBasedPruning(const bool bRuntimeM
 	return Super::ShouldAllowQueryBasedPruning(bRuntimeMode);
 }
 
-void URecallTemplateProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallTemplateProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTemplateFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTemplateFragment>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallTemplateProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallTemplateProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Template_Execute);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
-		const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+		const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 
 		const TConstArrayView<FRecallTemplateFragment> TemplateList = Context.GetFragmentView<FRecallTemplateFragment>();
 

@@ -7,7 +7,7 @@
 
 #include "RecallAssetTasks.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
 #include "System/Asset/RecallAssetManagerSubsystem.h"

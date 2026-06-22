@@ -7,7 +7,7 @@
 
 #include "RecallAttributeProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Attribute/RecallAttributeDefinitionTypes.h"
 #include "Simulation/Attribute/RecallAttributeFragments.h"
 
@@ -17,25 +17,25 @@
 URecallAttributeInitializer::URecallAttributeInitializer()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallAttributeFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Add;
+	Operation = EMassObservedOperation::Add;
 }
 
-void URecallAttributeInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallAttributeInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallAttributeInitializer::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallAttributeInitializer::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallAttributeFragment>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallAttributeFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddConstSharedRequirement<FRecallAttributeConstSharedFragment>();
 }
 
-void URecallAttributeInitializer::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallAttributeInitializer::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const auto& AttributeConstSharedFragment = Context.GetConstSharedFragment<FRecallAttributeConstSharedFragment>();
 		if (!AttributeConstSharedFragment.AttributeSet)
@@ -47,7 +47,7 @@ void URecallAttributeInitializer::Execute(FMassExtendedEntityManager& EntityMana
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			
 			FRecallAttributeFragment& AttributeFragment = AttributeList[EntityIndex];
 			AttributeFragment.AttributeSet = FRecallAttributeSet(AttributeConstSharedFragment.AttributeSet);

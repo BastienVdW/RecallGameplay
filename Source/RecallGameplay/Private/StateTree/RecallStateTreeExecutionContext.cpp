@@ -7,7 +7,7 @@
 
 #include "StateTree/RecallStateTreeExecutionContext.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "Simulation/StateTree/RecallStateTreeSignalTypes.h"
 
@@ -18,10 +18,10 @@ bool SetContextData(FStateTreeExecutionContext& Context)
 	CSV_SCOPED_TIMING_STAT_EXCLUSIVE(StateTreeProcessorSetContextData);
 
 	const FRecallStateTreeExecutionContext& RecallContext = static_cast<const FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityManager& EntityManager = RecallContext.GetEntityManager();
+	const FMassEntityManager& EntityManager = RecallContext.GetEntityManager();
 
 	bool bFoundAll = true;
-	const FMassExtendedEntityView EntityView(EntityManager, RecallContext.GetEntity());
+	const FMassEntityView EntityView(EntityManager, RecallContext.GetEntity());
 
 	for (const FStateTreeExternalDataDesc& DataDesc : Context.GetContextDataDescs())
 	{
@@ -30,7 +30,7 @@ bool SetContextData(FStateTreeExecutionContext& Context)
 			continue;
 		}
 
-		if (DataDesc.Struct->IsChildOf(FMassExtendedFragment::StaticStruct()))
+		if (DataDesc.Struct->IsChildOf(FMassFragment::StaticStruct()))
 		{
 			const UScriptStruct* ScriptStruct = Cast<const UScriptStruct>(DataDesc.Struct);
 			FStructView Fragment = EntityView.GetFragmentDataStruct(ScriptStruct);
@@ -43,7 +43,7 @@ bool SetContextData(FStateTreeExecutionContext& Context)
 				bFoundAll = false;
 			}
 		}
-		else if (DataDesc.Struct->IsChildOf(FMassExtendedSharedFragment::StaticStruct()))
+		else if (DataDesc.Struct->IsChildOf(FMassSharedFragment::StaticStruct()))
 		{
 			const UScriptStruct* ScriptStruct = Cast<const UScriptStruct>(DataDesc.Struct);
 			FStructView SharedFragment = EntityView.GetSharedFragmentDataStruct(ScriptStruct);
@@ -56,7 +56,7 @@ bool SetContextData(FStateTreeExecutionContext& Context)
 				bFoundAll = false;
 			}
 		}
-		else if (DataDesc.Struct->IsChildOf(FMassExtendedConstSharedFragment::StaticStruct()))
+		else if (DataDesc.Struct->IsChildOf(FMassConstSharedFragment::StaticStruct()))
 		{
 			const UScriptStruct* ScriptStruct = Cast<const UScriptStruct>(DataDesc.Struct);
 			FConstStructView ConstSharedFragment = EntityView.GetConstSharedFragmentDataStruct(ScriptStruct);
@@ -83,11 +83,11 @@ bool CollectExternalData(const FStateTreeExecutionContext& Context, const UState
 	CSV_SCOPED_TIMING_STAT_EXCLUSIVE(StateTreeProcessorCollectExternalData);
 
 	const FRecallStateTreeExecutionContext& RecallContext = static_cast<const FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityManager& EntityManager = RecallContext.GetEntityManager();
+	const FMassEntityManager& EntityManager = RecallContext.GetEntityManager();
 	const UWorld* World = RecallContext.GetWorld();
 
 	TArray<FName> MissingDataDescs;
-	const FMassExtendedEntityView EntityView(EntityManager, RecallContext.GetEntity());
+	const FMassEntityView EntityView(EntityManager, RecallContext.GetEntity());
 
 	check(ExternalDataDescs.Num() == OutDataViews.Num());
 
@@ -99,7 +99,7 @@ bool CollectExternalData(const FStateTreeExecutionContext& Context, const UState
 			continue;
 		}
 
-		if (DataDesc.Struct->IsChildOf(FMassExtendedFragment::StaticStruct()))
+		if (DataDesc.Struct->IsChildOf(FMassFragment::StaticStruct()))
 		{
 			const UScriptStruct* ScriptStruct = Cast<const UScriptStruct>(DataDesc.Struct);
 			FStructView Fragment = EntityView.GetFragmentDataStruct(ScriptStruct);
@@ -115,7 +115,7 @@ bool CollectExternalData(const FStateTreeExecutionContext& Context, const UState
 				}
 			}
 		}
-		else if (DataDesc.Struct->IsChildOf(FMassExtendedSharedFragment::StaticStruct()))
+		else if (DataDesc.Struct->IsChildOf(FMassSharedFragment::StaticStruct()))
 		{
 			const UScriptStruct* ScriptStruct = Cast<const UScriptStruct>(DataDesc.Struct);
 			FStructView SharedFragment = EntityView.GetSharedFragmentDataStruct(ScriptStruct);
@@ -139,7 +139,7 @@ bool CollectExternalData(const FStateTreeExecutionContext& Context, const UState
 				}
 			}
 		}
-		else if (DataDesc.Struct->IsChildOf(FMassExtendedConstSharedFragment::StaticStruct()))
+		else if (DataDesc.Struct->IsChildOf(FMassConstSharedFragment::StaticStruct()))
 		{
 			const UScriptStruct* ScriptStruct = Cast<const UScriptStruct>(DataDesc.Struct);
 			FConstStructView Fragment = EntityView.GetConstSharedFragmentDataStruct(ScriptStruct);
@@ -184,7 +184,7 @@ bool CollectExternalData(const FStateTreeExecutionContext& Context, const UState
 }; // UE::MassBehavior
 
 FRecallStateTreeExecutionContext::FRecallStateTreeExecutionContext(UObject& InOwner, const UStateTree& InStateTree, FStateTreeInstanceData& InInstanceData,
-	FMassExtendedEntityManager& InEntityManager, URecallSignalSubsystem& InSignalSystem, FMassExtendedExecutionContext& InContext, const FMassExtendedEntityHandle& InEntity)
+	FMassEntityManager& InEntityManager, URecallSignalSubsystem& InSignalSystem, FMassExecutionContext& InContext, const FMassEntityHandle& InEntity)
 	: FStateTreeExecutionContext(InOwner, InStateTree, InInstanceData, FOnCollectStateTreeExternalData::CreateStatic(UE::MassBehavior::CollectExternalData))
 	, EntityManager(&InEntityManager)
 	, SignalSubsystem(&InSignalSystem)

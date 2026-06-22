@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "RecallStateTreeFragments.h"
 
 #include "RecallStateTreeTrait.generated.h"
@@ -14,14 +14,14 @@
 class UStateTree;
 
 UCLASS(meta=(DisplayName="RE State Tree"))
-class RECALLGAMEPLAY_API URecallStateTreeTrait : public UMassExtendedEntityTraitBase
+class RECALLGAMEPLAY_API URecallStateTreeTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 	URecallStateTreeTrait();
 
 public:
-	void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override final;
+	void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override final;
 	
 protected:
 	UPROPERTY(EditAnywhere)

@@ -10,7 +10,7 @@
 
 struct FRecallMovementContext
 {
-	struct FMassExtendedExecutionContext& ExecutionContext;
+	struct FMassExecutionContext& ExecutionContext;
 	struct FRecallMovementFragment& MovementFragment;
 	const struct FRecallMovementSharedFragment& MovementConstSharedFragment;
 	const TWeakPtr<class FRecallPhysicsBody>& PhysicsBody;

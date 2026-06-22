@@ -8,7 +8,7 @@
 #include "RecallInteractGameplayEffectCommandTypes.h"
 
 #include "Gameplay/RecallGameplayEffectContext.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "Simulation/GameplayEffect/RecallGameplayEffectFragments.h"
 
 //----------------------------------------------------------------------//
@@ -21,8 +21,8 @@ void FRecallInteractGameplayEffectCommand::OnBegin(const FRecallInteractContext&
 		return;
 	}
 
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(Target);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(Target);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 
 	FRecallGameplayEffectFragment* GameplayEffectFragmentPtr = TargetView.GetFragmentDataPtr<FRecallGameplayEffectFragment>();
 	if (GameplayEffectFragmentPtr == nullptr)
@@ -43,8 +43,8 @@ void FRecallInteractGameplayEffectCommand::OnEnd(const FRecallInteractContext& C
 		return;
 	}
 
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(Target);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(Target);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 
 	FRecallGameplayEffectFragment* GameplayEffectFragmentPtr = TargetView.GetFragmentDataPtr<FRecallGameplayEffectFragment>();
 	if (GameplayEffectFragmentPtr == nullptr)
@@ -61,8 +61,8 @@ void FRecallInteractGameplayEffectCommand::OnEnd(const FRecallInteractContext& C
 
 void FRecallInteractGameplayEffectCommand::OnExecute(const FRecallInteractContext& Context) const
 {
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(Target);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(Target);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 
 	FRecallGameplayEffectFragment* GameplayEffectFragmentPtr = TargetView.GetFragmentDataPtr<FRecallGameplayEffectFragment>();
 	if (GameplayEffectFragmentPtr == nullptr)

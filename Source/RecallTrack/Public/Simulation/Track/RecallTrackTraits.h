@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "Physics/RecallPhysicsTypes.h"
 #include "Physics/Common/RecallPhysicsCommonShapeTypes.h"
 #include "Simulation/Physics/RecallPhysicsColliderTraits.h"
@@ -23,7 +23,7 @@ class RECALLTRACK_API URecallTrackTrait : public URecallPhysicsBodyTrait
 	
 public:
 	virtual void PostLoad() override;
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere, Category=Collision, meta=(ShowOnlyInnerProperties))

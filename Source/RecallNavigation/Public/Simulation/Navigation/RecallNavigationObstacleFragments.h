@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallNavigationObstacleFragments.generated.h"
 
 USTRUCT()
-struct RECALLNAVIGATION_API FRecallNavigationObstacleFragment : public FMassExtendedFragment
+struct RECALLNAVIGATION_API FRecallNavigationObstacleFragment : public FMassFragment
 {
 	GENERATED_BODY()
 

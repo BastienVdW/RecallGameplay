@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "System/Navigation/RecallNavigationTypes.h"
 
 #include "RecallNavigationFragments.generated.h"
@@ -27,7 +27,7 @@ constexpr void EnumRemoveFlags(uint16& Flags, ERecallNavMeshPathRequestFlag Flag
 constexpr bool EnumHasAnyFlags(uint16 Flags, ERecallNavMeshPathRequestFlag Contains) { return (Flags & static_cast<uint16>(Contains)) != 0; }
 
 USTRUCT()
-struct RECALLNAVIGATION_API FRecallNavMeshPathRequestFragment : public FMassExtendedFragment
+struct RECALLNAVIGATION_API FRecallNavMeshPathRequestFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -75,7 +75,7 @@ private:
 using FRecallNavigationAgentFragment = FRecallNavMeshPathRequestFragment;
 
 USTRUCT()
-struct RECALLNAVIGATION_API FRecallNavigationAgentConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLNAVIGATION_API FRecallNavigationAgentConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

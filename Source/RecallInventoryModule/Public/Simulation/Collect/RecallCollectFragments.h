@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "Collect/RecallCollectTypes.h"
 
 #include "RecallCollectFragments.generated.h"
@@ -15,7 +15,7 @@
  * Resources can be collected from this location
  */
 USTRUCT()
-struct RECALLINVENTORYMODULE_API FRecallCollectPointFragment : public FMassExtendedFragment
+struct RECALLINVENTORYMODULE_API FRecallCollectPointFragment : public FMassFragment
 {
 	GENERATED_BODY()
 	
@@ -26,7 +26,7 @@ public:
 };
 
 USTRUCT()
-struct RECALLINVENTORYMODULE_API FRecallCollectableFragment : public FMassExtendedFragment
+struct RECALLINVENTORYMODULE_API FRecallCollectableFragment : public FMassFragment
 {
 	GENERATED_BODY()
 	
@@ -45,7 +45,7 @@ public:
 };
 
 USTRUCT()
-struct RECALLINVENTORYMODULE_API FRecallCollectableConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLINVENTORYMODULE_API FRecallCollectableConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

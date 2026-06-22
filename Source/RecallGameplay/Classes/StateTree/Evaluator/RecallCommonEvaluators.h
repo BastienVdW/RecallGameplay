@@ -10,7 +10,7 @@
 #include "StateTree/RecallStateTreeEvaluatorBase.h"
 #include "GameplayTagContainer.h"
 #include "StateTreePropertyRef.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "System/AI/RecallStateTreeInstanceTypes.h"
 
 #include "RecallCommonEvaluators.generated.h"
@@ -109,7 +109,7 @@ struct RECALLGAMEPLAY_API FRecallEventPayloadEvaluatorInstanceData
 	TStateTreePropertyRef<FVector> VectorResult;
 	
 	UPROPERTY(VisibleAnywhere, Category=Input, meta=(CanRefToArray, Optional, EditCondition="Type == ERecallEventPayloadType::Entity", EditConditionHides), DisplayName="Result")
-	TStateTreePropertyRef<FMassExtendedEntityHandle> EntityResult;
+	TStateTreePropertyRef<FMassEntityHandle> EntityResult;
 
 	UPROPERTY(Transient)
 	TArray<FInstancedStruct> Payloads;

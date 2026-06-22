@@ -8,7 +8,7 @@
 #include "RecallVehicleRepresentationProcessors.h"
 
 #include "Actor/Vehicle/Interface/RecallPhysicsVehicleActorInterface.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Physics/Vehicle/RecallPhysicsVehicleObject.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
 #include "Simulation/Physics/RecallPhysicsVehicleFragments.h"
@@ -22,30 +22,30 @@
 URecallVehicleRepresentationProcessor::URecallVehicleRepresentationProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::Render;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::Render;
 	bRequiresGameThreadExecution = true;
 }
 
-void URecallVehicleRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallVehicleRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallVehicleRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallVehicleRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallActorRepresentationFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallPhysicsVehicleFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallActorRepresentationFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallPhysicsVehicleFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallVehicleRepresentationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallVehicleRepresentationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_VehicleRepresentation_Execute);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const URecallPhysicsSubsystem& PhysicsSystem = Context.GetSubsystemChecked<URecallPhysicsSubsystem>();
 		const URecallActorSubsystem& ActorSystem = Context.GetSubsystemChecked<URecallActorSubsystem>();

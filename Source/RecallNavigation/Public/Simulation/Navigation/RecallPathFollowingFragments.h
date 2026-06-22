@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "Simulation/Navigation/RecallPathFollowingSettings.h"
 #include "Simulation/Crowd/RecallCrowdAgentCollisionSettings.h"
 
@@ -68,7 +68,7 @@ constexpr void EnumRemoveFlags(uint16& Flags, ERecallPathFollowerFlag FlagsToRem
 constexpr bool EnumHasAnyFlags(uint16 Flags, ERecallPathFollowerFlag Contains) { return (Flags & static_cast<uint16>(Contains)) != 0; }
 
 USTRUCT()
-struct RECALLNAVIGATION_API FRecallPathFollowerFragment : public FMassExtendedFragment
+struct RECALLNAVIGATION_API FRecallPathFollowerFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -234,7 +234,7 @@ public:
  * All navigation agents (NavMesh and Grid) must have this fragment for the path follower processor to work
  */
 USTRUCT()
-struct RECALLNAVIGATION_API FRecallPathFollowingConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLNAVIGATION_API FRecallPathFollowingConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 	
@@ -248,7 +248,7 @@ struct RECALLNAVIGATION_API FRecallPathFollowingConstSharedFragment : public FMa
  * Contains agent-specific settings for crowd collision (height, etc.)
  */
 USTRUCT()
-struct RECALLNAVIGATION_API FRecallCrowdAgentCollisionConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLNAVIGATION_API FRecallCrowdAgentCollisionConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

@@ -7,8 +7,8 @@
 
 #include "RecallInteractGenericCommandTypes.h"
 
-#include "MassExtendedCommandBuffer.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassCommandBuffer.h"
+#include "MassExecutionContext.h"
 
 void FRecallInteractDestroyCommand::OnExecute(const FRecallInteractContext& Context) const
 {

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "RecallGameplayEffectContext.h"
 #include "RecallGameplayEffectHandle.h"
 #include "RecallGameplayEffectInstance.h"
@@ -26,7 +26,7 @@ public:
 	virtual ~FRecallGameplayEffectContainer() = default;
 	
 public:
-	void Initialize(const FMassExtendedEntityHandle& InOwnerEntity);
+	void Initialize(const FMassEntityHandle& InOwnerEntity);
 
 public:
 	FRecallGameplayEffectHandle AddEffect(const FRecallGameplayEffectContext& Context, const TSubclassOf<URecallGameplayEffect>& Effect);
@@ -39,7 +39,7 @@ public:
 
 	TArray<TSubclassOf<URecallGameplayEffect>> GetEffectClasses() const;
 	TArray<FRecallGameplayEffectHandle> GetAllEffectHandles(const TSubclassOf<URecallGameplayEffect>& Effect,
-		const FMassExtendedEntityHandle& EffectOwnerEntity = FMassExtendedEntityHandle()) const;
+		const FMassEntityHandle& EffectOwnerEntity = FMassEntityHandle()) const;
 
 	void TickEffects(const FRecallGameplayEffectContext& Context, float DeltaTime,
 		ERecallGameplayEffectTickSource Source = ERecallGameplayEffectTickSource::Custom);
@@ -49,7 +49,7 @@ protected:
 	 * Entity owning this modifier to whom the effect is being applied.
 	 */
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle OwnerEntity;
+	FMassEntityHandle OwnerEntity;
 
 	/**
 	 * Map of effects being applied to the owning entity.
@@ -75,7 +75,7 @@ private:
 	void HandleEffectStack(const FRecallGameplayEffectContext& Context, const TSubclassOf<URecallGameplayEffect>& Effect);
 
 	FRecallGameplayEffectHandle GetOldestEffectHandle(const TSubclassOf<URecallGameplayEffect>& Effect,
-		const FMassExtendedEntityHandle& EffectOwnerEntity, int32& OutEffectOwnedCount) const;
+		const FMassEntityHandle& EffectOwnerEntity, int32& OutEffectOwnedCount) const;
 
 	static bool TickEffect_Internal(float DeltaTime, ERecallGameplayEffectTickSource Source,
 	                                FRecallGameplayEffectInstance& Instance);

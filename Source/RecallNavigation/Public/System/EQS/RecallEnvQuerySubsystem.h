@@ -9,7 +9,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "System/Interface/RecallSimulationReactSystemInterface.h"
-#include "MassExtendedExternalSubsystemTraits.h"
+#include "Mass/ExternalSubsystemTraits.h"
 #include "RecallEnvQueryTypes.h"
 
 #include "RecallEnvQuerySubsystem.generated.h"
@@ -22,7 +22,7 @@ class RECALLNAVIGATION_API URecallEnvQuerySubsystem :
 	GENERATED_BODY()
 
 public:
-	FRecallEnvQueryHandle RequestEnvQuery(const FMassExtendedEntityHandle& Entity, const FRecallEnvQueryRequest& Request);
+	FRecallEnvQueryHandle RequestEnvQuery(const FMassEntityHandle& Entity, const FRecallEnvQueryRequest& Request);
 	bool IsEnvQueryFinished(const FRecallEnvQueryHandle& Handle) const;
 	bool GetEnvQueryBestResult(const FRandomStream& RandomStream, FRecallEnvQueryHandle& Handle, FVector& OutLocation);
 	void ReleaseEnvQuery(FRecallEnvQueryHandle& Handle);
@@ -72,7 +72,7 @@ private:
 };
 
 template<>
-struct TMassExtendedExternalSubsystemTraits<URecallEnvQuerySubsystem> final
+struct TMassExternalSubsystemTraits<URecallEnvQuerySubsystem> final
 {
 	enum
 	{

@@ -7,7 +7,7 @@
 
 #include "Simulation/Cinematic/RecallCinematicTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "RecallCinematicInternalFragments.h"
 #include "Simulation/Cinematic/RecallCinematicFragments.h"
 #include "Utility/Trait/RecallTraitUtils.h"
@@ -15,9 +15,9 @@
 //----------------------------------------------------------------------//
 // URecallCinematicTrait
 //----------------------------------------------------------------------//
-void URecallCinematicTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallCinematicTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	BuildContext.AddFragment<FRecallCinematicFragment>();
 	BuildContext.AddFragment<FRecallCinematicInternalFragment>();

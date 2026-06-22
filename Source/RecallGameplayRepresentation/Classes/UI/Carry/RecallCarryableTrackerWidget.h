@@ -9,7 +9,7 @@
 #include "ExtendedCommonUserWidget.h"
 #include "Observer/Representation/RecallRepresentationReactInterface.h"
 #include "Representation/Tracker/RecallTrackerEntityInterface.h"
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallCarryableTrackerWidget.generated.h"
 
@@ -39,7 +39,7 @@ public:
 
 	// IRecallTrackerEntityInterface implementation Begin
 public:
-	virtual void SetTrackedEntity_Implementation(const FMassExtendedEntityHandle& Entity) override;
+	virtual void SetTrackedEntity_Implementation(const FMassEntityHandle& Entity) override;
 	// IRecallTrackerEntityInterface implementation End
 
 public:
@@ -63,5 +63,5 @@ protected:
 
 private:
 	UPROPERTY(Transient)
-	FMassExtendedEntityHandle TrackedEntity;
+	FMassEntityHandle TrackedEntity;
 };

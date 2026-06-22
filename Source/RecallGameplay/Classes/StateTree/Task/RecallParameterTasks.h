@@ -7,7 +7,7 @@
 #pragma once
 
 #include "StateTree/RecallStateTreeTaskBase.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "StateTreePropertyRef.h"
 
 #include "RecallParameterTasks.generated.h"
@@ -25,13 +25,13 @@ struct RECALLGAMEPLAY_API FRecallSetEntityParameterTaskInstanceData
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, Category=Input)
-	TStateTreePropertyRef<FMassExtendedEntityHandle> Parameter;
+	TStateTreePropertyRef<FMassEntityHandle> Parameter;
 	
 	UPROPERTY(EditAnywhere, Category=Parameter)
 	ERecallSetParameterSource Source = ERecallSetParameterSource::Data;
 	
 	UPROPERTY(EditAnywhere, Category=Parameter, meta=(EditCondition="Source == ERecallSetParameterSource::Data", EditConditionHides))
-	FMassExtendedEntityHandle Value;
+	FMassEntityHandle Value;
 	
 	UPROPERTY(EditAnywhere, Category=Parameter, meta=(EditCondition="Source == ERecallSetParameterSource::Payload", EditConditionHides), DisplayName="Value")
 	FInstancedStruct PayloadValue;

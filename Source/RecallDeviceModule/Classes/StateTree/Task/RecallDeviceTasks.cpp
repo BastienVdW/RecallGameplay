@@ -8,10 +8,10 @@
 #include "RecallDeviceTasks.h"
 
 #include "Data/Device/RecallDeviceAsset.h"
-#include "MassExtendedCommandBuffer.h"
-#include "MassExtendedEntityConfigAsset.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassCommandBuffer.h"
+#include "MassEntityConfigAsset.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "StateTree/RecallStateTreeExecutionContext.h"
 #include "StateTree/Task/RecallCommonTasks.h"
@@ -116,7 +116,7 @@ EStateTreeRunStatus FRecallPlaceDeviceTask::Tick(FStateTreeExecutionContext& Con
 	const FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	const FRecallStateTreeExecutionContext& RecallContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
 
-	FMassExtendedEntityHandle DeviceEntity;
+	FMassEntityHandle DeviceEntity;
 	if (!GetOrSpawnDeviceEntityEntityAsync(Context, DeviceEntity))
 	{
 		RecallContext.GetSignalSystem().DelaySignalEntity(
@@ -134,7 +134,7 @@ EStateTreeRunStatus FRecallPlaceDeviceTask::Tick(FStateTreeExecutionContext& Con
 	return Super::Tick(Context, DeltaTime);
 }
 
-bool FRecallPlaceDeviceTask::GetOrSpawnDeviceEntityEntityAsync(FStateTreeExecutionContext& Context, FMassExtendedEntityHandle& OutEntity) const
+bool FRecallPlaceDeviceTask::GetOrSpawnDeviceEntityEntityAsync(FStateTreeExecutionContext& Context, FMassEntityHandle& OutEntity) const
 {
 	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	
@@ -168,12 +168,12 @@ void FRecallPlaceDeviceTask::SpawnDeviceEntityEntityChecked(FStateTreeExecutionC
 	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	
 	const URecallAssetManagerSubsystem& AssetManagerSystem = Context.GetExternalData(AssetManagerSystemHandle);
-	InstanceData.DeviceEntityConfig = AssetManagerSystem.GetLoadedAsset<UMassExtendedEntityConfigAsset>(
+	InstanceData.DeviceEntityConfig = AssetManagerSystem.GetLoadedAsset<UMassEntityConfigAsset>(
 		InstanceData.DeviceAssetHandle);
 	checkf(IsValid(InstanceData.DeviceEntityConfig), TEXT("%hs Invalid entity config asset"), __FUNCTION__);
 	
 	FRecallStateTreeExecutionContext& RecallContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityHandle OwnerEntity = RecallContext.GetEntity();
+	const FMassEntityHandle OwnerEntity = RecallContext.GetEntity();
 
 	const FRecallTransformFragment& TransformFragment = Context.GetExternalData(TransformFragmentHandle);
 	const FRecallPhysicsBodyFragment* BodyFragmentPtr = Context.GetExternalDataPtr(BodyFragmentHandle);
@@ -186,7 +186,7 @@ void FRecallPlaceDeviceTask::SpawnDeviceEntityEntityChecked(FStateTreeExecutionC
 		InstanceData.DevicePosition, DeviceColorParameterName, PlacementInvalidColor, EntitySystem, RepresentationEventSystem);
 }
 
-void FRecallPlaceDeviceTask::UpdateDeviceEntityLocation(FStateTreeExecutionContext& Context, const FMassExtendedEntityHandle& DeviceEntity) const
+void FRecallPlaceDeviceTask::UpdateDeviceEntityLocation(FStateTreeExecutionContext& Context, const FMassEntityHandle& DeviceEntity) const
 {
 	FRecallStateTreeExecutionContext& RecallContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
 	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
@@ -194,7 +194,7 @@ void FRecallPlaceDeviceTask::UpdateDeviceEntityLocation(FStateTreeExecutionConte
 	const FRecallTransformFragment& TransformFragment = Context.GetExternalData(TransformFragmentHandle);
 	const FRecallPhysicsBodyFragment* BodyFragmentPtr = Context.GetExternalDataPtr(BodyFragmentHandle);
 
-	const FMassExtendedEntityView DeviceView(RecallContext.GetEntityManager(), DeviceEntity);
+	const FMassEntityView DeviceView(RecallContext.GetEntityManager(), DeviceEntity);
 	FRecallTransformFragment& DeviceTransformFragment = DeviceView.GetFragmentData<FRecallTransformFragment>();
 	InstanceData.DevicePosition = Recall::Device::Utils::GetDevicePosition(InstanceData.DeviceEntityConfig,
 		TransformFragment, BodyFragmentPtr,	bSnapToGrid, GridSize);

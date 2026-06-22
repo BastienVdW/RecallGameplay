@@ -9,7 +9,7 @@
 
 #include "Conversation/RecallConversationTypes.h"
 #include "ConversationContext.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "Simulation/StateTree/RecallStateTreeFragments.h"
 #include "Simulation/StateTree/RecallStateTreeSignalTypes.h"
@@ -29,12 +29,12 @@ void URecallConversationStateTreeEventSideEffect::CauseSideEffect_Implementation
 		return;
 	}
 
-	const TArray<FMassExtendedEntityHandle> SourceEntities = Recall::Conversation::Node::Utils::GetTargetEntities(Context, Source);
-	const TArray<FMassExtendedEntityHandle> TargetEntities = Recall::Conversation::Node::Utils::GetTargetEntities(Context, Target);
+	const TArray<FMassEntityHandle> SourceEntities = Recall::Conversation::Node::Utils::GetTargetEntities(Context, Source);
+	const TArray<FMassEntityHandle> TargetEntities = Recall::Conversation::Node::Utils::GetTargetEntities(Context, Target);
 
-	for (const FMassExtendedEntityHandle& TargetEntity : TargetEntities)
+	for (const FMassEntityHandle& TargetEntity : TargetEntities)
 	{
-		const FMassExtendedEntityView EntityView = Recall::Conversation::Node::Utils::CreateEntityView(Context, TargetEntity);
+		const FMassEntityView EntityView = Recall::Conversation::Node::Utils::CreateEntityView(Context, TargetEntity);
 		const FRecallStateTreeInstanceFragment* StateTreeInstanceFragmentPtr = EntityView.GetFragmentDataPtr<FRecallStateTreeInstanceFragment>();
 		if (StateTreeInstanceFragmentPtr == nullptr)
 		{
@@ -43,11 +43,11 @@ void URecallConversationStateTreeEventSideEffect::CauseSideEffect_Implementation
 			return;
 		}
 
-		for (const FMassExtendedEntityHandle& SourceEntity : SourceEntities)
+		for (const FMassEntityHandle& SourceEntity : SourceEntities)
 		{
 			FStateTreeEvent StateTreeEvent;
 			StateTreeEvent.Tag = Tag;
-			StateTreeEvent.Payload = FInstancedStruct::Make<FMassExtendedEntityHandle>(SourceEntity);
+			StateTreeEvent.Payload = FInstancedStruct::Make<FMassEntityHandle>(SourceEntity);
 			StateTreeEvent.Origin = Origin;
 		
 			StateTreeSystem->SendStateTreeEvent(StateTreeInstanceFragmentPtr->InstanceHandle, StateTreeEvent);

@@ -10,7 +10,7 @@
 #include "Desync/RecallDesyncLog.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "Navigation/RecallNavigationSignalTypes.h"
 #include "ProfilingDebugging/CsvProfiler.h"
@@ -49,30 +49,30 @@ CSV_DEFINE_CATEGORY(RecallStateTreeProcessor, true);
 URecallStateTreeFragmentDestructor::URecallStateTreeFragmentDestructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallStateTreeInstanceFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Remove;
+	Operation = EMassObservedOperation::Remove;
 }
 
-void URecallStateTreeFragmentDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallStateTreeFragmentDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallStateTreeFragmentDestructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallStateTreeFragmentDestructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddConstSharedRequirement<FRecallStateTreeSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallStateTreeFragmentDestructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallStateTreeFragmentDestructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_StateTree_Destructor);
 
 	EntityQuery.ForEachEntityChunk(Context,
-		[&EntityManager](FMassExtendedExecutionContext& Context)
+		[&EntityManager](FMassExecutionContext& Context)
 	{
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
 		URecallStateTreeSubsystem& StateTreeSystem = Context.GetMutableSubsystemChecked<URecallStateTreeSubsystem>();
@@ -107,25 +107,25 @@ void URecallStateTreeFragmentDestructor::Execute(FMassExtendedEntityManager& Ent
 URecallStateTreeActivationProcessor::URecallStateTreeActivationProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::PostPhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::PostPhysics;
 	ExecutionOrder.ExecuteInGroup = Recall::StateTree::ProcessorGroupNames::StateTreeActivation;
 }
 
-void URecallStateTreeActivationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallStateTreeActivationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddTagRequirement<FRecallStateTreeActivatedTag>(EMassExtendedFragmentPresence::None);
+	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddTagRequirement<FRecallStateTreeActivatedTag>(EMassFragmentPresence::None);
 	EntityQuery.AddConstSharedRequirement<FRecallStateTreeSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallStateTreeActivationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallStateTreeActivationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_StateTree_Activation);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallStateTreeSubsystem& StateTreeSystem = Context.GetMutableSubsystemChecked<URecallStateTreeSubsystem>();
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
@@ -157,13 +157,13 @@ void URecallStateTreeActivationProcessor::Execute(FMassExtendedEntityManager& En
 URecallStateTreeStartProcessor::URecallStateTreeStartProcessor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd;
+	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 	ExecutionOrder.ExecuteInGroup = Recall::StateTree::ProcessorGroupNames::StateTreeStart;
 }
 
 struct FRecallStateTreeStartCacheManager
 {
-	TArray<FMassExtendedEntityHandle> EntitiesToSignal;
+	TArray<FMassEntityHandle> EntitiesToSignal;
 
 	void ResetCache()
 	{
@@ -171,7 +171,7 @@ struct FRecallStateTreeStartCacheManager
 	}
 };
 
-void URecallStateTreeStartProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallStateTreeStartProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
@@ -180,43 +180,43 @@ void URecallStateTreeStartProcessor::InitializeInternal(UObject& Owner, const TS
 	SubscribeToSignal(Recall::StateTree::Signals::StateTreeStart);
 }
 
-void URecallStateTreeStartProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallStateTreeStartProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	FMassExtendedTagBitSet RequiredTags;
+	FMassTagBitSet RequiredTags;
 	RequiredTags.Add(*FRecallStateTreeActivatedTag::StaticStruct());
 
-	FMassExtendedTagBitSet InvalidTags;
+	FMassTagBitSet InvalidTags;
 	InvalidTags.Add(*FRecallStateTreeRunningTag::StaticStruct());
 	
-	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddConstSharedRequirement<FRecallStateTreeSharedFragment>();
-	EntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::All>(RequiredTags);
-	EntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::None>(InvalidTags);
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallRandomNumberSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddTagRequirements<EMassFragmentPresence::All>(RequiredTags);
+	EntityQuery.AddTagRequirements<EMassFragmentPresence::None>(InvalidTags);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallRandomNumberSubsystem>(EMassFragmentAccess::ReadWrite);
 
-	ProcessorRequirements.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallStateTreeStartProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallStateTreeStartProcessor::SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_StateTree_Tick);
 
 	check(CacheManager.IsValid());
 	CacheManager->ResetCache();
 
-	TArray<FMassExtendedEntityHandle>& EntitiesToSignal = CacheManager->EntitiesToSignal;
+	TArray<FMassEntityHandle>& EntitiesToSignal = CacheManager->EntitiesToSignal;
 
 	EntityQuery.ForEachEntityChunk(Context,
-		[&EntitiesToSignal](FMassExtendedExecutionContext& Context)
+		[&EntitiesToSignal](FMassExecutionContext& Context)
 	{
 		// Keep stats regarding the amount of tree instances ticked per frame
 		CSV_CUSTOM_STAT(RecallStateTreeProcessor, NumStartedStateTree, Context.GetNumEntities(), ECsvCustomStatOp::Accumulate);
 
 		const double TimeInSeconds = Recall::Simulation::Utils::GetTimeSeconds(Context.GetWorld());
 
-		FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+		FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
 		URecallStateTreeSubsystem& StateTreeSystem = Context.GetMutableSubsystemChecked<URecallStateTreeSubsystem>();
 		URecallRandomNumberSubsystem& RandomNumberSystem = Context.GetMutableSubsystemChecked<URecallRandomNumberSubsystem>();
@@ -239,7 +239,7 @@ void URecallStateTreeStartProcessor::SignalEntities(FMassExtendedEntityManager& 
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
 		SignalSystem.SignalEntities(Recall::StateTree::Signals::StateTreeActivate, EntitiesToSignal);
 		
-		Context.Defer().PushCommand<FMassExtendedCommandAddTag<FRecallStateTreeRunningTag>>(EntitiesToSignal);
+		Context.Defer().PushCommand<FMassCommandAddTag<FRecallStateTreeRunningTag>>(EntitiesToSignal);
 	}
 }
 
@@ -249,7 +249,7 @@ void URecallStateTreeStartProcessor::SignalEntities(FMassExtendedEntityManager& 
 URecallStateTreeUpdateProcessor::URecallStateTreeUpdateProcessor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteInGroup = Recall::StateTree::ProcessorGroupNames::StateTreeUpdate;
 	ExecutionOrder.ExecuteAfter.Add(Recall::Player::ProcessorGroupNames::Input);
 	ExecutionOrder.ExecuteBefore.Add(Recall::Entity::ProcessorGroupNames::AsyncSpawn);
@@ -258,7 +258,7 @@ URecallStateTreeUpdateProcessor::URecallStateTreeUpdateProcessor(const FObjectIn
 
 struct FRecallStateTreeUpdateCacheManager
 {
-	TArray<FMassExtendedEntityHandle> EntitiesToSignal;
+	TArray<FMassEntityHandle> EntitiesToSignal;
 
 	void ResetCache()
 	{
@@ -266,7 +266,7 @@ struct FRecallStateTreeUpdateCacheManager
 	}
 };
 
-void URecallStateTreeUpdateProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallStateTreeUpdateProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
@@ -293,29 +293,29 @@ void URecallStateTreeUpdateProcessor::InitializeInternal(UObject& Owner, const T
 	SubscribeToSignal(Recall::Navigation::Signals::MoveAtDone);
 }
 
-void URecallStateTreeUpdateProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallStateTreeUpdateProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	FMassExtendedTagBitSet RequiredTags;
+	FMassTagBitSet RequiredTags;
 	RequiredTags.Add(*FRecallStateTreeRunningTag::StaticStruct());
 	RequiredTags.Add(*FRecallStateTreeActivatedTag::StaticStruct());
 	
-	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddConstSharedRequirement<FRecallStateTreeSharedFragment>();
-	EntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::All>(RequiredTags);
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddTagRequirements<EMassFragmentPresence::All>(RequiredTags);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 
-	ProcessorRequirements.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallStateTreeUpdateProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallStateTreeUpdateProcessor::SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_StateTree_Tick);
 
 	check(CacheManager.IsValid());
 	CacheManager->ResetCache();
 
-	TArray<FMassExtendedEntityHandle>& EntitiesToSignal = CacheManager->EntitiesToSignal;
+	TArray<FMassEntityHandle>& EntitiesToSignal = CacheManager->EntitiesToSignal;
 
 	static bool bIsPaused = false;
 	const bool bPreviousPause = bIsPaused;
@@ -327,14 +327,14 @@ void URecallStateTreeUpdateProcessor::SignalEntities(FMassExtendedEntityManager&
 #endif // UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
 
 	EntityQuery.ForEachEntityChunk(Context,
-		[&EntitySignals, &EntitiesToSignal, bPreviousPause](FMassExtendedExecutionContext& Context)
+		[&EntitySignals, &EntitiesToSignal, bPreviousPause](FMassExecutionContext& Context)
 	{
 		// Keep stats regarding the amount of tree instances ticked per frame
 		CSV_CUSTOM_STAT(RecallStateTreeProcessor, NumTickedStateTree, Context.GetNumEntities(), ECsvCustomStatOp::Accumulate);
 
 		const double TimeInSeconds = Recall::Simulation::Utils::GetTimeSeconds(Context.GetWorld());
 
-		FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+		FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
 		URecallStateTreeSubsystem& StateTreeSystem = Context.GetMutableSubsystemChecked<URecallStateTreeSubsystem>();
 
@@ -343,7 +343,7 @@ void URecallStateTreeUpdateProcessor::SignalEntities(FMassExtendedEntityManager&
 		Recall::StateTree::Behavior::ForEachEntityInChunk(Context, EntityManager, SignalSystem, StateTreeSystem, [&DeltaTime, &SignalSystem, TimeInSeconds, &EntitySignals, &EntitiesToSignal, bPreviousPause]
 		(FRecallStateTreeExecutionContext& StateTreeExecutionContext, FRecallStateTreeInstanceFragment& StateTreeFragment)
 		{
-			const FMassExtendedEntityHandle Entity = StateTreeExecutionContext.GetEntity();
+			const FMassEntityHandle Entity = StateTreeExecutionContext.GetEntity();
 
 			// Compute adjusted delta time
 			const float AdjustedDeltaTime = FloatCastChecked<float>(TimeInSeconds - StateTreeFragment.LastUpdateTimeInSeconds, /* Precision */ 1. / 256.);
@@ -436,24 +436,24 @@ static FAutoConsoleVariableRef CVarRecallStateTreeInWorldLog(
 URecallStateTreeDebugRepresentationProcessor::URecallStateTreeDebugRepresentationProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::Render;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::Render;
 	bRequiresGameThreadExecution = true;
 }
 
-void URecallStateTreeDebugRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallStateTreeDebugRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 #if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
-	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
+	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddConstSharedRequirement<FRecallStateTreeSharedFragment>();
-	EntityQuery.AddTagRequirement<FRecallStateTreeActivatedTag>(EMassExtendedFragmentPresence::All);
-	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddTagRequirement<FRecallStateTreeActivatedTag>(EMassFragmentPresence::All);
+	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 #endif // UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
 }
 
-void URecallStateTreeDebugRepresentationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallStateTreeDebugRepresentationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 #if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_StateTree_DebugRender);
@@ -463,7 +463,7 @@ void URecallStateTreeDebugRepresentationProcessor::Execute(FMassExtendedEntityMa
 		return;
 	}
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const FRecallStateTreeSharedFragment& SharedStateTree = Context.GetConstSharedFragment<FRecallStateTreeSharedFragment>();
 		const TObjectPtr<const UStateTree>& StateTree = SharedStateTree.StateTree;
@@ -472,7 +472,7 @@ void URecallStateTreeDebugRepresentationProcessor::Execute(FMassExtendedEntityMa
 			return;
 		}
 
-		FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+		FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
 		URecallStateTreeSubsystem& StateTreeSystem = Context.GetMutableSubsystemChecked<URecallStateTreeSubsystem>();
 

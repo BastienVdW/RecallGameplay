@@ -7,8 +7,8 @@
 
 #include "Utility/Animation/RecallPositionAnimationUtils.h"
 
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Physics/RecallPhysicsObjects.h"
 #include "Simulation/Animation/RecallPositionAnimationFragments.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
@@ -17,19 +17,19 @@
 namespace Recall::Animation::Utils
 {
     void StartPositionAnimation(
-        FMassExtendedExecutionContext& Context,
-        const FMassExtendedEntityHandle& Entity,
+        FMassExecutionContext& Context,
+        const FMassEntityHandle& Entity,
         const FVector& StartPosition,
         const FVector& TargetPosition,
         const FRecallPositionAnimationSettings& Settings)
     {
-        const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+        const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
         if (!EntityManager.IsEntityValid(Entity))
         {
             return;
         }
         
-        const FMassExtendedEntityView EntityView(EntityManager, Entity);
+        const FMassEntityView EntityView(EntityManager, Entity);
         const FRecallPositionAnimationFragment* AnimationFragmentPtr = EntityView.GetFragmentDataPtr<FRecallPositionAnimationFragment>();
         if (AnimationFragmentPtr != nullptr)
         {
@@ -50,8 +50,8 @@ namespace Recall::Animation::Utils
         }
         
         // Add fragment via deferred command
-        Context.Defer().PushCommand<FMassExtendedDeferredAddCommand>(
-            [Entity, StartPosition, TargetPosition, Settings](FMassExtendedEntityManager& EntityManager)
+        Context.Defer().PushCommand<FMassDeferredAddCommand>(
+            [Entity, StartPosition, TargetPosition, Settings](FMassEntityManager& EntityManager)
             {
                 // Set fragment values after adding (will be done in deferred execution)
                 // Note: This is a simplified approach - in a production system you might want to 
@@ -70,17 +70,17 @@ namespace Recall::Animation::Utils
     }
     
     void StopPositionAnimation(
-        FMassExtendedExecutionContext& Context,
-        const FMassExtendedEntityHandle& Entity)
+        FMassExecutionContext& Context,
+        const FMassEntityHandle& Entity)
     {
-        const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+        const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
         if (!EntityManager.IsEntityValid(Entity))
         {
             return;
         }
         
         // Reactivate physics body after animation completes
-        const FMassExtendedEntityView EntityView(EntityManager, Entity);
+        const FMassEntityView EntityView(EntityManager, Entity);
         if (const FRecallPhysicsBodyFragment* PhysicsBodyFragment = EntityView.GetFragmentDataPtr<FRecallPhysicsBodyFragment>())
         {
             URecallPhysicsSubsystem* PhysicsSystem = UWorld::GetSubsystem<URecallPhysicsSubsystem>(EntityManager.GetWorld());

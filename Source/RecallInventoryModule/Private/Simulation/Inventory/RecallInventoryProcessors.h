@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedProcessor.h"
+#include "MassProcessor.h"
 #include "NativeGameplayTags.h"
 
 #include "RecallInventoryProcessors.generated.h"
@@ -14,18 +14,18 @@
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(StateTreeEvent_UseInventoryItem);
 
 UCLASS()
-class URecallInventoryInputProcessor : public UMassExtendedProcessor
+class URecallInventoryInputProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallInventoryInputProcessor();
 
 protected:
-	void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };

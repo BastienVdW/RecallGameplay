@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "System/Actor/RecallActorTypes.h"
 
 #include "RecallCinematicFragments.generated.h"
 
-USTRUCT() struct RECALLGAMEPLAY_API FRecallCinematicPlayingTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct RECALLGAMEPLAY_API FRecallCinematicPlayingTag : public FMassTag { GENERATED_BODY() };
 
 UENUM(meta=(BitFlags, UseEnumValuesAsMaskValuesInEditor="true"))
 enum class ERecallCinematicCallback : uint16
@@ -43,7 +43,7 @@ struct RECALLGAMEPLAY_API FRecallCinematicBinding
 * Data used to trigger our cinematic
 */
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallCinematicFragment : public FMassExtendedFragment
+struct RECALLGAMEPLAY_API FRecallCinematicFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -81,8 +81,12 @@ struct RECALLGAMEPLAY_API FRecallCinematicFragment : public FMassExtendedFragmen
 	}
 };
 
+template <>
+struct TMassFragmentTraits<FRecallCinematicFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };
+
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallCinematicSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLGAMEPLAY_API FRecallCinematicSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

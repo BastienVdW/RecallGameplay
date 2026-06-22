@@ -9,7 +9,7 @@
 #include "RecallGameRuleCommands.h"
 #include "NativeGameplayTags.h"
 #include "Data/GameplayTag/RecallGameplayTagConditionTypes.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "Simulation/Animation/RecallPositionAnimationFragments.h"
 
 #include "RecallGameRuleCommonCommands.generated.h"
@@ -89,7 +89,7 @@ struct RECALLGAMERULEMODULE_API FRecallGameRuleMoveToPositionCommand : public FR
     
     // Target entity whose position will be used as destination
     UPROPERTY(EditAnywhere, Category="Command")
-    FMassExtendedEntityHandle TargetEntity;
+    FMassEntityHandle TargetEntity;
     
     // Whether to animate the movement instead of instant teleport
     UPROPERTY(EditAnywhere, Category="Animation")

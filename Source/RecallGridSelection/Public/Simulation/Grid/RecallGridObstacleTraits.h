@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
-#include "MassExtendedObserverProcessor.h"
+#include "MassEntityTraitBase.h"
+#include "MassObserverProcessor.h"
 
 #include "RecallGridObstacleTraits.generated.h"
 
@@ -15,10 +15,10 @@
 * Trait attached to the grid obstacle entity.
 */
 UCLASS(meta=(DisplayName="RE Selection Grid Obstacle"))
-class RECALLGRIDSELECTION_API URecallGridObstacleTrait : public UMassExtendedEntityTraitBase
+class RECALLGRIDSELECTION_API URecallGridObstacleTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 };

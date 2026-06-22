@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedProcessor.h"
+#include "MassProcessor.h"
 
 #include "RecallGameRuleCommonCommandProcessors.generated.h"
 
@@ -14,7 +14,7 @@
  * Processor for destroy entities commands
  */
 UCLASS()
-class URecallGameRuleDestroyEntitiesProcessor : public UMassExtendedProcessor
+class URecallGameRuleDestroyEntitiesProcessor : public UMassProcessor
 {
     GENERATED_BODY()
 
@@ -22,18 +22,18 @@ public:
     URecallGameRuleDestroyEntitiesProcessor();
 
 protected:
-    virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override;
-    virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override;
+    virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override;
+    virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
     
 private:
-    FMassExtendedEntityQuery EntityQuery;
+    FMassEntityQuery EntityQuery;
 };
 
 /**
  * Processor for apply tag commands
  */
 UCLASS()
-class URecallGameRuleApplyTagProcessor : public UMassExtendedProcessor
+class URecallGameRuleApplyTagProcessor : public UMassProcessor
 {
     GENERATED_BODY()
 
@@ -41,18 +41,18 @@ public:
     URecallGameRuleApplyTagProcessor();
 
 protected:
-    virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override;
-    virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override;
+    virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override;
+    virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
     
 private:
-    FMassExtendedEntityQuery EntityQuery;
+    FMassEntityQuery EntityQuery;
 };
 
 /**
  * Processor for swap positions commands
  */
 UCLASS()
-class URecallGameRuleSwapPositionsProcessor : public UMassExtendedProcessor
+class URecallGameRuleSwapPositionsProcessor : public UMassProcessor
 {
     GENERATED_BODY()
 
@@ -60,18 +60,18 @@ public:
     URecallGameRuleSwapPositionsProcessor();
 
 protected:
-    virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override;
-    virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override;
+    virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override;
+    virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
     
 private:
-    FMassExtendedEntityQuery EntityQuery;
+    FMassEntityQuery EntityQuery;
 };
 
 /**
  * Processor for move to position commands (e.g., Mouse Monopoly)
  */
 UCLASS()
-class URecallGameRuleMoveToPositionProcessor : public UMassExtendedProcessor
+class URecallGameRuleMoveToPositionProcessor : public UMassProcessor
 {
     GENERATED_BODY()
 
@@ -79,9 +79,9 @@ public:
     URecallGameRuleMoveToPositionProcessor();
 
 protected:
-    virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override;
-    virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override;
+    virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override;
+    virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
         
 private:
-    FMassExtendedEntityQuery EntityQuery;
+    FMassEntityQuery EntityQuery;
 };

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "StateTree/RecallStateTreeTaskBase.h"
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "System/Asset/RecallAssetManagerTypes.h"
 
 #include "RecallDeviceTasks.generated.h"
@@ -21,7 +21,7 @@ struct RECALLDEVICEMODULE_API FRecallPlaceDeviceTaskInstanceData
 	FGameplayTag DeviceTag;
 	
 	UPROPERTY(EditAnywhere, Category=Output)
-	TObjectPtr<class UMassExtendedEntityConfigAsset> DeviceEntityConfig;
+	TObjectPtr<class UMassEntityConfigAsset> DeviceEntityConfig;
 	
 	UPROPERTY(EditAnywhere, Category=Output)
 	FVector DevicePosition = FVector::ZeroVector;
@@ -101,7 +101,7 @@ private:
 	TStateTreeExternalDataHandle<class URecallAssetManagerSubsystem> AssetManagerSystemHandle;
 	TStateTreeExternalDataHandle<class URecallRepresentationEventSubsystem> RepresentationEventSystemHandle;
 
-	bool GetOrSpawnDeviceEntityEntityAsync(FStateTreeExecutionContext& Context, FMassExtendedEntityHandle& OutEntity) const;
+	bool GetOrSpawnDeviceEntityEntityAsync(FStateTreeExecutionContext& Context, FMassEntityHandle& OutEntity) const;
 	void SpawnDeviceEntityEntityChecked(FStateTreeExecutionContext& Context) const;
-	void UpdateDeviceEntityLocation(FStateTreeExecutionContext& Context, const FMassExtendedEntityHandle& DeviceEntity) const;
+	void UpdateDeviceEntityLocation(FStateTreeExecutionContext& Context, const FMassEntityHandle& DeviceEntity) const;
 };

@@ -9,7 +9,7 @@
 
 #include "Data/Faction/RecallFactionTypes.h"
 #include "Desync/RecallDesyncLog.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "StateTree/RecallStateTreeExecutionContext.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTreeLinker.h"

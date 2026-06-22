@@ -9,7 +9,7 @@
 
 #include "Async/ParallelFor.h"
 #include "Desync/RecallDesyncLog.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Physics/Common/RecallPhysicsCommonObjects.h"
 #include "Simulation/Attribute/RecallAttributeFragments.h"
 #include "Simulation/Controller/RecallControllerFragments.h"
@@ -27,40 +27,40 @@
 URecallMovementProcessor::URecallMovementProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::StartPhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::StartPhysics;
 	ExecutionOrder.ExecuteInGroup = Recall::Movement::ProcessorGroupNames::StartPhysics::Update;
 	ExecutionOrder.ExecuteAfter.Add(Recall::Physics::ProcessorGroupNames::Initialize);
 }
 
-void URecallMovementProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallMovementProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallMovementProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallMovementProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	FMassExtendedTagBitSet InvalidTags;
+	FMassTagBitSet InvalidTags;
 
 	// Block movement while traversing a nav link.
 	InvalidTags.Add(*FRecallNavLinkTraversalTag::StaticStruct());
 	
-	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallMovementFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassExtendedFragmentAccess::ReadWrite, EMassExtendedFragmentPresence::Optional);
-	EntityQuery.AddRequirement<FRecallAttributeFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);	
-	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
-	EntityQuery.AddRequirement<FRecallPhysicsCharacterFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
-	EntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::None>(InvalidTags);
-	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallMovementFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassFragmentAccess::ReadWrite, EMassFragmentPresence::Optional);
+	EntityQuery.AddRequirement<FRecallAttributeFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);	
+	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
+	EntityQuery.AddRequirement<FRecallPhysicsCharacterFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
+	EntityQuery.AddTagRequirements<EMassFragmentPresence::None>(InvalidTags);
+	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddConstSharedRequirement<FRecallMovementSharedFragment>();
 }
 
-void URecallMovementProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallMovementProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Movement_Execute);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallPhysicsSubsystem& PhysicsSystem = Context.GetMutableSubsystemChecked<URecallPhysicsSubsystem>();
 
@@ -99,11 +99,11 @@ void URecallMovementProcessor::Execute(FMassExtendedEntityManager& EntityManager
 		});
 
 #if RECALL_DESYNC_LOG
-		const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+		const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
-			const FMassExtendedArchetypeHandle ArchetypeHandle = EntityManager.GetArchetypeForEntity(Entity);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassArchetypeHandle ArchetypeHandle = EntityManager.GetArchetypeForEntity(Entity);
 			int32 AbsoluteIndex, ChunkIndex;
 			EntityManager.GetArchetypeInternalIndexForEntity(Entity, ArchetypeHandle, AbsoluteIndex, ChunkIndex);
 			const FRecallMovementFragment& MovementFragment = MovementList[EntityIndex];

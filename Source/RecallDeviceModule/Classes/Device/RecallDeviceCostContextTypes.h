@@ -8,18 +8,18 @@
 
 #include "CoreMinimal.h"
 
-struct FMassExtendedEntityHandle;
-struct FMassExtendedEntityManager;
-struct FMassExtendedEntityView;
+struct FMassEntityHandle;
+struct FMassEntityManager;
+struct FMassEntityView;
 
 struct RECALLDEVICEMODULE_API FRecallDeviceCostContext
 {
 public:
-	const FMassExtendedEntityManager& EntityManager;
-	const FMassExtendedEntityHandle& Entity;
+	const FMassEntityManager& EntityManager;
+	const FMassEntityHandle& Entity;
 
 public:
 	UWorld* GetWorld() const;
-	FMassExtendedEntityView GetEntityView() const;
-	const FMassExtendedEntityManager& GetEntityManager() const;
+	FMassEntityView GetEntityView() const;
+	const FMassEntityManager& GetEntityManager() const;
 };

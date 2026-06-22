@@ -7,9 +7,9 @@
 
 #include "RecallInteractCollectCommandTypes.h"
 
-#include "MassExtendedCommandBuffer.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassCommandBuffer.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "Simulation/Collect/RecallCollectSignalTypes.h"
 #include "Simulation/Inventory/RecallDropItemFragments.h"
@@ -32,7 +32,7 @@ void FRecallCollectCommand::OnExecute(const FRecallInteractContext& Context) con
 //----------------------------------------------------------------------//
 void FRecallDropItemCommand::OnExecute(const FRecallInteractContext& Context) const
 {
-	const FMassExtendedEntityView EntityView(Context.GetEntityManagerChecked(), Context.InteractableEntity);
+	const FMassEntityView EntityView(Context.GetEntityManagerChecked(), Context.InteractableEntity);
 	const FRecallTransformFragment& TransformFragment = EntityView.GetFragmentData<FRecallTransformFragment>();
 	const FVector SpawnPosition = TransformFragment.Position + SpawnOffset;
 

@@ -7,7 +7,7 @@
 
 #include "RecallInteractInventoryConditionTypes.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "Data/Inventory/RecallInventoryItemAsset.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 #include "System/Inventory/RecallItemSubsystem.h"
@@ -20,7 +20,7 @@ FRecallInteractInventoryCondition::FRecallInteractInventoryCondition()
 
 bool FRecallInteractInventoryCondition::EvaluateCondition(const FRecallInteractContext& Context, FText& OutFailedText) const
 {
-	const FMassExtendedEntityView InstigatorView(Context.GetEntityManagerChecked(), Context.InstigatorEntity);
+	const FMassEntityView InstigatorView(Context.GetEntityManagerChecked(), Context.InstigatorEntity);
 	const FRecallGameplayTagFragment* InstigatorGameplayTagFragmentPtr = InstigatorView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 
 	if (InstigatorGameplayTagFragmentPtr == nullptr ||

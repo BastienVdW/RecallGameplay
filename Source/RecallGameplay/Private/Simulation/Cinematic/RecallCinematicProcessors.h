@@ -22,45 +22,45 @@ public:
 	URecallCinematicEventProcessor(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	void SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	void SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals) override final;
 };
 
 UCLASS()
-class URecallCinematicPlayingProcessor : public UMassExtendedProcessor
+class URecallCinematicPlayingProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallCinematicPlayingProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 };
 
 UCLASS()
-class URecallCinematicRepresentationProcessor : public UMassExtendedProcessor
+class URecallCinematicRepresentationProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallCinematicRepresentationProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 };

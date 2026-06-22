@@ -7,20 +7,20 @@
 
 #include "RecallStateTreeEntityFilterTypes.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 #include "StateTree/RecallStateTreeExecutionContext.h"
 #include "Utility/GameplayTag/RecallGameplayTagUtils.h"
 
 static void RemoveInvalidEntities(const FRecallStateTreeExecutionContext& Context,
-	TArray<FMassExtendedEntityHandle>& Entities)
+	TArray<FMassEntityHandle>& Entities)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.GetEntityManager();
+	const FMassEntityManager& EntityManager = Context.GetEntityManager();
 	for (int32 EntityIndex = Entities.Num() - 1; EntityIndex >= 0; --EntityIndex)
 	{
-		const FMassExtendedEntityHandle& Entity = Entities[EntityIndex];
+		const FMassEntityHandle& Entity = Entities[EntityIndex];
 		if (!EntityManager.IsEntityValid(Entity))
 		{
 			Entities.RemoveAtSwap(EntityIndex);
@@ -32,19 +32,19 @@ static void RemoveInvalidEntities(const FRecallStateTreeExecutionContext& Contex
 // FRecallStateTreeEntityFilterGameplayTag
 //----------------------------------------------------------------------//
 void FRecallStateTreeEntityFilterGameplayTag::FilterEntities(const FRecallStateTreeExecutionContext& Context,
-	TArray<FMassExtendedEntityHandle>& Entities) const
+	TArray<FMassEntityHandle>& Entities) const
 {
 	RemoveInvalidEntities(Context, Entities);
 		
 	TArray<bool> Results;
 	Results.SetNum(Entities.Num());
 
-	const FMassExtendedEntityManager& EntityManager = Context.GetEntityManager();
+	const FMassEntityManager& EntityManager = Context.GetEntityManager();
 	ParallelFor(Entities.Num(),
 		[this, &Entities, &EntityManager, &Results](int32 Index)
 	{
-		const FMassExtendedEntityHandle& Entity = Entities[Index];
-		const FMassExtendedEntityView EntityView(EntityManager, Entity);
+		const FMassEntityHandle& Entity = Entities[Index];
+		const FMassEntityView EntityView(EntityManager, Entity);
 
 		const auto* SlaveGameplayTagFragmentPtr = EntityView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 		Results[Index] = SlaveGameplayTagFragmentPtr != nullptr ? Recall::GameplayTag::Utils::EvaluateCondition(
@@ -66,7 +66,7 @@ void FRecallStateTreeEntityFilterGameplayTag::FilterEntities(const FRecallStateT
 // FRecallStateTreeEntityFilterSelect
 //----------------------------------------------------------------------//
 void FRecallStateTreeEntityFilterSelect::FilterEntities(const FRecallStateTreeExecutionContext& Context,
-	TArray<FMassExtendedEntityHandle>& Entities) const
+	TArray<FMassEntityHandle>& Entities) const
 {
 	RemoveInvalidEntities(Context, Entities);
 	
@@ -79,7 +79,7 @@ void FRecallStateTreeEntityFilterSelect::FilterEntities(const FRecallStateTreeEx
 }
 
 void FRecallStateTreeEntityFilterSelect::Sort(const FRecallStateTreeExecutionContext& Context,
-	TArray<FMassExtendedEntityHandle>& Entities) const
+	TArray<FMassEntityHandle>& Entities) const
 {
 	switch (Selection)
 	{
@@ -98,23 +98,23 @@ void FRecallStateTreeEntityFilterSelect::Sort(const FRecallStateTreeExecutionCon
 }
 
 void FRecallStateTreeEntityFilterSelect::SortByDistance(const FRecallStateTreeExecutionContext& Context,
-	TArray<FMassExtendedEntityHandle>& Entities)
+	TArray<FMassEntityHandle>& Entities)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.GetEntityManager();
-	const FMassExtendedEntityHandle& OwnerEntity = Context.GetEntity();
+	const FMassEntityManager& EntityManager = Context.GetEntityManager();
+	const FMassEntityHandle& OwnerEntity = Context.GetEntity();
 
-	auto GetEntityLocation = [&EntityManager](const FMassExtendedEntityHandle& Entity)
+	auto GetEntityLocation = [&EntityManager](const FMassEntityHandle& Entity)
 	{
-		const FMassExtendedEntityView EntityView(EntityManager, Entity);
+		const FMassEntityView EntityView(EntityManager, Entity);
 		const auto& TransformFragment = EntityView.GetFragmentData<FRecallTransformFragment>();
 		return TransformFragment.Position;
 	};
 
 	const FVector OwnerLocation = GetEntityLocation(OwnerEntity);
 
-	TMap<FMassExtendedEntityHandle, float> Distances;
+	TMap<FMassEntityHandle, float> Distances;
 	
-	for (const FMassExtendedEntityHandle& Entity : Entities)
+	for (const FMassEntityHandle& Entity : Entities)
 	{
 		const FVector Location = GetEntityLocation(OwnerEntity);
 		const float DistanceSquared = FVector::DistSquared(Location, OwnerLocation);
@@ -123,14 +123,14 @@ void FRecallStateTreeEntityFilterSelect::SortByDistance(const FRecallStateTreeEx
 	}
 	
 	Entities.Sort(
-		[&Distances](const FMassExtendedEntityHandle& lEntity, const FMassExtendedEntityHandle& rEntity)
+		[&Distances](const FMassEntityHandle& lEntity, const FMassEntityHandle& rEntity)
 	{
 		return Distances[lEntity] < Distances[rEntity];
 	});
 }
 
 void FRecallStateTreeEntityFilterSelect::SortShuffle(const FRecallStateTreeExecutionContext& Context,
-	TArray<FMassExtendedEntityHandle>& Entities)
+	TArray<FMassEntityHandle>& Entities)
 {
 	const FRandomStream& RandomStream = Context.GetRandomStream();
 	const int32 LastIndex = Entities.Num() - 1;

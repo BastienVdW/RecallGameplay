@@ -8,7 +8,7 @@
 #include "RecallPlayerEvaluators.h"
 
 #include "Data/Input/RecallInputActionTableRow.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "StateTree/RecallStateTreeExecutionContext.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
@@ -45,13 +45,13 @@ void FRecallPlayerLocationEvaluator::Tick(FStateTreeExecutionContext& Context, c
 
 	for (const FString& PlayerId : PlayerIds)
 	{
-		FMassExtendedEntityHandle PlayerEntity;
+		FMassEntityHandle PlayerEntity;
 		if (!ensureMsgf(EntitySystem.FindControllerOwnedEntity(PlayerId, PlayerEntity), TEXT("No player entity")))
 		{
 			continue;
 		}
 
-		const FMassExtendedEntityView PlayerView(RecallContext.GetEntityManager(), PlayerEntity);
+		const FMassEntityView PlayerView(RecallContext.GetEntityManager(), PlayerEntity);
 		if (!PlayerView.HasTag<FRecallPlayerControllerTag>())
 		{
 			continue;

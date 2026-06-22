@@ -18,8 +18,8 @@ public class RecallVoxel : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core",
 			"CoreUObject",
-			"MassExtendedEntity",
-			"MassExtendedSpawner",
+			"MassEntity",
+			"MassSpawner",
 			"RecallCore",
 			"RecallSimulation",
 			"RecallPhysicsModule",

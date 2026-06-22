@@ -26,7 +26,7 @@ void URecallGameplayTagCountWidget::NativeDestruct()
 	Recall::Frontend::Utils::UnregisterAllGlobalObservers(this);
 }
 
-void URecallGameplayTagCountWidget::SetEntity(const FMassExtendedEntityHandle& InEntity)
+void URecallGameplayTagCountWidget::SetEntity(const FMassEntityHandle& InEntity)
 {
 	Entity = InEntity;
 }

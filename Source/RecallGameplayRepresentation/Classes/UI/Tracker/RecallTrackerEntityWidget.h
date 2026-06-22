@@ -8,7 +8,7 @@
 
 #include "ExtendedCommonUserWidget.h"
 #include "Representation/Tracker/RecallTrackerReactInterface.h"
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallTrackerEntityWidget.generated.h"
 
@@ -49,16 +49,16 @@ protected:
 
 protected:
 	UPROPERTY(Transient)
-	TMap<FMassExtendedEntityHandle, TObjectPtr<UUserWidget>> ActiveTrackerWidgets;
+	TMap<FMassEntityHandle, TObjectPtr<UUserWidget>> ActiveTrackerWidgets;
 	UPROPERTY(Transient)
 	TMap<TSubclassOf<UUserWidget>, FRecallTrackerEntityWidgetPool> PoolTrackerWidgets;
 
 	TArray<FRecallTrackedEntityRepresentation> CacheNewTrackedEntityRepresentations;
-	TSet<FMassExtendedEntityHandle> CacheNewTrackedEntities;
-	TArray<FMassExtendedEntityHandle> CacheActiveTrackedEntities;
-	TArray<FMassExtendedEntityHandle> CacheReleaseEntities;
+	TSet<FMassEntityHandle> CacheNewTrackedEntities;
+	TArray<FMassEntityHandle> CacheActiveTrackedEntities;
+	TArray<FMassEntityHandle> CacheReleaseEntities;
 	
 	void CreateTrackers(const TArray<FRecallTrackedEntityRepresentation>& NewTrackedEntities);
-	void ReleaseTrackers(const TArray<FMassExtendedEntityHandle>& TrackedEntities);
+	void ReleaseTrackers(const TArray<FMassEntityHandle>& TrackedEntities);
 	void UpdateTrackersPosition(const TArray<FRecallTrackedEntityRepresentation>& TrackedEntities);
 };

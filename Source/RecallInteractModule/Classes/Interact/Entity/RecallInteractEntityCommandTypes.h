@@ -27,7 +27,7 @@ protected:
 	/**
 	 * Entity config to spawn.
 	*/
-	UPROPERTY(EditAnywhere, meta=(AllowedClasses="/Script/MassExtendedSpawner.MassExtendedEntityConfigAsset"))
+	UPROPERTY(EditAnywhere, meta=(AllowedClasses="/Script/MassSpawner.MassEntityConfigAsset"))
 	FSoftObjectPath EntityConfigAsset;
 	
 	/**

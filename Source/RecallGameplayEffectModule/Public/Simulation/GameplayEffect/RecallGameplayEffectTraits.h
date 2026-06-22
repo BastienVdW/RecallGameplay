@@ -6,26 +6,26 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 
 #include "RecallGameplayEffectTraits.generated.h"
 
 UCLASS(meta=(DisplayName="RE Gameplay Effect"))
-class RECALLGAMEPLAYEFFECTMODULE_API URecallGameplayEffectTrait : public UMassExtendedEntityTraitBase
+class RECALLGAMEPLAYEFFECTMODULE_API URecallGameplayEffectTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 };
 
 UCLASS(meta=(DisplayName="RE Gameplay Effect Area"))
-class RECALLGAMEPLAYEFFECTMODULE_API URecallGameplayEffectAreaTrait : public UMassExtendedEntityTraitBase
+class RECALLGAMEPLAYEFFECTMODULE_API URecallGameplayEffectAreaTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	/**

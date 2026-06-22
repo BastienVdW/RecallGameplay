@@ -8,7 +8,7 @@
 #include "RecallConversationEntryPointSideEffect.h"
 
 #include "ConversationContext.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "Simulation/Conversation/RecallConversationFragments.h"
 #include "Utility/Conversation/RecallConversationNodeUtils.h"
 
@@ -18,8 +18,8 @@
 void URecallConversationEntryPointSideEffect::CauseSideEffect_Implementation(
 	const FConversationContext& Context) const
 {
-	const FMassExtendedEntityHandle OwnerEntity = Recall::Conversation::Node::Utils::GetConversationEntity(Context);
-	const FMassExtendedEntityView OwnerView = Recall::Conversation::Node::Utils::CreateEntityView(Context, OwnerEntity);
+	const FMassEntityHandle OwnerEntity = Recall::Conversation::Node::Utils::GetConversationEntity(Context);
+	const FMassEntityView OwnerView = Recall::Conversation::Node::Utils::CreateEntityView(Context, OwnerEntity);
 
 	FRecallConversationFragment& ConversationFragment = OwnerView.GetFragmentData<FRecallConversationFragment>();
 	ConversationFragment.ConversationEntryPoint = ConversationEntryPoint;

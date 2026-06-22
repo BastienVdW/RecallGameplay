@@ -6,17 +6,17 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "RecallMovementTypes.h"
 
 #include "RecallMovementFragments.generated.h"
 
-USTRUCT() struct RECALLGAMEPLAY_API FRecallCrowdMovementTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct RECALLGAMEPLAY_API FRecallCrowdMovementTag : public FMassTag { GENERATED_BODY() };
 
 /**
  * Tag to identify entities which are in the process of traversing a nav link.
  */
-USTRUCT() struct RECALLGAMEPLAY_API FRecallNavLinkTraversalTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct RECALLGAMEPLAY_API FRecallNavLinkTraversalTag : public FMassTag { GENERATED_BODY() };
 
 /**
  * Fragment containing movement input data for an entity.
@@ -25,7 +25,7 @@ USTRUCT() struct RECALLGAMEPLAY_API FRecallNavLinkTraversalTag : public FMassExt
  * and any pending jump requests. Movement direction is expressed in world coordinates.
  */
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallMovementFragment : public FMassExtendedFragment
+struct RECALLGAMEPLAY_API FRecallMovementFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -52,7 +52,7 @@ struct RECALLGAMEPLAY_API FRecallMovementFragment : public FMassExtendedFragment
  * cannot be modified during gameplay and provide memory-efficient configuration storage.
  */
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallMovementSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLGAMEPLAY_API FRecallMovementSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

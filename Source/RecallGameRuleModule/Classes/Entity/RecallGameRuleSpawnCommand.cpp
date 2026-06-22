@@ -7,14 +7,14 @@
 
 #include "Entity/RecallGameRuleSpawnCommand.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "Simulation/Game/RecallGameRuleFragments.h"
 
-void FRecallGameRuleSpawnCommand::OnSpawn(FMassExtendedEntityManager& System, const TArray<FMassExtendedEntityHandle>& Entities) const
+void FRecallGameRuleSpawnCommand::OnSpawn(FMassEntityManager& System, const TArray<FMassEntityHandle>& Entities) const
 {
 	// Apply game rule data to spawned entities
-	for (const FMassExtendedEntityHandle& Entity : Entities)
+	for (const FMassEntityHandle& Entity : Entities)
 	{
 		System.AddTagToEntity(Entity, FRecallGameRuleTag::StaticStruct());
 	}

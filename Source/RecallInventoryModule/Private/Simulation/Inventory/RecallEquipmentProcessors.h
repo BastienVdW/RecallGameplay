@@ -6,46 +6,46 @@
 
 #pragma once
 
-#include "MassExtendedObserverProcessor.h"
+#include "MassObserverProcessor.h"
 #include "RecallSignalProcessorBase.h"
 
 #include "RecallEquipmentProcessors.generated.h"
 
 UCLASS()
-class URecallEquipmentConstructor : public UMassExtendedObserverProcessor
+class URecallEquipmentConstructor : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 public:
 	URecallEquipmentConstructor();
 
-	void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 	
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };
 
 UCLASS()
-class URecallEquipmentDestructor : public UMassExtendedObserverProcessor
+class URecallEquipmentDestructor : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 public:
 	URecallEquipmentDestructor();
 
-	void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 	
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };
 
@@ -60,26 +60,26 @@ class URecallEquipmentSignalProcessor : public URecallSignalProcessorBase
 public:
 	URecallEquipmentSignalProcessor(const FObjectInitializer& ObjectInitializer);
 
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals) override final;
 };
 
 UCLASS()
-class URecallEquipmentRepresentationProcessor : public UMassExtendedProcessor
+class URecallEquipmentRepresentationProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallEquipmentRepresentationProcessor();
 
 protected:
-	void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };

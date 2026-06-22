@@ -10,7 +10,7 @@
 
 #include "RecallPlayerCardWidget.generated.h"
 
-struct FMassExtendedEntityHandle;
+struct FMassEntityHandle;
 
 /**
  * Generic widget for the card of an active player.
@@ -22,7 +22,7 @@ class RECALLGAMEPLAYREPRESENTATION_API URecallPlayerCardWidget :
 	GENERATED_UCLASS_BODY()
 
 public:
-	void SetPlayerEntity(const FMassExtendedEntityHandle& Entity);
+	void SetPlayerEntity(const FMassEntityHandle& Entity);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional))

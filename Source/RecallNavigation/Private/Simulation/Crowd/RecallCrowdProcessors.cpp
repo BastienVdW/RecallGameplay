@@ -10,7 +10,7 @@
 #include "Crowd/RecallCrowdAgentBlackboard.h"
 #include "Crowd/RecallCrowdAgentTypes.h"
 #include "Desync/RecallDesyncLog.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Physics/RecallPhysicsObjects.h"
 #include "Simulation/Crowd/RecallCrowdFragments.h"
 #include "Simulation/Movement/RecallMovementFragments.h"
@@ -29,27 +29,27 @@
 URecallCrowdAgentConstructor::URecallCrowdAgentConstructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallCrowdAgentFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Add;
+	Operation = EMassObservedOperation::Add;
 }
 
-void URecallCrowdAgentConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCrowdAgentConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallCrowdAgentConstructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCrowdAgentConstructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallCrowdAgentConstructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallCrowdAgentConstructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_CrowdAgent_Constructor);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallCrowdSubsystem& CrowdSystem = Context.GetMutableSubsystemChecked<URecallCrowdSubsystem>();
 
@@ -69,27 +69,27 @@ void URecallCrowdAgentConstructor::Execute(FMassExtendedEntityManager& EntityMan
 URecallCrowdAgentDestructor::URecallCrowdAgentDestructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallCrowdAgentFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Remove;
+	Operation = EMassObservedOperation::Remove;
 }
 
-void URecallCrowdAgentDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCrowdAgentDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallCrowdAgentDestructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCrowdAgentDestructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallCrowdAgentDestructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallCrowdAgentDestructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_CrowdAgent_Destructor);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallCrowdSubsystem& CrowdSystem = Context.GetMutableSubsystemChecked<URecallCrowdSubsystem>();
 
@@ -109,27 +109,27 @@ void URecallCrowdAgentDestructor::Execute(FMassExtendedEntityManager& EntityMana
 URecallCrowdAgentNavLinkTraversalConstructor::URecallCrowdAgentNavLinkTraversalConstructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallNavLinkTraversalTag::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Add;
+	Operation = EMassObservedOperation::Add;
 }
 
-void URecallCrowdAgentNavLinkTraversalConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCrowdAgentNavLinkTraversalConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallCrowdAgentNavLinkTraversalConstructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCrowdAgentNavLinkTraversalConstructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallCrowdAgentNavLinkTraversalConstructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallCrowdAgentNavLinkTraversalConstructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_CrowdAgentNavLinkTraversal_Constructor);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallCrowdSubsystem& CrowdSystem = Context.GetMutableSubsystemChecked<URecallCrowdSubsystem>();
 
@@ -149,27 +149,27 @@ void URecallCrowdAgentNavLinkTraversalConstructor::Execute(FMassExtendedEntityMa
 URecallCrowdAgentNavLinkTraversalDestructor::URecallCrowdAgentNavLinkTraversalDestructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallNavLinkTraversalTag::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Remove;
+	Operation = EMassObservedOperation::Remove;
 }
 
-void URecallCrowdAgentNavLinkTraversalDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCrowdAgentNavLinkTraversalDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallCrowdAgentNavLinkTraversalDestructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCrowdAgentNavLinkTraversalDestructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallCrowdAgentNavLinkTraversalDestructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallCrowdAgentNavLinkTraversalDestructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_CrowdAgentNavLinkTraversal_Destructor);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallCrowdSubsystem& CrowdSystem = Context.GetMutableSubsystemChecked<URecallCrowdSubsystem>();
 
@@ -189,34 +189,34 @@ void URecallCrowdAgentNavLinkTraversalDestructor::Execute(FMassExtendedEntityMan
 URecallCrowdAgentSetBlackboardProcessor::URecallCrowdAgentSetBlackboardProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::StartPhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::StartPhysics;
 	ExecutionOrder.ExecuteAfter.Add(Recall::Movement::ProcessorGroupNames::StartPhysics::Update);
 }
 
-void URecallCrowdAgentSetBlackboardProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCrowdAgentSetBlackboardProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallCrowdAgentSetBlackboardProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCrowdAgentSetBlackboardProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallMovementFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallMovementFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddConstSharedRequirement<FRecallPathFollowingConstSharedFragment>();
 	EntityQuery.AddConstSharedRequirement<FRecallCrowdAgentCollisionConstSharedFragment>();
 	EntityQuery.AddConstSharedRequirement<FRecallMovementSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallCrowdAgentSetBlackboardProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallCrowdAgentSetBlackboardProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_CrowdAgentSetBlackboard_Execute);
 
-	EntityQuery.ParallelForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ParallelForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const URecallPhysicsSubsystem& PhysicsSystem = Context.GetSubsystemChecked<URecallPhysicsSubsystem>();
 		URecallCrowdSubsystem& CrowdSystem = Context.GetMutableSubsystemChecked<URecallCrowdSubsystem>();
@@ -273,29 +273,29 @@ void URecallCrowdAgentSetBlackboardProcessor::Execute(FMassExtendedEntityManager
 URecallCrowdAgentGetBlackboardProcessor::URecallCrowdAgentGetBlackboardProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::EndPhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::EndPhysics;
 	ExecutionOrder.ExecuteBefore.Add(Recall::Physics::ProcessorGroupNames::CopyLocation);
 }
 
-void URecallCrowdAgentGetBlackboardProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCrowdAgentGetBlackboardProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallCrowdAgentGetBlackboardProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCrowdAgentGetBlackboardProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallCrowdAgentFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallCrowdAgentGetBlackboardProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallCrowdAgentGetBlackboardProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_CrowdAgentGetBlackboard_Execute);
 	
-	EntityQuery.ParallelForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ParallelForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const URecallCrowdSubsystem& CrowdSystem = Context.GetSubsystemChecked<URecallCrowdSubsystem>();
 		URecallPhysicsSubsystem& PhysicsSystem = Context.GetMutableSubsystemChecked<URecallPhysicsSubsystem>();
@@ -345,11 +345,11 @@ void URecallCrowdAgentGetBlackboardProcessor::Execute(FMassExtendedEntityManager
 //----------------------------------------------------------------------//
 URecallCrowdUpdateProcessor::URecallCrowdUpdateProcessor()
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::DuringPhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::DuringPhysics;
 }
 
-void URecallCrowdUpdateProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCrowdUpdateProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
@@ -359,12 +359,12 @@ bool URecallCrowdUpdateProcessor::ShouldAllowQueryBasedPruning(const bool bRunti
 	return false;
 }
 
-void URecallCrowdUpdateProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCrowdUpdateProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	ProcessorRequirements.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallCrowdSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallCrowdUpdateProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallCrowdUpdateProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_CrowdUpdate_Execute);
 

@@ -7,7 +7,7 @@
 
 #include "RecallInteractStateTreeCommandTypes.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "Simulation/StateTree/RecallStateTreeFragments.h"
 #include "Simulation/StateTree/RecallStateTreeSignalTypes.h"
@@ -24,8 +24,8 @@ void FRecallInteractSendStateTreeEventCommand::OnExecute(const FRecallInteractCo
 		return;
 	}
 
-	const FMassExtendedEntityHandle& EventTargetEntity = Context.GetTargetEntity(EventTarget);
-	const FMassExtendedEntityView EntityView(Context.GetEntityManagerChecked(), EventTargetEntity);
+	const FMassEntityHandle& EventTargetEntity = Context.GetTargetEntity(EventTarget);
+	const FMassEntityView EntityView(Context.GetEntityManagerChecked(), EventTargetEntity);
 	const FRecallStateTreeInstanceFragment* StateTreeInstanceFragmentPtr = EntityView.GetFragmentDataPtr<FRecallStateTreeInstanceFragment>();
 	if (StateTreeInstanceFragmentPtr == nullptr)
 	{
@@ -36,7 +36,7 @@ void FRecallInteractSendStateTreeEventCommand::OnExecute(const FRecallInteractCo
 	
 	FStateTreeEvent StateTreeEvent;
 	StateTreeEvent.Tag = Tag;
-	StateTreeEvent.Payload = FInstancedStruct::Make<FMassExtendedEntityHandle>(Context.GetTargetEntity(PayloadTarget));
+	StateTreeEvent.Payload = FInstancedStruct::Make<FMassEntityHandle>(Context.GetTargetEntity(PayloadTarget));
 	StateTreeEvent.Origin = Origin;
 		
 	StateTreeSystem->SendStateTreeEvent(StateTreeInstanceFragmentPtr->InstanceHandle, StateTreeEvent);

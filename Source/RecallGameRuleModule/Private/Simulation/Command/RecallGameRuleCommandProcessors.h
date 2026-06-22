@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedProcessor.h"
+#include "MassProcessor.h"
 
 #include "RecallGameRuleCommandProcessors.generated.h"
 
@@ -15,7 +15,7 @@
  * This prevents commands from carrying over between frames and provides debugging info
  */
 UCLASS()
-class URecallGameRuleCommandCleanupProcessor : public UMassExtendedProcessor
+class URecallGameRuleCommandCleanupProcessor : public UMassProcessor
 {
     GENERATED_BODY()
 
@@ -23,7 +23,7 @@ public:
     URecallGameRuleCommandCleanupProcessor();
 
 protected:
-    virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override;
-    virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override;
+    virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override;
+    virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
     virtual bool ShouldAllowQueryBasedPruning(const bool bRuntimeMode) const override { return false; }
 };

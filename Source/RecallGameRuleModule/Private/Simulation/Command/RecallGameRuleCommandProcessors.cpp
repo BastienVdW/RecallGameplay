@@ -7,7 +7,7 @@
 
 #include "RecallGameRuleCommandProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "System/Command/RecallGameRuleCommandSubsystem.h"
 
 //----------------------------------------------------------------------//
@@ -15,18 +15,18 @@
 //----------------------------------------------------------------------//
 URecallGameRuleCommandCleanupProcessor::URecallGameRuleCommandCleanupProcessor()
 {
-    ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-    ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd; // Run at the very end of the frame
+    ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+    ProcessingPhase = EMassProcessingPhase::FrameEnd; // Run at the very end of the frame
 }
 
-void URecallGameRuleCommandCleanupProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGameRuleCommandCleanupProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
     // This processor doesn't need any entity queries - it only works with the command subsystem
-    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallGameRuleCommandCleanupProcessor::Execute(FMassExtendedEntityManager& EntityManager, 
-    FMassExtendedExecutionContext& Context)
+void URecallGameRuleCommandCleanupProcessor::Execute(FMassEntityManager& EntityManager, 
+    FMassExecutionContext& Context)
 {
     URecallGameRuleCommandSubsystem& CommandSubsystem = Context.GetMutableSubsystemChecked<URecallGameRuleCommandSubsystem>();
     

@@ -9,13 +9,13 @@
 #include "CoreMinimal.h"
 #include "Desync/RecallDesyncLog.h"
 
-struct FMassExtendedEntityHandle;
+struct FMassEntityHandle;
 class URecallNavigationSubsystem;
 
 struct FRecallNavigationContext
 {
-	struct FMassExtendedExecutionContext& ExecutionContext;
-	const FMassExtendedEntityHandle& Entity;
+	struct FMassExecutionContext& ExecutionContext;
+	const FMassEntityHandle& Entity;
 	const struct FRecallNavigationAgentConstSharedFragment& AgentConstSharedFragment;
 	const struct FRecallTransformFragment& TransformFragment;
 	struct FRecallNavigationAgentFragment& NavigationFragment;
@@ -23,13 +23,13 @@ struct FRecallNavigationContext
 	struct FRecallNavLinkTraversalFragment& NavLinkTraversalFragment;
 	
 	FCriticalSection& DoneDataGuard;
-	TArray<FMassExtendedEntityHandle>& EntitiesToSignalDone;
+	TArray<FMassEntityHandle>& EntitiesToSignalDone;
 	
 	FCriticalSection& AbortDataGuard;
-	TArray<FMassExtendedEntityHandle>& EntitiesToSignalAbort;
+	TArray<FMassEntityHandle>& EntitiesToSignalAbort;
 	
 	FCriticalSection& StartNavLinkDataGuard;
-	TArray<FMassExtendedEntityHandle>& StartNavLinkEntities;
+	TArray<FMassEntityHandle>& StartNavLinkEntities;
 };
 
 namespace Recall::Navigation::Utils

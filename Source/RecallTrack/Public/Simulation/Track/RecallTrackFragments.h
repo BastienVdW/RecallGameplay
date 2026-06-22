@@ -6,14 +6,14 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "Physics/RecallPhysicsTypes.h"
 #include "Physics/Common/RecallPhysicsCommonShapeTypes.h"
 
 #include "RecallTrackFragments.generated.h"
 
 USTRUCT()
-struct RECALLTRACK_API FRecallTrackFragment : public FMassExtendedFragment
+struct RECALLTRACK_API FRecallTrackFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -22,7 +22,7 @@ struct RECALLTRACK_API FRecallTrackFragment : public FMassExtendedFragment
 };
 
 USTRUCT()
-struct RECALLTRACK_API FRecallTrackConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLTRACK_API FRecallTrackConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

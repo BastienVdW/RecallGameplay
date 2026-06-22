@@ -7,8 +7,8 @@
 
 #include "RecallCollectProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
-#include "MassExtendedEntityView.h"
+#include "MassExecutionContext.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "Data/Inventory/RecallInventoryItemAsset.h"
 #include "Simulation/Collect/RecallCollectFragments.h"
@@ -33,7 +33,7 @@ URecallCollectPointSignalProcessor::URecallCollectPointSignalProcessor(const FOb
 {
 }
 
-void URecallCollectPointSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCollectPointSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
@@ -41,20 +41,20 @@ void URecallCollectPointSignalProcessor::InitializeInternal(UObject& Owner, cons
 	SubscribeToSignal(Recall::Physics::Signals::OverlapUpdate);
 }
 
-void URecallCollectPointSignalProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCollectPointSignalProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallCollectPointFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallPhysicsSensorFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallInventorySubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallCollectPointFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallPhysicsSensorFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallInventorySubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallCollectPointSignalProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallCollectPointSignalProcessor::SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_CollectPoint_Signal);
 
-	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExecutionContext& Context)
 	{
-		const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+		const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 		URecallInventorySubsystem& InventorySystem = Context.GetMutableSubsystemChecked<URecallInventorySubsystem>();
 
 		const TConstArrayView<FRecallCollectPointFragment> CollectPointList = Context.GetFragmentView<FRecallCollectPointFragment>();
@@ -68,15 +68,15 @@ void URecallCollectPointSignalProcessor::SignalEntities(FMassExtendedEntityManag
 			FRecallGameplayTagCountMap& Inventory = InventorySystem.GetMutableInventory(CollectPointFragment.OwnerInventoryTag);
 			
 			// Collect overlapping collectable entities
-			const TArray<FMassExtendedEntityHandle> OverlappingEntities = SensorFragment.GetOverlappingEntities();
-			for (const FMassExtendedEntityHandle& OverlappingEntity : OverlappingEntities)
+			const TArray<FMassEntityHandle> OverlappingEntities = SensorFragment.GetOverlappingEntities();
+			for (const FMassEntityHandle& OverlappingEntity : OverlappingEntities)
 			{
 				if (!EntityManager.IsEntityValid(OverlappingEntity))
 				{
 					continue;
 				}
 				
-				const FMassExtendedEntityView CollectableView(EntityManager, OverlappingEntity);
+				const FMassEntityView CollectableView(EntityManager, OverlappingEntity);
 				const FRecallCollectableFragment* CollectableFragmentPtr = CollectableView.GetFragmentDataPtr<FRecallCollectableFragment>();
 				if (CollectableFragmentPtr == nullptr)
 				{
@@ -108,7 +108,7 @@ URecallCollectableSignalProcessor::URecallCollectableSignalProcessor(const FObje
 {
 }
 
-void URecallCollectableSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCollectableSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
@@ -117,33 +117,33 @@ void URecallCollectableSignalProcessor::InitializeInternal(UObject& Owner, const
 	SubscribeToSignal(Recall::Physics::Signals::OverlapUpdate);
 }
 
-void URecallCollectableSignalProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCollectableSignalProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallCollectableFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallInteractableFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
-	EntityQuery.AddRequirement<FRecallPhysicsSensorFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallCollectableFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallInteractableFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
+	EntityQuery.AddRequirement<FRecallPhysicsSensorFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
 	EntityQuery.AddConstSharedRequirement<FRecallCollectableConstSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallInventorySubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallRepresentationEventSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallInventorySubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallRepresentationEventSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
 static bool CollectByInstigatorEntity(
-	FMassExtendedExecutionContext& Context,
-	const FMassExtendedEntityHandle& InstigatorEntity,
-	const FMassExtendedEntityHandle& CollectableEntity,
+	FMassExecutionContext& Context,
+	const FMassEntityHandle& InstigatorEntity,
+	const FMassEntityHandle& CollectableEntity,
 	const FRecallCollectableSettings& CollectableSettings,
 	const FRecallCollectableFragment& CollectableFragment,
 	const FRecallTransformFragment& CollectableTransformFragment)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();	
+	const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();	
 	if (!EntityManager.IsEntityValid(InstigatorEntity))
 	{
 		return false;
 	}
 	
-	const FMassExtendedEntityView InstigatorView(EntityManager, InstigatorEntity);
+	const FMassEntityView InstigatorView(EntityManager, InstigatorEntity);
 
 	// Add collected item
 	if (FRecallGameplayTagFragment* GameplayTagFragmentPtr = InstigatorView.GetFragmentDataPtr<FRecallGameplayTagFragment>())
@@ -203,14 +203,14 @@ static bool CollectByInstigatorEntity(
 }
 
 static void CollectByInteractor(
-	FMassExtendedExecutionContext& Context,
-	const FMassExtendedEntityHandle& CollectableEntity,
+	FMassExecutionContext& Context,
+	const FMassEntityHandle& CollectableEntity,
 	const FRecallInteractableFragment& InteractableFragment,
 	const FRecallCollectableSettings& CollectableSettings,
 	const FRecallCollectableFragment& CollectableFragment,
 	const FRecallTransformFragment& CollectableTransformFragment)
 {	
-	for (const FMassExtendedEntityHandle& InstigatorEntity : InteractableFragment.ExecuteInstigators)
+	for (const FMassEntityHandle& InstigatorEntity : InteractableFragment.ExecuteInstigators)
 	{
 		if (CollectByInstigatorEntity(Context, InstigatorEntity, CollectableEntity,
 			CollectableSettings, CollectableFragment, CollectableTransformFragment))
@@ -221,14 +221,14 @@ static void CollectByInteractor(
 }
 
 static void AutoCollectByOverlappingEntity(
-	FMassExtendedExecutionContext& Context,
-	const FMassExtendedEntityHandle& CollectableEntity,
+	FMassExecutionContext& Context,
+	const FMassEntityHandle& CollectableEntity,
 	const FRecallPhysicsSensorFragment& SensorFragment,
 	const FRecallCollectableSettings& CollectableSettings,
 	const FRecallCollectableFragment& CollectableFragment,
 	const FRecallTransformFragment& CollectableTransformFragment)
 {
-	for (const FMassExtendedEntityHandle& InstigatorEntity : SensorFragment.GetOverlappingEntities(CollectableSettings.AutoCollectSensorName))
+	for (const FMassEntityHandle& InstigatorEntity : SensorFragment.GetOverlappingEntities(CollectableSettings.AutoCollectSensorName))
 	{
 		if (CollectByInstigatorEntity(Context, InstigatorEntity, CollectableEntity,
 			CollectableSettings, CollectableFragment, CollectableTransformFragment))
@@ -238,11 +238,11 @@ static void AutoCollectByOverlappingEntity(
 	}
 }
 
-void URecallCollectableSignalProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallCollectableSignalProcessor::SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Collectable_Signal);
 
-	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExecutionContext& Context)
 	{
 		const FRecallCollectableConstSharedFragment& CollectableConstSharedFragment = Context.GetConstSharedFragment<FRecallCollectableConstSharedFragment>();
 		const FRecallCollectableSettings& CollectableSettings = CollectableConstSharedFragment.CollectableSettings;
@@ -254,7 +254,7 @@ void URecallCollectableSignalProcessor::SignalEntities(FMassExtendedEntityManage
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 
 			const FRecallTransformFragment& TransformFragment = TransformList[EntityIndex];
 			const FRecallCollectableFragment& CollectableFragment = CollectableList[EntityIndex];

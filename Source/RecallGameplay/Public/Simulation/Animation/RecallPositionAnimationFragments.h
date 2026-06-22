@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 // Forward declarations
 class UCurveFloat;
@@ -51,7 +51,7 @@ struct RECALLGAMEPLAY_API FRecallPositionAnimationSettings
  * This fragment is temporary and will be removed when animation completes
  */
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallPositionAnimationFragment : public FMassExtendedFragment
+struct RECALLGAMEPLAY_API FRecallPositionAnimationFragment : public FMassFragment
 {
     GENERATED_BODY()
 

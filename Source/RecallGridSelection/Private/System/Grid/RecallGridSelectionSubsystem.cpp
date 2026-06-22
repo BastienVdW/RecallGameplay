@@ -77,7 +77,7 @@ int32 URecallGridSelectionSubsystem::GetDefaultGridCellIndex(const FName& GridNa
 	return GridActor->GetGridCenterCellIndex();
 }
 
-FMassExtendedEntityHandle URecallGridSelectionSubsystem::GetGridCellEntity(int32 CellIndex,
+FMassEntityHandle URecallGridSelectionSubsystem::GetGridCellEntity(int32 CellIndex,
 	const FName& GridName) const
 {
 	return GridRegistry.GetCellEntity(CellIndex);
@@ -124,13 +124,13 @@ int32 URecallGridSelectionSubsystem::ReserveCell(int32 CellIndex, const FName& G
 	return GridRegistry.ReserveCell(CellIndex);
 }
 
-void URecallGridSelectionSubsystem::RegisterCell(int32 CellIndex, const FMassExtendedEntityHandle& Entity,
+void URecallGridSelectionSubsystem::RegisterCell(int32 CellIndex, const FMassEntityHandle& Entity,
 	const FName& GridName)
 {
 	GridRegistry.RegisterCell(CellIndex, Entity);
 }
 
-void URecallGridSelectionSubsystem::RegisterCell(const FVector& Position, const FMassExtendedEntityHandle& Entity, const FName& GridName)
+void URecallGridSelectionSubsystem::RegisterCell(const FVector& Position, const FMassEntityHandle& Entity, const FName& GridName)
 {
 	const TObjectPtr<ARecallGridActor> GridActor = GridActorMap.FindRef(GridName);
 	if (!ensureMsgf(GridActor,

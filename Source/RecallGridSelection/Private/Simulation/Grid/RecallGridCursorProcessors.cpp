@@ -13,8 +13,8 @@
 #include "Entity/RecallGridSelectionSpawnCommand.h"
 #include "Input/RecallGridSelectionInputTypes.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Controller/RecallControllerFragments.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 #include "Simulation/Grid/RecallGridCursorFragments.h"
@@ -33,27 +33,27 @@
 URecallGridCursorOwnerInitializer::URecallGridCursorOwnerInitializer()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallGridCursorOwnerFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Add;
+	Operation = EMassObservedOperation::Add;
 }
 
-void URecallGridCursorOwnerInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGridCursorOwnerInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallGridCursorOwnerInitializer::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGridCursorOwnerInitializer::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddConstSharedRequirement<FRecallGridCursorOwnerConstSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallEntityAsyncSpawnSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallEntityAsyncSpawnSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallGridCursorOwnerInitializer::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallGridCursorOwnerInitializer::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const auto& GridCursorOwnerConstSharedFragment = Context.GetConstSharedFragment<FRecallGridCursorOwnerConstSharedFragment>();
 		if (GridCursorOwnerConstSharedFragment.GridSelectionEntityConfig.IsNull())
@@ -82,7 +82,7 @@ void URecallGridCursorOwnerInitializer::Execute(FMassExtendedEntityManager& Enti
 				FVector::ZeroVector, FQuat::Identity, SpawnParams);
 
 #if RECALL_DESYNC_LOG
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			RECALL_DESYNC_LOG_STR(Context.GetWorld(), "Cursor Spawn",
 				FString::Printf(TEXT("Cursor spawned by: %s"), *Entity.DebugGetDescription()));
 #endif // RECALL_DESYNC_LOG
@@ -102,25 +102,25 @@ void URecallGridCursorOwnerInitializer::Execute(FMassExtendedEntityManager& Enti
 URecallGridCursorOwnerDeinitializer::URecallGridCursorOwnerDeinitializer()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallGridCursorOwnerFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Remove;
+	Operation = EMassObservedOperation::Remove;
 }
 
-void URecallGridCursorOwnerDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGridCursorOwnerDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallGridCursorOwnerDeinitializer::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGridCursorOwnerDeinitializer::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallGridCursorOwnerDeinitializer::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallGridCursorOwnerDeinitializer::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		auto& ActorSystem = Context.GetMutableSubsystemChecked<URecallActorSubsystem>();
 		const TArrayView<FRecallGridCursorOwnerFragment> CursorOwnerList = Context.GetMutableFragmentView<FRecallGridCursorOwnerFragment>();
@@ -151,25 +151,25 @@ void URecallGridCursorOwnerDeinitializer::Execute(FMassExtendedEntityManager& En
 URecallGridSelectionInitializer::URecallGridSelectionInitializer()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallGridSelectionFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Add;
+	Operation = EMassObservedOperation::Add;
 }
 
-void URecallGridSelectionInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGridSelectionInitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallGridSelectionInitializer::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGridSelectionInitializer::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallGridSelectionFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallGridSelectionFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallGridSelectionInitializer::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallGridSelectionInitializer::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const auto& GridSelectionSystem = Context.GetSubsystemChecked<URecallGridSelectionSubsystem>();
 		
@@ -189,33 +189,33 @@ void URecallGridSelectionInitializer::Execute(FMassExtendedEntityManager& Entity
 URecallGridCursorOwnerInputProcessor::URecallGridCursorOwnerInputProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteBefore.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
 }
 
-void URecallGridCursorOwnerInputProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGridCursorOwnerInputProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallGridCursorOwnerInputProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGridCursorOwnerInputProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddConstSharedRequirement<FRecallGridCursorOwnerConstSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallGridCursorOwnerInputProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallGridCursorOwnerInputProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_GridCursorOwnerInput_Execute);
 
 	EntityQuery.ForEachEntityChunk(Context,
-		[](FMassExtendedExecutionContext& Context)
+		[](FMassExecutionContext& Context)
 	{
-		const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+		const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 			
 		const auto& GridSelectionSystem = Context.GetSubsystemChecked<URecallGridSelectionSubsystem>();
 		const auto& InputQueueSystem = Context.GetSubsystemChecked<URecallInputQueueSubsystem>();
@@ -251,7 +251,7 @@ void URecallGridCursorOwnerInputProcessor::Execute(FMassExtendedEntityManager& E
 			
 			const int32 SelectedGridCellIndex = GridSelectionSystem.GetGridCellIndex(GridSelectionInput.GridPosition);
 			
-			const FMassExtendedEntityView CursorView(EntityManager, CursorOwnerFragment.GridSelectionEntity);
+			const FMassEntityView CursorView(EntityManager, CursorOwnerFragment.GridSelectionEntity);
 			auto& CursorFragment = CursorView.GetFragmentData<FRecallGridSelectionFragment>();
 					
 			if (GridSelectionInput.IsSelect())
@@ -275,28 +275,28 @@ void URecallGridCursorOwnerInputProcessor::Execute(FMassExtendedEntityManager& E
 URecallGridSelectionPositionProcessor::URecallGridSelectionPositionProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 }
 
-void URecallGridSelectionPositionProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGridSelectionPositionProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallGridSelectionPositionProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGridSelectionPositionProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallGridSelectionFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallGridSelectionFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallGridSelectionPositionProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallGridSelectionPositionProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_GridSelectionPosition_Execute);
 
 	EntityQuery.ForEachEntityChunk(Context,
-		[](FMassExtendedExecutionContext& Context)
+		[](FMassExecutionContext& Context)
 	{
 		const auto& GridSelectionSystem = Context.GetSubsystemChecked<URecallGridSelectionSubsystem>();
 	
@@ -320,29 +320,29 @@ void URecallGridSelectionPositionProcessor::Execute(FMassExtendedEntityManager& 
 URecallGridSelectionRepresentationProcessor::URecallGridSelectionRepresentationProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::Render;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::Render;
 	bRequiresGameThreadExecution = true;
 }
 
-void URecallGridSelectionRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGridSelectionRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallGridSelectionRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGridSelectionRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallActorRepresentationFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallGridSelectionFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallActorRepresentationFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallGridSelectionFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallGridSelectionRepresentationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallGridSelectionRepresentationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_GridSelection_Representation);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const auto& ActorSystem = Context.GetSubsystemChecked<URecallActorSubsystem>();
 		const auto& GridSelectionSystem = Context.GetSubsystemChecked<URecallGridSelectionSubsystem>();
@@ -374,27 +374,27 @@ void URecallGridSelectionRepresentationProcessor::Execute(FMassExtendedEntityMan
 URecallGridCursorPositionProcessor::URecallGridCursorPositionProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 }
 
-void URecallGridCursorPositionProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGridCursorPositionProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallGridCursorPositionProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGridCursorPositionProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallGridCursorPositionProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallGridCursorPositionProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_GridCursorPosition_Execute);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const auto& InputQueueSystem = Context.GetSubsystemChecked<URecallInputQueueSubsystem>();
 
@@ -423,33 +423,33 @@ void URecallGridCursorPositionProcessor::Execute(FMassExtendedEntityManager& Ent
 URecallGridCursorRepresentationProcessor::URecallGridCursorRepresentationProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::Render;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::Render;
 	bRequiresGameThreadExecution = true;
 }
 
-void URecallGridCursorRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGridCursorRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallGridCursorRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGridCursorRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
-	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallGridCursorOwnerFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
+	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-static FVector GetSelectionPosition(FMassExtendedExecutionContext& Context,
-	const FMassExtendedEntityHandle& GridSelectionEntity)
+static FVector GetSelectionPosition(FMassExecutionContext& Context,
+	const FMassEntityHandle& GridSelectionEntity)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 	const auto& GridSelectionSystem = Context.GetSubsystemChecked<URecallGridSelectionSubsystem>();
 	
 	if (EntityManager.IsEntityValid(GridSelectionEntity))
 	{
-		const FMassExtendedEntityView SelectionView(EntityManager, GridSelectionEntity);
+		const FMassEntityView SelectionView(EntityManager, GridSelectionEntity);
 		if (const auto* SelectionFragmentPtr = SelectionView.GetFragmentDataPtr<FRecallGridSelectionFragment>())
 		{
 			return GridSelectionSystem.GetGridCellPosition(SelectionFragmentPtr->GridCellIndex);
@@ -459,7 +459,7 @@ static FVector GetSelectionPosition(FMassExtendedExecutionContext& Context,
 	return FVector::ZeroVector;
 }
 
-static FVector GetGridCursorPosition(FMassExtendedExecutionContext& Context,
+static FVector GetGridCursorPosition(FMassExecutionContext& Context,
 	const FRecallGridCursorOwnerFragment& CursorOwnerFragment)
 {
 	const FVector GridSelectionPosition = GetSelectionPosition(Context, CursorOwnerFragment.GridSelectionEntity);
@@ -499,16 +499,16 @@ static FVector GetGridCursorPosition(FMassExtendedExecutionContext& Context,
 	return GridSelectionPosition;
 }
 
-void URecallGridCursorRepresentationProcessor::Execute(FMassExtendedEntityManager& EntityManager,
-	FMassExtendedExecutionContext& Context)
+void URecallGridCursorRepresentationProcessor::Execute(FMassEntityManager& EntityManager,
+	FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_GridCursor_Representation);
 
 	int32 ZOffset = 0;
 
-	EntityQuery.ForEachEntityChunk(Context, [&ZOffset](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&ZOffset](FMassExecutionContext& Context)
 	{
-		const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+		const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 		
 		const auto& ActorSystem = Context.GetSubsystemChecked<URecallActorSubsystem>();
 		

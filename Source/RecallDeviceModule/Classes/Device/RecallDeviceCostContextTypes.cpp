@@ -7,8 +7,8 @@
 
 #include "RecallDeviceCostContextTypes.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 
 //----------------------------------------------------------------------//
 // FRecallDeviceCostContext
@@ -18,12 +18,12 @@ UWorld* FRecallDeviceCostContext::GetWorld() const
 	return EntityManager.GetWorld();
 }
 
-FMassExtendedEntityView FRecallDeviceCostContext::GetEntityView() const
+FMassEntityView FRecallDeviceCostContext::GetEntityView() const
 {
-	return FMassExtendedEntityView(GetEntityManager(), Entity);
+	return FMassEntityView(GetEntityManager(), Entity);
 }
 
-const FMassExtendedEntityManager& FRecallDeviceCostContext::GetEntityManager() const
+const FMassEntityManager& FRecallDeviceCostContext::GetEntityManager() const
 {
 	return EntityManager;
 }

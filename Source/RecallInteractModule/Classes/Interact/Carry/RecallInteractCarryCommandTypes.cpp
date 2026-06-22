@@ -7,7 +7,7 @@
 
 #include "RecallInteractCarryCommandTypes.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "Simulation/Carry/RecallCarryFragments.h"
 #include "Simulation/Carry/RecallCarrySignalTypes.h"
@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------//
 bool FRecallInteractCarryCommand::Validate(const FRecallInteractContext& Context) const
 {
-	const FMassExtendedEntityView CarryableView(Context.GetEntityManagerChecked(), Context.InteractableEntity);
+	const FMassEntityView CarryableView(Context.GetEntityManagerChecked(), Context.InteractableEntity);
 	const FRecallCarryableFragment* CarryableFragmentPtr = CarryableView.GetFragmentDataPtr<FRecallCarryableFragment>();
 	if (CarryableFragmentPtr == nullptr)
 	{

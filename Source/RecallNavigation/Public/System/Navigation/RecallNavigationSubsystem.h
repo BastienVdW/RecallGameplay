@@ -9,7 +9,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "System/Interface/RecallSimulationReactSystemInterface.h"
-#include "MassExtendedExternalSubsystemTraits.h"
+#include "Mass/ExternalSubsystemTraits.h"
 #include "RecallNavigationTypes.h"
 
 #include "RecallNavigationSubsystem.generated.h"
@@ -62,7 +62,7 @@ private:
 };
 
 template<>
-struct TMassExtendedExternalSubsystemTraits<URecallNavigationSubsystem> final
+struct TMassExternalSubsystemTraits<URecallNavigationSubsystem> final
 {
 	enum
 	{

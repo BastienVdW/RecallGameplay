@@ -7,7 +7,7 @@
 
 #include "RecallNavMeshAgentProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "Navigation/RecallNavigationSignalTypes.h"
 #include "Simulation/Navigation/RecallNavigationFragments.h"
@@ -23,27 +23,27 @@
 URecallNavMeshAgentConstructor::URecallNavMeshAgentConstructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallNavMeshPathRequestFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Add;
+	Operation = EMassObservedOperation::Add;
 }
 
-void URecallNavMeshAgentConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallNavMeshAgentConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallNavMeshAgentConstructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallNavMeshAgentConstructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallNavMeshPathRequestFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallNavMeshPathRequestFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallNavMeshAgentConstructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallNavMeshAgentConstructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_NavMeshAgent_Constructor);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallNavigationSubsystem& NavigationSystem = Context.GetMutableSubsystemChecked<URecallNavigationSubsystem>();
 
@@ -62,28 +62,28 @@ void URecallNavMeshAgentConstructor::Execute(FMassExtendedEntityManager& EntityM
 URecallNavMeshAgentDestructor::URecallNavMeshAgentDestructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallNavMeshPathRequestFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Remove;
+	Operation = EMassObservedOperation::Remove;
 }
 
-void URecallNavMeshAgentDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallNavMeshAgentDestructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallNavMeshAgentDestructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallNavMeshAgentDestructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallNavMeshPathRequestFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallNavMeshPathRequestFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassFragmentAccess::ReadWrite);
 
 }
 
-void URecallNavMeshAgentDestructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallNavMeshAgentDestructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_NavMeshAgent_Destructor);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallNavigationSubsystem& NavigationSystem = Context.GetMutableSubsystemChecked<URecallNavigationSubsystem>();
 
@@ -103,37 +103,37 @@ void URecallNavMeshAgentDestructor::Execute(FMassExtendedEntityManager& EntityMa
 URecallNavMeshAgentProcessor::URecallNavMeshAgentProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteAfter.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
 }
 
-void URecallNavMeshAgentProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallNavMeshAgentProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallNavMeshAgentProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallNavMeshAgentProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallNavMeshPathRequestFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallPathFollowerFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallNavMeshPathRequestFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallPathFollowerFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddConstSharedRequirement<FRecallNavigationAgentConstSharedFragment>();
 	EntityQuery.AddConstSharedRequirement<FRecallPathFollowingConstSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 
-	ProcessorRequirements.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallNavMeshAgentProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallNavMeshAgentProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_NavMeshAgent_Execute);
 
 	URecallNavigationSubsystem& NavigationSystem = Context.GetMutableSubsystemChecked<URecallNavigationSubsystem>();
 
 	EntityQuery.ForEachEntityChunk(Context,
-		[&NavigationSystem](FMassExtendedExecutionContext& Context)
+		[&NavigationSystem](FMassExecutionContext& Context)
 	{
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
 
@@ -149,7 +149,7 @@ void URecallNavMeshAgentProcessor::Execute(FMassExtendedEntityManager& EntityMan
 		// Handle path requests from PathFollower Fragment (generic pattern allows other navigation systems)
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 
 			FRecallNavMeshPathRequestFragment& NavMeshPathRequest = NavMeshPathRequestList[EntityIndex];
 			FRecallPathFollowerFragment& PathFollower = PathFollowerList[EntityIndex];

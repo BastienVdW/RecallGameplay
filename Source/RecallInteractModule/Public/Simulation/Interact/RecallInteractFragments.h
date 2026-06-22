@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include "MassExtendedEntityElementTypes.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityElementTypes.h"
+#include "Mass/EntityHandle.h"
+#include "MassEntityTypes.h"
 #include "Data/Interact/RecallInteractTypes.h"
 
 #include "RecallInteractFragments.generated.h"
@@ -43,16 +44,16 @@ struct RECALLINTERACTMODULE_API FRecallInteractionPosition
 };
 
 // Tag to identify entities that can interact with other entities
-USTRUCT() struct FRecallInteractorTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct FRecallInteractorTag : public FMassTag { GENERATED_BODY() };
 
 USTRUCT()
-struct RECALLINTERACTMODULE_API FRecallInteractorFragment : public FMassExtendedFragment
+struct RECALLINTERACTMODULE_API FRecallInteractorFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
 	// Closest interactable entity that can be interacted with
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle ClosestInteractableEntity;
+	FMassEntityHandle ClosestInteractableEntity;
 
 	/**
 	 * Position index within closest/current interactable.
@@ -66,11 +67,11 @@ struct RECALLINTERACTMODULE_API FRecallInteractorFragment : public FMassExtended
 
 	// Contextual interactable entity for contextual actions
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle ContextualInteractEntity;
+	FMassEntityHandle ContextualInteractEntity;
 
 	// Entity that is currently being interacted with
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle CurrentInteractEntity;
+	FMassEntityHandle CurrentInteractEntity;
 
 	// Index of the current interaction event on the interact entity.
 	UPROPERTY(VisibleAnywhere)
@@ -102,7 +103,7 @@ struct RECALLINTERACTMODULE_API FRecallInteractorFragment : public FMassExtended
 };
 
 USTRUCT()
-struct RECALLINTERACTMODULE_API FRecallInteractorSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLINTERACTMODULE_API FRecallInteractorSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 	
@@ -143,7 +144,7 @@ struct RECALLINTERACTMODULE_API FRecallInteractionEventData
 class URecallInteractAsset;
 
 USTRUCT()
-struct RECALLINTERACTMODULE_API FRecallInteractableConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLINTERACTMODULE_API FRecallInteractableConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 
@@ -195,7 +196,7 @@ public:
 };
 
 USTRUCT()
-struct RECALLINTERACTMODULE_API FRecallInteractableFragment : public FMassExtendedFragment
+struct RECALLINTERACTMODULE_API FRecallInteractableFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -210,10 +211,10 @@ struct RECALLINTERACTMODULE_API FRecallInteractableFragment : public FMassExtend
 		
 	// Entities that are currently interacting with this interactable
 	UPROPERTY(VisibleAnywhere)
-	TArray<FMassExtendedEntityHandle> InProgressInstigators;
+	TArray<FMassEntityHandle> InProgressInstigators;
 	// Entities that finished interacting with this interactable
 	UPROPERTY(VisibleAnywhere)
-	TArray<FMassExtendedEntityHandle> ExecuteInstigators;
+	TArray<FMassEntityHandle> ExecuteInstigators;
 
 	// Can be interacted with
 	UPROPERTY(VisibleAnywhere)
@@ -264,3 +265,7 @@ public:
 	FRecallInteractionEventData& GetMutableInteractionEventDataChecked(int32 EventIndex,
 		const FRecallInteractableConstSharedFragment* ConstSharedFragmentPtr);
 };
+
+template <>
+struct TMassFragmentTraits<FRecallInteractableFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };

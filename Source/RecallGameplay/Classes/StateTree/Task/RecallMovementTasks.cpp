@@ -7,7 +7,7 @@
 
 #include "RecallMovementTasks.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "Physics/RecallPhysicsObjects.h"
 #include "Simulation/Movement/RecallMovementFragments.h"
@@ -128,16 +128,16 @@ FQuat FRecallRotateTask::GetTargetRotation(FStateTreeExecutionContext& Context,
 {
 	const FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-	auto GetEntityLocation = [&Context](const FMassExtendedEntityHandle& Entity)
+	auto GetEntityLocation = [&Context](const FMassEntityHandle& Entity)
 	{
 		const FRecallStateTreeExecutionContext& MassContext = static_cast<const FRecallStateTreeExecutionContext&>(Context);
-		const FMassExtendedEntityManager& EntityManager = MassContext.GetEntityManager();
+		const FMassEntityManager& EntityManager = MassContext.GetEntityManager();
 		if (!EntityManager.IsEntityValid(Entity))
 		{
 			return FVector::ZeroVector;
 		}
 		
-		const FMassExtendedEntityView EntityView(EntityManager, Entity);
+		const FMassEntityView EntityView(EntityManager, Entity);
 		const auto& TransformFragment = EntityView.GetFragmentData<FRecallTransformFragment>();
 		return TransformFragment.Position;
 	};

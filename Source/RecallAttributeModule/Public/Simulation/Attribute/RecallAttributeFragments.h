@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
+#include "MassEntityTypes.h"
 #include "Attribute/RecallAttributeSetTypes.h"
 
 #include "RecallAttributeFragments.generated.h"
@@ -17,7 +18,7 @@ class URecallAttributeSetAsset;
  * Fragment to hold entity attributes
  */
 USTRUCT()
-struct RECALLATTRIBUTEMODULE_API FRecallAttributeFragment : public FMassExtendedFragment
+struct RECALLATTRIBUTEMODULE_API FRecallAttributeFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -28,11 +29,15 @@ struct RECALLATTRIBUTEMODULE_API FRecallAttributeFragment : public FMassExtended
 	FRecallAttributeSet AttributeSet;
 };
 
+template <>
+struct TMassFragmentTraits<FRecallAttributeFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };
+
 /**
  * Fragment to hold entity attributes
  */
 USTRUCT()
-struct RECALLATTRIBUTEMODULE_API FRecallAttributeConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLATTRIBUTEMODULE_API FRecallAttributeConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

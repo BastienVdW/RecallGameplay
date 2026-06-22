@@ -15,7 +15,7 @@ struct RECALLGAMERULEMODULE_API FRecallGameRuleInProgressConditionInstanceData
 {
 	GENERATED_BODY()
 };
-STATETREE_POD_INSTANCEDATA(FRecallGameRuleInProgressConditionInstanceData);
+UE_STATETREE_ZEROED_TRIVIALLY_COPIED_NO_DESTRUCTOR_INSTANCEDATA(FRecallGameRuleInProgressConditionInstanceData);
 
 USTRUCT(DisplayName="Match In Progress")
 struct RECALLGAMERULEMODULE_API FRecallGameRuleInProgressCondition : public FRecallGameRuleStateTreeConditionBase

@@ -10,15 +10,15 @@
 #include "Data/Interact/RecallInteractTypes.h"
 
 class URecallSignalSubsystem;
-struct FMassExtendedEntityHandle;
-struct FMassExtendedExecutionContext;
+struct FMassEntityHandle;
+struct FMassExecutionContext;
 struct FRecallInteractorFragment;
 class UInputAction;
 
 struct FRecallInteractExecuteContext
 {
-	FMassExtendedExecutionContext& ExecutionContext;
-	const FMassExtendedEntityHandle& InteractorEntity;
+	FMassExecutionContext& ExecutionContext;
+	const FMassEntityHandle& InteractorEntity;
 	FRecallInteractorFragment* const InteractorFragmentPtr = nullptr;
 	struct FRecallGameplayTagFragment* const InteractorGameplayTagFragmentPtr = nullptr;
 	struct FRecallAttributeFragment* const InteractorAttributeFragmentPtr = nullptr;
@@ -42,11 +42,11 @@ namespace Recall::Interact::Utils
 /// @param OutText Text to display for the interaction, failed text if return value is INDEX_NONE
 /// @return The index of the interaction event that passed all the conditions, INDEX_NONE if none or any condition failed
 RECALLINTERACTMODULE_API extern int32 FindInteractEventIndexByInput(const FRecallInteractExecuteContext& Context,
-	const FMassExtendedEntityHandle& InteractionTarget, ERecallInteractInput Input = ERecallInteractInput::Any,
+	const FMassEntityHandle& InteractionTarget, ERecallInteractInput Input = ERecallInteractInput::Any,
 	bool bIsContextual = false, FText* OutText = nullptr, TObjectPtr<UInputAction>* OutUIAction = nullptr);
 	
 RECALLINTERACTMODULE_API extern bool BeginInteract(const FRecallInteractExecuteContext& Context,
-	const FMassExtendedEntityHandle& InteractionTarget, int32 EventIndex = 0);
+	const FMassEntityHandle& InteractionTarget, int32 EventIndex = 0);
 RECALLINTERACTMODULE_API extern void EndInteract(const FRecallInteractExecuteContext& Context);
 RECALLINTERACTMODULE_API extern ERecallInteractResult UpdateInteract(const FRecallInteractExecuteContext& Context,
 	ERecallInteractInput Input, float DeltaTime, bool& bOutCanEndInteraction, bool bIsContextual = false);

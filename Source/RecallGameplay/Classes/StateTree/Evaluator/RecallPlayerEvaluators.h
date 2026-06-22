@@ -9,7 +9,7 @@
 #include "CoreMinimal.h"
 #include "StateTree/Player/RecallPlayerEvaluatorBase.h"
 #include "StateTree/RecallStateTreeEvaluatorBase.h"
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "StateTreePropertyRef.h"
 
 #include "RecallPlayerEvaluators.generated.h"
@@ -26,7 +26,7 @@ struct RECALLGAMEPLAY_API FRecallPlayerLocationEvaluatorInstanceData
 	FVector PlayerLocation = FVector::ZeroVector;
 	
 	UPROPERTY(VisibleAnywhere, Category=Output)
-	FMassExtendedEntityHandle PlayerEntity;
+	FMassEntityHandle PlayerEntity;
 };
 
 /**

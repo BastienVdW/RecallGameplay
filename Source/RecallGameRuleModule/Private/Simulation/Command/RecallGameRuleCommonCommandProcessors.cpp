@@ -9,8 +9,8 @@
 
 #include "Desync/RecallDesyncLog.h"
 #include "GameplayTag/RecallGameplayTagTypes.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
@@ -28,19 +28,19 @@
 URecallGameRuleDestroyEntitiesProcessor::URecallGameRuleDestroyEntitiesProcessor()
     : EntityQuery(*this)
 {
-    ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-    ProcessingPhase = EMassExtendedProcessingPhase::PostPhysics;
+    ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+    ProcessingPhase = EMassProcessingPhase::PostPhysics;
 }
 
-void URecallGameRuleDestroyEntitiesProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGameRuleDestroyEntitiesProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-    EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassExtendedFragmentAccess::ReadOnly);
+    EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassFragmentAccess::ReadOnly);
     
-    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallGameRuleDestroyEntitiesProcessor::Execute(FMassExtendedEntityManager& EntityManager, 
-    FMassExtendedExecutionContext& Context)
+void URecallGameRuleDestroyEntitiesProcessor::Execute(FMassEntityManager& EntityManager, 
+    FMassExecutionContext& Context)
 {
     URecallGameRuleCommandSubsystem& CommandSubsystem = Context.GetMutableSubsystemChecked<URecallGameRuleCommandSubsystem>();
     
@@ -54,7 +54,7 @@ void URecallGameRuleDestroyEntitiesProcessor::Execute(FMassExtendedEntityManager
         return;
     }
     
-    EntityQuery.ForEachEntityChunk(Context, [&ValidCommands](FMassExtendedExecutionContext& Context)
+    EntityQuery.ForEachEntityChunk(Context, [&ValidCommands](FMassExecutionContext& Context)
     {
         const TConstArrayView<FRecallGameplayTagFragment> GameplayTagList = 
             Context.GetFragmentView<FRecallGameplayTagFragment>();
@@ -69,7 +69,7 @@ void URecallGameRuleDestroyEntitiesProcessor::Execute(FMassExtendedEntityManager
                 if (Recall::GameplayTag::Utils::EvaluateCondition(
                     Command.TagCondition, GameplayTagFragment.GameplayTagCountMap))
                 {
-                    const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+                    const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
                     Context.Defer().DestroyEntity(Entity);
 
 #if RECALL_DESYNC_LOG
@@ -88,19 +88,19 @@ void URecallGameRuleDestroyEntitiesProcessor::Execute(FMassExtendedEntityManager
 URecallGameRuleApplyTagProcessor::URecallGameRuleApplyTagProcessor()
     : EntityQuery(*this)
 {
-    ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-    ProcessingPhase = EMassExtendedProcessingPhase::PostPhysics;
+    ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+    ProcessingPhase = EMassProcessingPhase::PostPhysics;
 }
 
-void URecallGameRuleApplyTagProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGameRuleApplyTagProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-    EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassExtendedFragmentAccess::ReadWrite);
+    EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassFragmentAccess::ReadWrite);
     
-    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallGameRuleApplyTagProcessor::Execute(FMassExtendedEntityManager& EntityManager, 
-    FMassExtendedExecutionContext& Context)
+void URecallGameRuleApplyTagProcessor::Execute(FMassEntityManager& EntityManager, 
+    FMassExecutionContext& Context)
 {
     URecallGameRuleCommandSubsystem& CommandSubsystem = Context.GetMutableSubsystemChecked<URecallGameRuleCommandSubsystem>();
     
@@ -115,7 +115,7 @@ void URecallGameRuleApplyTagProcessor::Execute(FMassExtendedEntityManager& Entit
     }
     
     // Apply tag changes - iterate through entities once
-    EntityQuery.ForEachEntityChunk(Context, [&ValidCommands](FMassExtendedExecutionContext& Context)
+    EntityQuery.ForEachEntityChunk(Context, [&ValidCommands](FMassExecutionContext& Context)
     {
         const TArrayView<FRecallGameplayTagFragment> GameplayTagList = 
             Context.GetMutableFragmentView<FRecallGameplayTagFragment>();
@@ -135,7 +135,7 @@ void URecallGameRuleApplyTagProcessor::Execute(FMassExtendedEntityManager& Entit
                     GameplayTagFragment.GameplayTagCountMap.RemoveTags(Command.TagsToRemove);
 
 #if RECALL_DESYNC_LOG
-                    const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+                    const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
                     RECALL_DESYNC_LOG_INT(Context.GetWorld(), "GameRuleApplyTag_TagsModified", Entity.Index);
 #endif
                     
@@ -153,23 +153,23 @@ void URecallGameRuleApplyTagProcessor::Execute(FMassExtendedEntityManager& Entit
 URecallGameRuleSwapPositionsProcessor::URecallGameRuleSwapPositionsProcessor()
     : EntityQuery(*this)
 {
-    ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-    ProcessingPhase = EMassExtendedProcessingPhase::PostPhysics;
+    ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+    ProcessingPhase = EMassProcessingPhase::PostPhysics;
 }
 
-void URecallGameRuleSwapPositionsProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGameRuleSwapPositionsProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-    EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassExtendedFragmentAccess::ReadOnly);
-    EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadWrite);
-    EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
+    EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassFragmentAccess::ReadOnly);
+    EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadWrite);
+    EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
     
-    ProcessorRequirements.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-    ProcessorRequirements.AddSubsystemRequirement<URecallRandomNumberSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+    ProcessorRequirements.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadWrite);
+    ProcessorRequirements.AddSubsystemRequirement<URecallRandomNumberSubsystem>(EMassFragmentAccess::ReadWrite);
+    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallGameRuleSwapPositionsProcessor::Execute(FMassExtendedEntityManager& EntityManager, 
-    FMassExtendedExecutionContext& Context)
+void URecallGameRuleSwapPositionsProcessor::Execute(FMassEntityManager& EntityManager, 
+    FMassExecutionContext& Context)
 {
     URecallGameRuleCommandSubsystem& CommandSubsystem = Context.GetMutableSubsystemChecked<URecallGameRuleCommandSubsystem>();
     
@@ -186,12 +186,12 @@ void URecallGameRuleSwapPositionsProcessor::Execute(FMassExtendedEntityManager& 
     const FRecallGameRuleSwapPositionsCommand& Command = ValidCommands[0];
     
     // Collect entities first
-    TArray<FMassExtendedEntityHandle> MatchingEntities;
+    TArray<FMassEntityHandle> MatchingEntities;
     TArray<FVector> Positions;
     
     // Collect entities and their positions that match each command's tag condition
     EntityQuery.ForEachEntityChunk(Context,
-        [&Command, &MatchingEntities, &Positions](FMassExtendedExecutionContext& Context)
+        [&Command, &MatchingEntities, &Positions](FMassExecutionContext& Context)
     {
         const TConstArrayView<FRecallGameplayTagFragment> GameplayTagList = 
             Context.GetFragmentView<FRecallGameplayTagFragment>();
@@ -228,7 +228,7 @@ void URecallGameRuleSwapPositionsProcessor::Execute(FMassExtendedEntityManager& 
     // Apply shuffled positions to entities
     for (int32 EntityIndex = 0; EntityIndex < MatchingEntities.Num(); ++EntityIndex)
     {
-        const FMassExtendedEntityHandle& Entity = MatchingEntities[EntityIndex];
+        const FMassEntityHandle& Entity = MatchingEntities[EntityIndex];
         const FVector& NewPosition = ShuffledPositions[EntityIndex];
         const FVector& CurrentPosition = Positions[EntityIndex];
         
@@ -263,23 +263,23 @@ void URecallGameRuleSwapPositionsProcessor::Execute(FMassExtendedEntityManager& 
 URecallGameRuleMoveToPositionProcessor::URecallGameRuleMoveToPositionProcessor()
     : EntityQuery(*this)
 {
-    ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-    ProcessingPhase = EMassExtendedProcessingPhase::StartPhysics;
+    ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+    ProcessingPhase = EMassProcessingPhase::StartPhysics;
 }
 
-void URecallGameRuleMoveToPositionProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGameRuleMoveToPositionProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-    EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassExtendedFragmentAccess::ReadOnly);
-    EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadWrite);
-    EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
-    EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+    EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassFragmentAccess::ReadOnly);
+    EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadWrite);
+    EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
+    EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadWrite);
     
-    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+    ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleCommandSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
 static bool GetTargetEntityPosition(
-    const FMassExtendedEntityManager& EntityManager,
-    const FMassExtendedEntityHandle& TargetEntity,
+    const FMassEntityManager& EntityManager,
+    const FMassEntityHandle& TargetEntity,
     FVector& OutPosition)
 {
     if (!EntityManager.IsEntityValid(TargetEntity))
@@ -287,7 +287,7 @@ static bool GetTargetEntityPosition(
         return false;
     }
     
-    const FMassExtendedEntityView TargetEntityView(EntityManager, TargetEntity);
+    const FMassEntityView TargetEntityView(EntityManager, TargetEntity);
     const FRecallTransformFragment* TransformFragmentPtr = TargetEntityView.GetFragmentDataPtr<FRecallTransformFragment>();    
     if (!TransformFragmentPtr)
     {
@@ -298,8 +298,8 @@ static bool GetTargetEntityPosition(
     return true;
 }
 
-void URecallGameRuleMoveToPositionProcessor::Execute(FMassExtendedEntityManager& EntityManager, 
-    FMassExtendedExecutionContext& Context)
+void URecallGameRuleMoveToPositionProcessor::Execute(FMassEntityManager& EntityManager, 
+    FMassExecutionContext& Context)
 {
     URecallGameRuleCommandSubsystem& CommandSubsystem = Context.GetMutableSubsystemChecked<URecallGameRuleCommandSubsystem>();
     
@@ -315,7 +315,7 @@ void URecallGameRuleMoveToPositionProcessor::Execute(FMassExtendedEntityManager&
     
     // Collect entities that match the tag condition and move them to target position
     EntityQuery.ForEachEntityChunk(Context,
-        [&ValidCommands, &EntityManager](FMassExtendedExecutionContext& Context)
+        [&ValidCommands, &EntityManager](FMassExecutionContext& Context)
     {
         URecallPhysicsSubsystem& PhysicsSubsystem = Context.GetMutableSubsystemChecked<URecallPhysicsSubsystem>();
             
@@ -335,7 +335,7 @@ void URecallGameRuleMoveToPositionProcessor::Execute(FMassExtendedEntityManager&
                 continue;
             }
             
-            const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+            const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
             const FRecallTransformFragment& TransformFragment = TransformList[EntityIndex];
             
             // Get target position from the target entity (e.g., the escape/base entity)

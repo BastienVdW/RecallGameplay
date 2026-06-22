@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "Attribute/RecallAttributeDefinitionTypes.h"
 
 #include "RecallAttributeTraits.generated.h"
@@ -15,12 +15,12 @@
 * Trait for entities that own an attribute set.
 */
 UCLASS(meta=(DisplayName="RE Attribute Set"))
-class RECALLATTRIBUTEMODULE_API URecallAttributeTrait : public UMassExtendedEntityTraitBase
+class RECALLATTRIBUTEMODULE_API URecallAttributeTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere)

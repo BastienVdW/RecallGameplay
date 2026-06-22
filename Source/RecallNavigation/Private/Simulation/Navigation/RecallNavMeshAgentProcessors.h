@@ -6,63 +6,63 @@
 
 #pragma once
 
-#include "MassExtendedObserverProcessor.h"
+#include "MassObserverProcessor.h"
 
 #include "RecallNavMeshAgentProcessors.generated.h"
 
 UCLASS()
-class URecallNavMeshAgentConstructor : public UMassExtendedObserverProcessor
+class URecallNavMeshAgentConstructor : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 public:
 	URecallNavMeshAgentConstructor();
 
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };
 
 UCLASS()
-class URecallNavMeshAgentDestructor : public UMassExtendedObserverProcessor
+class URecallNavMeshAgentDestructor : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 public:
 	URecallNavMeshAgentDestructor();
 
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };
 
 UCLASS()
-class URecallNavMeshAgentProcessor : public UMassExtendedProcessor
+class URecallNavMeshAgentProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallNavMeshAgentProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };

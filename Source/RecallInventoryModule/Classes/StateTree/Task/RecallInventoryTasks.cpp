@@ -7,9 +7,9 @@
 
 #include "RecallInventoryTasks.h"
 
-#include "MassExtendedCommandBuffer.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassCommandBuffer.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "Data/Inventory/RecallInventoryItemAsset.h"
 #include "Data/Inventory/RecallInventoryItemCommandTypes.h"
@@ -148,8 +148,8 @@ bool FRecallDropEquipItemTask::Link(FStateTreeLinker& Linker)
 	return true;
 }
 
-static void SpawnDropItemEntity(const FMassExtendedExecutionContext& MassExecutionContext,
-	URecallEntitySubsystem& EntitySystem, const TObjectPtr<UMassExtendedEntityConfigAsset>& EntityConfigAsset,
+static void SpawnDropItemEntity(const FMassExecutionContext& MassExecutionContext,
+	URecallEntitySubsystem& EntitySystem, const TObjectPtr<UMassEntityConfigAsset>& EntityConfigAsset,
 	const FVector& DropLocation, const FVector& Velocity, const FGameplayTag& ItemTag)
 {
 	if (!ensureAlwaysMsgf(EntityConfigAsset, TEXT("Invalid drop item entity config")) ||
@@ -158,13 +158,13 @@ static void SpawnDropItemEntity(const FMassExtendedExecutionContext& MassExecuti
 		return;
 	}
 	
-	MassExecutionContext.Defer().PushCommand<FMassExtendedDeferredCreateCommand>(
-		[&EntitySystem, EntityConfigAsset, DropLocation, Velocity, ItemTag](FMassExtendedEntityManager& System)
+	MassExecutionContext.Defer().PushCommand<FMassDeferredCreateCommand>(
+		[&EntitySystem, EntityConfigAsset, DropLocation, Velocity, ItemTag](FMassEntityManager& System)
 		{
-			TArray<FMassExtendedEntityHandle> Entities;		
+			TArray<FMassEntityHandle> Entities;		
 			EntitySystem.CreateEntities(EntityConfigAsset, 1, Entities);
 
-			const FMassExtendedEntityView EntityView(System, Entities[0]);
+			const FMassEntityView EntityView(System, Entities[0]);
 			if (FRecallTransformFragment* TransformFragmentPtr = EntityView.GetFragmentDataPtr<FRecallTransformFragment>())
 			{
 				TransformFragmentPtr->Position = DropLocation;

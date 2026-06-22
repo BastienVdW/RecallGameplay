@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallStateTreeTokenHandle.generated.h"
 
@@ -32,7 +32,7 @@ struct FRecallStateTreeTokenHandle
 		TokenID = MS_STATE_TREE_TOKEN_INVALID_ID;
 	}
 	
-	static FRecallStateTreeTokenHandle Make(const FMassExtendedEntityHandle& OwnerEntity, int32 TokenID)
+	static FRecallStateTreeTokenHandle Make(const FMassEntityHandle& OwnerEntity, int32 TokenID)
 	{
 		FRecallStateTreeTokenHandle NewHandle;
 		NewHandle.OwnerEntity = OwnerEntity;
@@ -52,14 +52,14 @@ struct FRecallStateTreeTokenHandle
 		return HashCombine(GetTypeHash(Handle.OwnerEntity), Handle.TokenID);
 	}
 
-	const FMassExtendedEntityHandle& GetTokenOwnerEntity() const
+	const FMassEntityHandle& GetTokenOwnerEntity() const
 	{
 		return OwnerEntity;
 	}
 	
 protected:
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle OwnerEntity;
+	FMassEntityHandle OwnerEntity;
 	
 	UPROPERTY(VisibleAnywhere)
 	uint32 TokenID = MS_STATE_TREE_TOKEN_INVALID_ID;

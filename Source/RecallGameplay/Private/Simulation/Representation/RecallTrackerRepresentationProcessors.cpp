@@ -7,7 +7,7 @@
 
 #include "RecallTrackerRepresentationProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Representation/Tracker/RecallTrackerReactInterface.h"
 #include "Representation/Tracker/RecallTrackerRepresentationTypes.h"
 #include "Simulation/Representation/RecallTrackerRepresentationFragments.h"
@@ -20,8 +20,8 @@
 URecallTrackerRepresentationProcessor::URecallTrackerRepresentationProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::Render;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::Render;
 	bRequiresGameThreadExecution = true;
 }
 
@@ -35,22 +35,22 @@ struct FRecallTrackerRepresentationCacheManager
 	}
 };
 
-void URecallTrackerRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallTrackerRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
 	CacheManager = MakeShared<FRecallTrackerRepresentationCacheManager>();
 }
 
-void URecallTrackerRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallTrackerRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddConstSharedRequirement<FRecallTrackerRepresentationConstSharedFragment>();
 
-	ProcessorRequirements.AddSubsystemRequirement<URecallObserverSubjectSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	ProcessorRequirements.AddSubsystemRequirement<URecallObserverSubjectSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallTrackerRepresentationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallTrackerRepresentationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Tracker_Representation);
 
@@ -66,7 +66,7 @@ void URecallTrackerRepresentationProcessor::Execute(FMassExtendedEntityManager& 
 	
 	TArray<FRecallTrackedEntityRepresentation>& TrackedEntities = CacheManager->TrackedEntities;
 	
-	EntityQuery.ForEachEntityChunk(Context, [&TrackedEntities](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&TrackedEntities](FMassExecutionContext& Context)
 	{
 		const auto& TrackerRepresentationConstSharedFragment = Context.GetConstSharedFragment<FRecallTrackerRepresentationConstSharedFragment>();
 

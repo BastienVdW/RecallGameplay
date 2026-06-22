@@ -7,12 +7,12 @@
 
 #include "RecallGridSelectionSpawnCommand.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "Simulation/Grid/RecallGridCursorFragments.h"
 
-void FRecallGridSelectionSpawnCommand::OnSpawn(FMassExtendedEntityManager& System,
-                                              const TArray<FMassExtendedEntityHandle>& Entities) const
+void FRecallGridSelectionSpawnCommand::OnSpawn(FMassEntityManager& System,
+                                              const TArray<FMassEntityHandle>& Entities) const
 {
 	if (!System.IsEntityValid(SelectionOwnerEntity) || !ensure(Entities.Num() == 1))
 	{
@@ -20,7 +20,7 @@ void FRecallGridSelectionSpawnCommand::OnSpawn(FMassExtendedEntityManager& Syste
 		return;
 	}
 
-	const FMassExtendedEntityView CursorOwnerView(System, SelectionOwnerEntity);
+	const FMassEntityView CursorOwnerView(System, SelectionOwnerEntity);
 	auto& CursorOwnerFragment = CursorOwnerView.GetFragmentData<FRecallGridCursorOwnerFragment>();
 	CursorOwnerFragment.GridSelectionEntity = Entities[0];
 }

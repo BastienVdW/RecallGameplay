@@ -7,6 +7,7 @@
 
 #include "System/EQS/RecallEnvQuerySubsystem.h"
 
+#include "Engine/World.h"
 #include "RecallEnvQuerySnapshot.h"
 #include "RecallSignalSubsystem.h"
 #include "Navigation/RecallNavigationSignalTypes.h"
@@ -14,7 +15,7 @@
 #include "System/Random/RecallRandomNumberSubsystem.h"
 #include "System/Simulation/RecallMultiSimSubsystem.h"
 #include "Utility/Simulation/RecallSimulationUtils.h"
-#include "Utility/MultiWorldUtils.h"
+#include "Utility/MultiWorld/RecallMultiWorldUtils.h"
 
 void URecallEnvQuerySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -23,7 +24,7 @@ void URecallEnvQuerySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	Collection.InitializeDependency<URecallMultiSimSubsystem>();
 	Collection.InitializeDependency<URecallRandomNumberSubsystem>();
 
-	const UWorld* MainWorld = MultiWorld::Utils::GetMainWorld(this);
+	const UWorld* MainWorld = Recall::MultiWorld::Utils::GetMainWorld(this);
 
 	if (URecallMultiSimSubsystem* MultiSimSystem = UWorld::GetSubsystem<URecallMultiSimSubsystem>(MainWorld))
 	{
@@ -39,7 +40,7 @@ void URecallEnvQuerySubsystem::Deinitialize()
 {
 	Super::Deinitialize();
 
-	const UWorld* MainWorld = MultiWorld::Utils::GetMainWorld(this);
+	const UWorld* MainWorld = Recall::MultiWorld::Utils::GetMainWorld(this);
 
 	if (URecallMultiSimSubsystem* MultiSimSystem = UWorld::GetSubsystem<URecallMultiSimSubsystem>(MainWorld))
 	{
@@ -149,7 +150,7 @@ void URecallEnvQuerySubsystem::TickEnvQueryQueue()
 	}
 }
 
-FRecallEnvQueryHandle URecallEnvQuerySubsystem::RequestEnvQuery(const FMassExtendedEntityHandle& Entity,
+FRecallEnvQueryHandle URecallEnvQuerySubsystem::RequestEnvQuery(const FMassEntityHandle& Entity,
 	const FRecallEnvQueryRequest& Request)
 {
 	FRecallEnvQueryHandle NewHandle;

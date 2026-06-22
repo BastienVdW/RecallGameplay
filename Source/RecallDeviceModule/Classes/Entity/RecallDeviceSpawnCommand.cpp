@@ -7,17 +7,17 @@
 
 #include "RecallDeviceSpawnCommand.h"
 
-#include "MassExtendedCommandBuffer.h"
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassCommandBuffer.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 
-void FRecallDeviceSpawnCommand::OnSpawn(FMassExtendedEntityManager& System,
-												  const TArray<FMassExtendedEntityHandle>& Entities) const
+void FRecallDeviceSpawnCommand::OnSpawn(FMassEntityManager& System,
+												  const TArray<FMassEntityHandle>& Entities) const
 {
-	for (const FMassExtendedEntityHandle& Entity : Entities)
+	for (const FMassEntityHandle& Entity : Entities)
 	{
-		const FMassExtendedEntityView EntityView(System, Entity);
+		const FMassEntityView EntityView(System, Entity);
 		
 		FRecallGameplayTagFragment* GameplayTagFragmentPtr = EntityView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 		if (GameplayTagFragmentPtr != nullptr)

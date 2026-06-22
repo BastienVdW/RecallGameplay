@@ -7,7 +7,7 @@
 
 #include "RecallDestroyProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Destroy/RecallDestroySignalTypes.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 
@@ -17,26 +17,26 @@
 URecallDestroySignalProcessor::URecallDestroySignalProcessor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd;
+	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 }
 
-void URecallDestroySignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallDestroySignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
 	SubscribeToSignal(Recall::Destroy::Signals::Destroy);
 }
 
-void URecallDestroySignalProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallDestroySignalProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
 }
 
-void URecallDestroySignalProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallDestroySignalProcessor::SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Destroy_Signal);
 
-	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExecutionContext& Context)
 	{
 		Context.Defer().DestroyEntities(Context.GetEntities());
 	});

@@ -97,7 +97,7 @@ struct RECALLNAVIGATION_API FRecallEnvQueryTaskInstanceData
 	FVector TargetLocation = FVector::ZeroVector;
 	
 	UPROPERTY(EditAnywhere, Category=Parameter, meta=(EditCondition="Target==ERecallEnvQueryTarget::Entity", EditConditionHides))
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 
 	/**
 	 * Make the query result relative to the target entity.

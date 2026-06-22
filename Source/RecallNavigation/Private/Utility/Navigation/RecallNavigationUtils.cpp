@@ -9,7 +9,7 @@
 
 #include "Desync/RecallDesyncLog.h"
 #include "BaseGeneratedNavLinksProxy.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
 #include "Simulation/Movement/RecallMovementFragments.h"

@@ -9,8 +9,8 @@
 
 #include "Actor/Conversation/RecallConversationParticipantActor.h"
 #include "ConversationContext.h"
-#include "MassExtendedEntityUtils.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityUtils.h"
+#include "MassEntityView.h"
 #include "Utility/Simulation/RecallSimulationUtils.h"
 
 namespace Recall::Conversation::Node::Utils
@@ -54,7 +54,7 @@ TArray<FGameplayTag> GetAllParticipants(const FConversationContext& Context)
 	return Results;
 }
 
-FMassExtendedEntityHandle GetParticipantEntity(const FConversationContext& Context,
+FMassEntityHandle GetParticipantEntity(const FConversationContext& Context,
                                                const FGameplayTag& ParticipantID)
 {
 	const FConversationParticipantEntry* ParticipantEntryPtr = Context.GetParticipant(ParticipantID);
@@ -63,10 +63,10 @@ FMassExtendedEntityHandle GetParticipantEntity(const FConversationContext& Conte
 	return ParticipantActor->GetParticipantEntity();
 }
 
-TArray<FMassExtendedEntityHandle> GetParticipantEntities(
+TArray<FMassEntityHandle> GetParticipantEntities(
 	const FConversationContext& Context, const TArray<FGameplayTag>& Participants)
 {
-	TArray<FMassExtendedEntityHandle> Results;
+	TArray<FMassEntityHandle> Results;
 	Results.Reserve(Participants.Num());
 
 	for (const FGameplayTag& ParticipantID : Participants)
@@ -77,34 +77,34 @@ TArray<FMassExtendedEntityHandle> GetParticipantEntities(
 	return Results;
 }
 
-TArray<FMassExtendedEntityHandle> GetAllParticipantEntities(const FConversationContext& Context)
+TArray<FMassEntityHandle> GetAllParticipantEntities(const FConversationContext& Context)
 {
 	const TArray<FGameplayTag> Participants = GetAllParticipants(Context);
 	return GetParticipantEntities(Context, Participants);
 }
 
-TArray<FMassExtendedEntityHandle> GetPlayerParticipantEntities(
+TArray<FMassEntityHandle> GetPlayerParticipantEntities(
 	const FConversationContext& Context)
 {
 	const TArray<FGameplayTag> Participants = GetPlayerParticipants(Context);
 	return GetParticipantEntities(Context, Participants);
 }
 
-FMassExtendedEntityManager& GetEntityManagerChecked(const FConversationContext& Context)
+FMassEntityManager& GetEntityManagerChecked(const FConversationContext& Context)
 {
 	checkf(Context.GetWorld(), TEXT("%hs Invalid world"), __FUNCTION__);
 	checkf(!IsBeingRestored(Context),
 		TEXT("%hs Not allowed to access entity manager while restoring simulation"), __FUNCTION__);
-	return UE::MassExtended::Utils::GetEntityManagerChecked(*Context.GetWorld());
+	return UE::Mass::Utils::GetEntityManagerChecked(*Context.GetWorld());
 }
 
-FMassExtendedEntityView CreateEntityView(const FConversationContext& Context,
-	const FMassExtendedEntityHandle& Entity)
+FMassEntityView CreateEntityView(const FConversationContext& Context,
+	const FMassEntityHandle& Entity)
 {
-	return FMassExtendedEntityView(GetEntityManagerChecked(Context), Entity);
+	return FMassEntityView(GetEntityManagerChecked(Context), Entity);
 }
 
-FMassExtendedEntityHandle GetConversationEntity(const FConversationContext& Context)
+FMassEntityHandle GetConversationEntity(const FConversationContext& Context)
 {
 	for (const FConversationParticipantEntry& ParticipantEntry : Context.GetParticipantsCopy().List)
 	{
@@ -114,10 +114,10 @@ FMassExtendedEntityHandle GetConversationEntity(const FConversationContext& Cont
 
 	// Conversations should always have participants
 	checkNoEntry();
-	return FMassExtendedEntityHandle();
+	return FMassEntityHandle();
 }
 	
-TArray<FMassExtendedEntityHandle> GetTargetEntities(
+TArray<FMassEntityHandle> GetTargetEntities(
 	const FConversationContext& Context, ERecallConversationNodeTarget Target)
 {
 	switch (Target)

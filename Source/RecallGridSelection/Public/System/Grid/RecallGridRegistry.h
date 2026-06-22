@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallGridRegistry.generated.h"
 
@@ -17,7 +17,7 @@ struct RECALLGRIDSELECTION_API FRecallGridCellEntry
 	GENERATED_BODY()
 	
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 	
 	UPROPERTY(VisibleAnywhere)
 	int32 CellSerialNumber = 0;
@@ -30,10 +30,10 @@ struct RECALLGRIDSELECTION_API FRecallGridRegistry
 
 public:
 	int32 ReserveCell(int32 CellIndex);
-	void RegisterCell(int32 CellIndex, const FMassExtendedEntityHandle& Entity);
+	void RegisterCell(int32 CellIndex, const FMassEntityHandle& Entity);
 	void UnregisterCell(int32 CellIndex);
 	bool IsEmptyCell(int32 CellIndex) const;
-	FMassExtendedEntityHandle GetCellEntity(int32 CellIndex) const;
+	FMassEntityHandle GetCellEntity(int32 CellIndex) const;
 	int32 GetCellReservationNumber(int32 CellIndex) const;
 	void ResetGrid();
 	

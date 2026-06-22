@@ -7,7 +7,7 @@
 
 #include "RecallGameRuleCommonEvaluators.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
 #include "Data/GameplayTag/RecallGameplayTagConditionTypes.h"
@@ -56,7 +56,7 @@ void FRecallGameRuleFilterControllerEvaluator::TreeStart(FStateTreeExecutionCont
 void FRecallGameRuleFilterControllerEvaluator::Tick(FStateTreeExecutionContext& Context, const float DeltaTime) const
 {
 	const URecallEntitySubsystem& EntitySystem = Context.GetExternalData(EntitySystemHandle);
-	const TArray<FMassExtendedEntityHandle>& ControllerEntities = EntitySystem.GetControllerEntities();
+	const TArray<FMassEntityHandle>& ControllerEntities = EntitySystem.GetControllerEntities();
 	
 	FRecallStateTreeExecutionContext& RecallContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
 
@@ -65,9 +65,9 @@ void FRecallGameRuleFilterControllerEvaluator::Tick(FStateTreeExecutionContext& 
 	InstanceData.TotalPlayerCount = 0;
 	InstanceData.FilteredControllerCount = 0;
 
-	for (const FMassExtendedEntityHandle& ControllerEntity : ControllerEntities)
+	for (const FMassEntityHandle& ControllerEntity : ControllerEntities)
 	{
-		const FMassExtendedEntityView ControllerView(RecallContext.GetEntityManager(), ControllerEntity);
+		const FMassEntityView ControllerView(RecallContext.GetEntityManager(), ControllerEntity);
 
 		if (ControllerView.HasTag<FRecallPlayerControllerTag>())
 		{

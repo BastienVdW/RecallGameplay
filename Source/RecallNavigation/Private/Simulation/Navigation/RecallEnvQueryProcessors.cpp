@@ -7,7 +7,7 @@
 
 #include "RecallEnvQueryProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Simulation/StateTree/RecallStateTreeProcessorGroupTypes.h"
 #include "System/EQS/RecallEnvQuerySubsystem.h"
 
@@ -21,12 +21,12 @@
 URecallEnvQueryProcessor::URecallEnvQueryProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteBefore.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
 }
 
-void URecallEnvQueryProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallEnvQueryProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
@@ -36,12 +36,12 @@ bool URecallEnvQueryProcessor::ShouldAllowQueryBasedPruning(const bool bRuntimeM
 	return false;
 }
 
-void URecallEnvQueryProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallEnvQueryProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	ProcessorRequirements.AddSubsystemRequirement<URecallEnvQuerySubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallEnvQuerySubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallEnvQueryProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallEnvQueryProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_EnvQuery_Execute);
 
@@ -63,12 +63,12 @@ static FAutoConsoleVariableRef CVarRecallShowEnvQueryResult(
 
 URecallEnvQueryRepresentationProcessor::URecallEnvQueryRepresentationProcessor()
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::Render;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::Render;
 	bRequiresGameThreadExecution = true;
 }
 
-void URecallEnvQueryRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallEnvQueryRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
@@ -82,16 +82,16 @@ bool URecallEnvQueryRepresentationProcessor::ShouldAllowQueryBasedPruning(const 
 #endif
 }
 
-void URecallEnvQueryRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallEnvQueryRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 	Super::ConfigureQueries(EntityManager);
 
 #if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
-	ProcessorRequirements.AddSubsystemRequirement<URecallEnvQuerySubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	ProcessorRequirements.AddSubsystemRequirement<URecallEnvQuerySubsystem>(EMassFragmentAccess::ReadOnly);
 #endif // UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
 }
 
-void URecallEnvQueryRepresentationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallEnvQueryRepresentationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 #if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_EnvQueryRepresentation_Execute);

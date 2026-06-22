@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "GameplayTagContainer.h"
 #include "Collect/RecallCollectTypes.h"
 
@@ -16,12 +16,12 @@
 * Entity that can be collected as an inventory item
 */
 UCLASS(meta=(DisplayName="RE Collectable"))
-class RECALLINVENTORYMODULE_API URecallCollectableTrait : public UMassExtendedEntityTraitBase
+class RECALLINVENTORYMODULE_API URecallCollectableTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	/**
@@ -51,12 +51,12 @@ private:
 * Entity where collectable can be collected
 */
 UCLASS(meta=(DisplayName="RE Collect Point"))
-class RECALLINVENTORYMODULE_API URecallCollectPointTrait : public UMassExtendedEntityTraitBase
+class RECALLINVENTORYMODULE_API URecallCollectPointTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere, DisplayName="Inventory Owner Tag")

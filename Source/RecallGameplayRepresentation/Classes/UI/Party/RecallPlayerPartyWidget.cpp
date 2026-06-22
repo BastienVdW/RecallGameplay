@@ -9,7 +9,7 @@
 
 #include "GameFramework/GameStateBase.h"
 #include "Kismet/GameplayStatics.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "RecallFrontendUtils.h"
 #include "RecallPlayerCardWidget.h"
 #include "Player/Interface/RecallPlayerStateInterface.h"
@@ -59,7 +59,7 @@ void URecallPlayerPartyWidget::UpdatePartyCards()
 
 		const FString& PlayerId = PlayerInterface->GetSimPlayerId();
 
-		FMassExtendedEntityHandle PlayerEntity;
+		FMassEntityHandle PlayerEntity;
 		if (!Recall::Player::Utils::FindPlayerEntityInWorld(GetWorld(),
 			PlayerId, PlayerEntity))
 		{

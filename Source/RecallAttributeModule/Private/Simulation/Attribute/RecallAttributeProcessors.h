@@ -6,24 +6,24 @@
 
 #pragma once
 
-#include "MassExtendedObserverProcessor.h"
+#include "MassObserverProcessor.h"
 
 #include "RecallAttributeProcessors.generated.h"
 
 UCLASS()
-class URecallAttributeInitializer : public UMassExtendedObserverProcessor
+class URecallAttributeInitializer : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 	URecallAttributeInitializer();
 
 public:
-	void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 };

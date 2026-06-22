@@ -21,8 +21,8 @@ public class RecallGameRuleModule : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core",
 			"CoreUObject",
-			"MassExtendedEntity",
-			"MassExtendedSpawner",
+			"MassEntity",
+			"MassSpawner",
 			"RecallSimulation",
 			"RecallSignals",
 			"RecallGameplayCore",

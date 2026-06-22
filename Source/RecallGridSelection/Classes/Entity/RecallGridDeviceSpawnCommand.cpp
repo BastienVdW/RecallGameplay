@@ -7,15 +7,15 @@
 
 #include "RecallGridDeviceSpawnCommand.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 #include "Simulation/Grid/RecallGridObstacleFragments.h"
 #include "System/Grid/RecallGridSelectionSubsystem.h"
 #include "Utility/GameplayTag/RecallGameplayTagUtils.h"
 
-void FRecallGridDeviceSpawnCommand::OnSpawn(FMassExtendedEntityManager& System,
-                                              const TArray<FMassExtendedEntityHandle>& Entities) const
+void FRecallGridDeviceSpawnCommand::OnSpawn(FMassEntityManager& System,
+                                              const TArray<FMassEntityHandle>& Entities) const
 {
 	check(Entities.Num() == 1);
 	
@@ -31,17 +31,17 @@ void FRecallGridDeviceSpawnCommand::OnSpawn(FMassExtendedEntityManager& System,
 	auto* GridSelectionSystem = UWorld::GetSubsystem<URecallGridSelectionSubsystem>(System.GetWorld());
 	check(GridSelectionSystem);
 
-	const FMassExtendedEntityHandle& Entity = Entities[0];
+	const FMassEntityHandle& Entity = Entities[0];
 
 	if (GridSelectionSystem->GetCellReservationNumber(GridCellIndex) == GridCellReservationNumber)
 	{
-		const FMassExtendedEntityView EntityView(System, Entity);
+		const FMassEntityView EntityView(System, Entity);
 		auto* GameplayTagFragmentPtr = EntityView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 		if (GameplayTagFragmentPtr != nullptr)
 		{
 			if (bAddOwnerFactionTags && bValidOwner)
 			{
-				const FMassExtendedEntityView OwnerView(System, OwnerEntity);
+				const FMassEntityView OwnerView(System, OwnerEntity);
 				const auto* OwnerGameplayTagFragmentPtr = OwnerView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 				if (OwnerGameplayTagFragmentPtr != nullptr)
 				{

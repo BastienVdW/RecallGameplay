@@ -10,8 +10,8 @@
 #include "Components/MeshComponent.h"
 #include "Data/Interact/RecallInteractTypes.h"
 #include "Interact/RecallInteractReactInterface.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Interact/RecallInteractFragments.h"
 #include "Simulation/Representation/RecallActorRepresentationFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
@@ -22,26 +22,26 @@ namespace Recall::Interact::Representation::Utils
 {
 
 bool ShouldShowProgress(const FRecallInteractRepresentationContext& Context,
-	const FRecallInteractorFragment& InteractorFragment, const FMassExtendedEntityHandle& InteractableEntity)
+	const FRecallInteractorFragment& InteractorFragment, const FMassEntityHandle& InteractableEntity)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
-	const FMassExtendedEntityView InteractableView(EntityManager, InteractableEntity);
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityView InteractableView(EntityManager, InteractableEntity);
 	const auto* InteractableConstSharedFragmentPtr = InteractableView.GetConstSharedFragmentDataPtr<FRecallInteractableConstSharedFragment>();
 	const FRecallInteractableFragment& InteractableFragment = InteractableView.GetFragmentData<FRecallInteractableFragment>();
 	return InteractableFragment.GetInteractEventChecked(InteractorFragment.InteractEventIndex, InteractableConstSharedFragmentPtr).Duration > 0.0f;
 }
 
 FVector GetInteractableLocation(const FRecallInteractRepresentationContext& Context,
-	const FMassExtendedEntityHandle& InteractableEntity, const FMassExtendedEntityHandle& InteractorEntity,
+	const FMassEntityHandle& InteractableEntity, const FMassEntityHandle& InteractorEntity,
 	int32 PositionIndex)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
 	if (!EntityManager.IsEntityValid(InteractableEntity))
 	{
 		return FVector::ZeroVector;
 	}
 
-	const FMassExtendedEntityView InteractableView(EntityManager, InteractableEntity);
+	const FMassEntityView InteractableView(EntityManager, InteractableEntity);
 	const FRecallTransformFragment& InteractableTransformFragment = InteractableView.GetFragmentData<FRecallTransformFragment>();
 
 	const auto* InteractableConstSharedFragmentPtr = InteractableView.GetConstSharedFragmentDataPtr<FRecallInteractableConstSharedFragment>();
@@ -77,11 +77,11 @@ FVector GetInteractableLocation(const FRecallInteractRepresentationContext& Cont
 }
 	
 FRecallInteractionRepresentation GetInteractionRepresentation(const FRecallInteractRepresentationContext& Context,
-	const FMassExtendedEntityHandle& InteractorEntity, const FMassExtendedEntityHandle& InteractableEntity, bool bIsContextual)
+	const FMassEntityHandle& InteractorEntity, const FMassEntityHandle& InteractableEntity, bool bIsContextual)
 {
 	FRecallInteractionRepresentation InteractionRepresentation;
 
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
 	if (!EntityManager.IsEntityValid(InteractableEntity))
 	{
 		return InteractionRepresentation;
@@ -111,7 +111,7 @@ FRecallInteractionRepresentation GetInteractionRepresentation(const FRecallInter
 }
 
 FRecallInteractState GetInteractInfo(const FRecallInteractRepresentationContext& Context,
-	const FMassExtendedEntityHandle& InteractorEntity, const FRecallInteractorFragment& InteractorFragment)
+	const FMassEntityHandle& InteractorEntity, const FRecallInteractorFragment& InteractorFragment)
 {
 	FRecallInteractState InteractState;
 
@@ -119,7 +119,7 @@ FRecallInteractState GetInteractInfo(const FRecallInteractRepresentationContext&
 	InteractState.Progress.State = InteractorFragment.CurrentInteractEntity.IsSet() ?
 		ERecallInteractStateType::InProgress : ERecallInteractStateType::Idle;
 	
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
 	if (EntityManager.IsEntityValid(InteractorFragment.CurrentInteractEntity))
 	{
 		InteractState.Progress.Progress = InteractorFragment.InteractionProgress;

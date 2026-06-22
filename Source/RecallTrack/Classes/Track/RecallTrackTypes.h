@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallTrackTypes.generated.h"
 

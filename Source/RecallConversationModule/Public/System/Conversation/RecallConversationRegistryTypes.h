@@ -8,7 +8,7 @@
 
 #include "CoreMinimal.h"
 #include "ConversationTypes.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallConversationRegistryTypes.generated.h"
 
@@ -42,7 +42,7 @@ struct RECALLCONVERSATIONMODULE_API FRecallConversationParticipant
 	 * Entity owning this participant.
 	 */
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 	
 	/**
 	 * Player controlling this participant, if any
@@ -60,7 +60,7 @@ struct RECALLCONVERSATIONMODULE_API FRecallConversationInstanceData
 	GENERATED_BODY()
 	
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<const UConversationDatabase> ActiveConversationGraph = nullptr;
@@ -95,9 +95,9 @@ struct RECALLCONVERSATIONMODULE_API FRecallConversationInstanceData
 		Choices.Reset();
 	}
 	
-	FORCEINLINE TArray<FMassExtendedEntityHandle> GetParticipantEntities() const
+	FORCEINLINE TArray<FMassEntityHandle> GetParticipantEntities() const
 	{
-		TArray<FMassExtendedEntityHandle> Results;
+		TArray<FMassEntityHandle> Results;
 		Results.Reserve(Participants.Num());
 		for (const TPair<FGameplayTag, FRecallConversationParticipant>& Participant : Participants)
 		{

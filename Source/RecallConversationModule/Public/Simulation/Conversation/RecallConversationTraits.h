@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "GameplayTagContainer.h"
 #include "Conversation/RecallConversationTriggerSettings.h"
 
@@ -16,12 +16,12 @@
 * Trait for an entity which can hold conversations.
 */
 UCLASS(meta=(DisplayName="RE Conversation"))
-class RECALLCONVERSATIONMODULE_API URecallConversationTrait : public UMassExtendedEntityTraitBase
+class RECALLCONVERSATIONMODULE_API URecallConversationTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	/**
@@ -51,12 +51,12 @@ protected:
 * Trait for an entity which participate in a conversation.
 */
 UCLASS(meta=(DisplayName="RE Conversation Participant"))
-class RECALLCONVERSATIONMODULE_API URecallConversationParticipantTrait : public UMassExtendedEntityTraitBase
+class RECALLCONVERSATIONMODULE_API URecallConversationParticipantTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	/**

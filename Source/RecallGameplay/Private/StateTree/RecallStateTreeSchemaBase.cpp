@@ -7,7 +7,7 @@
 
 #include "StateTree/RecallStateTreeSchemaBase.h"
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "Simulation/StateTree/RecallStateTreeFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 #include "StateTree/RecallStateTreeConditionBase.h"
@@ -35,9 +35,9 @@ bool URecallStateTreeSchemaBase::IsExternalItemAllowed(const UStruct& InStruct) 
 {
 	// Allow only WorldSubsystems and fragments as external data.
 	return InStruct.IsChildOf(UWorldSubsystem::StaticClass())
-		|| InStruct.IsChildOf(FMassExtendedFragment::StaticStruct())
-		|| InStruct.IsChildOf(FMassExtendedSharedFragment::StaticStruct())
-		|| InStruct.IsChildOf(FMassExtendedConstSharedFragment::StaticStruct());
+		|| InStruct.IsChildOf(FMassFragment::StaticStruct())
+		|| InStruct.IsChildOf(FMassSharedFragment::StaticStruct())
+		|| InStruct.IsChildOf(FMassConstSharedFragment::StaticStruct());
 }
 
 TConstArrayView<FStateTreeExternalDataDesc> URecallStateTreeSchemaBase::GetContextDataDescs() const

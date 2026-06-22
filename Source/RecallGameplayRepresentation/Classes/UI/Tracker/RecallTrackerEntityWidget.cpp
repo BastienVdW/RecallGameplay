@@ -45,7 +45,7 @@ void URecallTrackerEntityWidget::SetTrackedEntities(
 	CacheReleaseEntities.Reset();
 	for (int32 EntityIndex = CacheActiveTrackedEntities.Num() - 1; EntityIndex >= 0; --EntityIndex)
 	{
-		const FMassExtendedEntityHandle& ActiveTrackedEntity = CacheActiveTrackedEntities[EntityIndex];
+		const FMassEntityHandle& ActiveTrackedEntity = CacheActiveTrackedEntities[EntityIndex];
 		if (CacheNewTrackedEntities.Contains(ActiveTrackedEntity))
 		{
 			CacheNewTrackedEntities.Remove(ActiveTrackedEntity);
@@ -115,14 +115,14 @@ void URecallTrackerEntityWidget::CreateTrackers(
 }
 
 void URecallTrackerEntityWidget::ReleaseTrackers(
-	const TArray<FMassExtendedEntityHandle>& TrackedEntities)
+	const TArray<FMassEntityHandle>& TrackedEntities)
 {
 	if (!CanvasPanel_Track)
 	{
 		return;
 	}
 	
-	for (const FMassExtendedEntityHandle& TrackedEntity : TrackedEntities)
+	for (const FMassEntityHandle& TrackedEntity : TrackedEntities)
 	{
 		const TObjectPtr<UUserWidget> TrackerWidget = ActiveTrackerWidgets.FindAndRemoveChecked(TrackedEntity);
 		CanvasPanel_Track->RemoveChild(TrackerWidget);

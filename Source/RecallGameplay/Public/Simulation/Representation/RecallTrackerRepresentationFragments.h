@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallTrackerRepresentationFragments.generated.h"
 
 USTRUCT()
-struct FRecallTrackerRepresentationConstSharedFragment : public FMassExtendedConstSharedFragment
+struct FRecallTrackerRepresentationConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

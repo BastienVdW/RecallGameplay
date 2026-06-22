@@ -6,30 +6,30 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallTemplateFragments.generated.h"
 
 // Tag to identify entities
-USTRUCT() struct FRecallTemplateTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct FRecallTemplateTag : public FMassTag { GENERATED_BODY() };
 
 // Fragment
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallTemplateFragment : public FMassExtendedFragment
+struct RECALLGAMEPLAY_API FRecallTemplateFragment : public FMassFragment
 {
 	GENERATED_BODY()
 };
 
 // Shared fragment
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallTemplateSharedFragment : public FMassExtendedSharedFragment
+struct RECALLGAMEPLAY_API FRecallTemplateSharedFragment : public FMassSharedFragment
 {
 	GENERATED_BODY()
 };
 
 // Const shared Fragment
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallTemplateConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLGAMEPLAY_API FRecallTemplateConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 };

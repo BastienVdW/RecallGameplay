@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "StateTreeExecutionContext.h"
 
 class URecallSignalSubsystem;
-struct FMassExtendedExecutionContext;
-struct FMassExtendedEntityManager;
+struct FMassExecutionContext;
+struct FMassEntityManager;
 
 /**
  * Extends FStateTreeExecutionContext to provide additional data to Evaluators and Tasks related to RecallSimulation
@@ -21,14 +21,14 @@ struct RECALLGAMEPLAY_API FRecallStateTreeExecutionContext : public FStateTreeEx
 public:
 	// @todo: refactor subsystems out of the exec context.
 	FRecallStateTreeExecutionContext(UObject& InOwner, const UStateTree& InStateTree, FStateTreeInstanceData& InInstanceData, 
-		FMassExtendedEntityManager& InEntityManager, URecallSignalSubsystem& InSignalSystem, FMassExtendedExecutionContext& InContext, const FMassExtendedEntityHandle& InEntity);
+		FMassEntityManager& InEntityManager, URecallSignalSubsystem& InSignalSystem, FMassExecutionContext& InContext, const FMassEntityHandle& InEntity);
 
-	FMassExtendedEntityManager& GetEntityManager() const { check(EntityManager); return *EntityManager; }
-	FMassExtendedExecutionContext& GetMassExecutionContext() const { return *EntitySubsystemExecutionContext; }
+	FMassEntityManager& GetEntityManager() const { check(EntityManager); return *EntityManager; }
+	FMassExecutionContext& GetMassExecutionContext() const { return *EntitySubsystemExecutionContext; }
 
 	URecallSignalSubsystem& GetSignalSystem() const { check(SignalSubsystem); return *SignalSubsystem; }
 
-	const FMassExtendedEntityHandle& GetEntity() const { return Entity; }
+	const FMassEntityHandle& GetEntity() const { return Entity; }
 
 	const FRandomStream& GetRandomStream() const { return GetExecState().RandomStream; }
 
@@ -39,8 +39,8 @@ protected:
 
 	virtual void BeginDelayedTransition(const FStateTreeTransitionDelayedState& DelayedState) override;
 
-	FMassExtendedEntityManager* EntityManager = nullptr;
+	FMassEntityManager* EntityManager = nullptr;
 	URecallSignalSubsystem* SignalSubsystem = nullptr;
-	FMassExtendedExecutionContext* EntitySubsystemExecutionContext = nullptr;
-	FMassExtendedEntityHandle Entity;
+	FMassExecutionContext* EntitySubsystemExecutionContext = nullptr;
+	FMassEntityHandle Entity;
 };

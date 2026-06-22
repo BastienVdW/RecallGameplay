@@ -9,7 +9,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "System/Interface/RecallSimulationReactSystemInterface.h"
-#include "MassExtendedExternalSubsystemTraits.h"
+#include "Mass/ExternalSubsystemTraits.h"
 #include "RecallInventoryTypes.h"
 
 #include "RecallInventorySubsystem.generated.h"
@@ -43,7 +43,7 @@ protected:
 };
 
 template<>
-struct TMassExtendedExternalSubsystemTraits<URecallInventorySubsystem> final
+struct TMassExternalSubsystemTraits<URecallInventorySubsystem> final
 {
 	enum
 	{

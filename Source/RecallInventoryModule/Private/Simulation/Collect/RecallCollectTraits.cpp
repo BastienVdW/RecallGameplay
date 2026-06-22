@@ -7,8 +7,8 @@
 
 #include "Simulation/Collect/RecallCollectTraits.h"
 
-#include "MassExtendedEntityConfigAsset.h"
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityConfigAsset.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Collect/RecallCollectFragments.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
 #include "Simulation/Sensor/RecallSensorTraits.h"
@@ -18,9 +18,9 @@
 //----------------------------------------------------------------------//
 // URecallCollectableTrait
 //----------------------------------------------------------------------//
-void URecallCollectableTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallCollectableTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 	
@@ -44,7 +44,7 @@ TArray<FName> URecallCollectableTrait::GetSensorNames() const
 	TArray<FName> Results;
 
 #if WITH_EDITOR
-	if (const FMassExtendedEntityConfig* EntityConfig = Recall::Trait::Utils::GetEntityConfig(GetOuter()))
+	if (const FMassEntityConfig* EntityConfig = Recall::Trait::Utils::GetEntityConfig(GetOuter()))
 	{
 		if (const URecallSensorTrait* SensorTrait = Cast<URecallSensorTrait>(EntityConfig->FindTrait(URecallSensorTrait::StaticClass())))
 		{
@@ -67,7 +67,7 @@ TArray<FName> URecallCollectableTrait::GetSensorNames() const
 //----------------------------------------------------------------------//
 // URecallCollectPointTrait
 //----------------------------------------------------------------------//
-void URecallCollectPointTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext,
+void URecallCollectPointTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext,
 	const UWorld& World) const
 {
 	FRecallCollectPointFragment& CollectPointFragment = BuildContext.AddFragment_GetRef<FRecallCollectPointFragment>();

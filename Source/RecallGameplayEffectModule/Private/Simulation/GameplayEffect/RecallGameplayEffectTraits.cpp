@@ -7,7 +7,7 @@
 
 #include "Simulation/GameplayEffect/RecallGameplayEffectTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/GameplayEffect/RecallGameplayEffectFragments.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------//
 // URecallGameplayEffectTrait
 //----------------------------------------------------------------------//
-void URecallGameplayEffectTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallGameplayEffectTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	BuildContext.AddFragment<FRecallGameplayEffectFragment>();
 }
@@ -23,7 +23,7 @@ void URecallGameplayEffectTrait::BuildTemplate(FMassExtendedEntityTemplateBuildC
 //----------------------------------------------------------------------//
 // URecallGameplayEffectAreaTrait
 //----------------------------------------------------------------------//
-void URecallGameplayEffectAreaTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallGameplayEffectAreaTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 	BuildContext.RequireFragment<FRecallPhysicsSensorFragment>();

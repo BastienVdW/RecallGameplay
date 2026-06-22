@@ -8,9 +8,9 @@
 
 #include "CoreMinimal.h"
 
-struct FMassExtendedEntityHandle;
-struct FMassExtendedEntityManager;
-struct FMassExtendedExecutionContext;
+struct FMassEntityHandle;
+struct FMassEntityManager;
+struct FMassExecutionContext;
 class URecallSignalSubsystem;
 
 /**
@@ -29,15 +29,15 @@ enum class ERecallInteractTarget : uint8
 struct RECALLINTERACTMODULE_API FRecallInteractContext
 {
 public:
-	FMassExtendedExecutionContext& ExecutionContext;
-	const FMassExtendedEntityHandle& InstigatorEntity;
-	const FMassExtendedEntityHandle& InteractableEntity;
+	FMassExecutionContext& ExecutionContext;
+	const FMassEntityHandle& InstigatorEntity;
+	const FMassEntityHandle& InteractableEntity;
 	URecallSignalSubsystem* SignalSystemPtr = nullptr;
 	float DeltaTime = 1.0f;
 
 public:
 	UWorld* GetWorld() const;
 	UGameInstance* GetGameInstance() const;
-	FMassExtendedEntityManager& GetEntityManagerChecked() const;
-	const FMassExtendedEntityHandle& GetTargetEntity(ERecallInteractTarget Target) const;
+	FMassEntityManager& GetEntityManagerChecked() const;
+	const FMassEntityHandle& GetTargetEntity(ERecallInteractTarget Target) const;
 };

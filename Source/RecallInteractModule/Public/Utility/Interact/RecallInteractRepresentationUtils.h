@@ -8,9 +8,9 @@
 
 #include "CoreMinimal.h"
 
-struct FMassExtendedEntityHandle;
-struct FMassExtendedEntityManager;
-struct FMassExtendedExecutionContext;
+struct FMassEntityHandle;
+struct FMassEntityManager;
+struct FMassExecutionContext;
 struct FRecallInteractionRepresentation;
 struct FRecallInteractorFragment;
 struct FRecallInteractState;
@@ -22,7 +22,7 @@ class URecallActorSubsystem;
  */
 struct FRecallInteractRepresentationContext
 {
-	FMassExtendedExecutionContext& ExecutionContext;
+	FMassExecutionContext& ExecutionContext;
 	const URecallActorSubsystem& ActorSubsystem;
 };
 
@@ -37,7 +37,7 @@ namespace Recall::Interact::Representation::Utils
  * @return True if progress should be shown, false otherwise
  */
 RECALLINTERACTMODULE_API extern bool ShouldShowProgress(const FRecallInteractRepresentationContext& Context,
-	const FRecallInteractorFragment& InteractorFragment, const FMassExtendedEntityHandle& InteractableEntity);
+	const FRecallInteractorFragment& InteractorFragment, const FMassEntityHandle& InteractableEntity);
 
 /**
  * Get the world location for displaying interaction UI for an interactable entity.
@@ -50,7 +50,7 @@ RECALLINTERACTMODULE_API extern bool ShouldShowProgress(const FRecallInteractRep
  * @return World location for interaction UI display
  */
 RECALLINTERACTMODULE_API extern FVector GetInteractableLocation(const FRecallInteractRepresentationContext& Context,
-	const FMassExtendedEntityHandle& InteractableEntity, const FMassExtendedEntityHandle& InteractorEntity,
+	const FMassEntityHandle& InteractableEntity, const FMassEntityHandle& InteractorEntity,
 	int32 PositionIndex = INDEX_NONE);
 
 /**
@@ -63,7 +63,7 @@ RECALLINTERACTMODULE_API extern FVector GetInteractableLocation(const FRecallInt
  */
 	RECALLINTERACTMODULE_API extern FRecallInteractionRepresentation GetInteractionRepresentation(
 		const FRecallInteractRepresentationContext& Context,
-		const FMassExtendedEntityHandle& InteractorEntity, const FMassExtendedEntityHandle& InteractableEntity, bool bIsContextual);
+		const FMassEntityHandle& InteractorEntity, const FMassEntityHandle& InteractableEntity, bool bIsContextual);
 
 /**
  * Get complete interaction state for an interactor.
@@ -73,6 +73,6 @@ RECALLINTERACTMODULE_API extern FVector GetInteractableLocation(const FRecallInt
  * @return Complete interaction state for UI representation
  */
 RECALLINTERACTMODULE_API extern FRecallInteractState GetInteractInfo(const FRecallInteractRepresentationContext& Context,
-	const FMassExtendedEntityHandle& InteractorEntity, const FRecallInteractorFragment& InteractorFragment);
+	const FMassEntityHandle& InteractorEntity, const FRecallInteractorFragment& InteractorFragment);
 	
 }

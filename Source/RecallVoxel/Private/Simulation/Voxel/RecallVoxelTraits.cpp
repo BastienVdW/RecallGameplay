@@ -8,14 +8,14 @@
 #include "Simulation/Voxel/RecallVoxelTraits.h"
 
 #include "Data/Voxel/RecallFlatVoxelShapeTableRow.h"
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Voxel/RecallVoxelFragments.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 #include "Utility/Trait/RecallTraitUtils.h"
 #include "Utility/Voxel/RecallVoxelUtils.h"
 
-void URecallFlatVoxelShapeTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallFlatVoxelShapeTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	Super::BuildTemplate(BuildContext, World);
 
@@ -30,7 +30,7 @@ void URecallFlatVoxelShapeTrait::BuildTemplate(FMassExtendedEntityTemplateBuildC
 		VoxelShapeFragment.PivotVoxelIndex = Recall::Voxel::Utils::FlipVoxelGridIndex2D(VoxelShapeFragment.VoxelGrid, VoxelShapePtr->PivotVoxelIndex);
 	}
 
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	FRecallVoxelShapeConstSharedFragment ConstSharedFragment;
 	ConstSharedFragment.PhysicsParams = Params;

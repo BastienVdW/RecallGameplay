@@ -7,18 +7,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "RecallMovementTypes.h"
 
 #include "RecallMovementTraits.generated.h"
 
 UCLASS(meta=(DisplayName="RE Movement"))
-class URecallMovementTrait : public UMassExtendedEntityTraitBase
+class URecallMovementTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere, meta=(ShowOnlyInnerProperties))

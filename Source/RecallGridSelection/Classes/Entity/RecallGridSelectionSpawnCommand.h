@@ -17,10 +17,10 @@ struct RECALLGRIDSELECTION_API FRecallGridSelectionSpawnCommand : public FRecall
 
 public:
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle SelectionOwnerEntity;
+	FMassEntityHandle SelectionOwnerEntity;
 	
 	// FRecallEntityAsyncSpawnCommand implementation Begin
 public:	
-	virtual void OnSpawn(FMassExtendedEntityManager& System, const TArray<FMassExtendedEntityHandle>& Entities) const override;
+	virtual void OnSpawn(FMassEntityManager& System, const TArray<FMassEntityHandle>& Entities) const override;
 	// FRecallEntityAsyncSpawnCommand implementation End
 };

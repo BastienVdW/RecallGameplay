@@ -25,8 +25,9 @@ public class RecallGameplayCore : ModuleRules
 			"Core",
 			"CoreUObject",
 			"RecallSimulation",
-			"MassExtendedSpawner",
-			"MassExtendedEntity",
+			"MassSpawner",
+			"MassEntity",
+			"MassCore",
 			"EnhancedInput",
 			"DeveloperSettings",
 		});

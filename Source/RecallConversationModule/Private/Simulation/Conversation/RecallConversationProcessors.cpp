@@ -9,7 +9,7 @@
 
 #include "Conversation/RecallConversationInputTypes.h"
 #include "Conversation/RecallConversationTypes.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Conversation/RecallConversationFragments.h"
 #include "Simulation/Conversation/RecallConversationSignalTypes.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
@@ -27,7 +27,7 @@ URecallConversationParticipantSignalProcessor::URecallConversationParticipantSig
 {
 }
 
-void URecallConversationParticipantSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallConversationParticipantSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
@@ -35,17 +35,17 @@ void URecallConversationParticipantSignalProcessor::InitializeInternal(UObject& 
 	SubscribeToSignal(Recall::Conversation::Signals::Callback::OnConversationEnd);
 }
 
-void URecallConversationParticipantSignalProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallConversationParticipantSignalProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallConversationParticipantFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassExtendedFragmentAccess::ReadWrite, EMassExtendedFragmentPresence::Optional);
+	EntityQuery.AddRequirement<FRecallConversationParticipantFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassFragmentAccess::ReadWrite, EMassFragmentPresence::Optional);
 }
 
-void URecallConversationParticipantSignalProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallConversationParticipantSignalProcessor::SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_ConversationParticipant_Signal);
 
-	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExecutionContext& Context)
 	{
 		const TArrayView<FRecallConversationParticipantFragment> ParticipantList = Context.GetMutableFragmentView<FRecallConversationParticipantFragment>();
 		const TArrayView<FRecallGameplayTagFragment> GameplayTagList = Context.GetMutableFragmentView<FRecallGameplayTagFragment>();
@@ -54,7 +54,7 @@ void URecallConversationParticipantSignalProcessor::SignalEntities(FMassExtended
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 
 			FRecallConversationParticipantFragment& ParticipantFragment = ParticipantList[EntityIndex];
 			FRecallGameplayTagFragment* const GameplayTagFragmentPtr = GameplayTagList.IsValidIndex(EntityIndex) ?
@@ -96,41 +96,41 @@ URecallConversationProcessor::URecallConversationProcessor()
 	: ActiveEntityQuery(*this)
 	, InactiveEntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 }
 
-void URecallConversationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallConversationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallConversationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallConversationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	FMassExtendedTagBitSet ActiveRequiredTags;
+	FMassTagBitSet ActiveRequiredTags;
 	ActiveRequiredTags.Add(*FRecallConversationActiveTag::StaticStruct());
 	
-	ProcessorRequirements.AddSubsystemRequirement<URecallConversationSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallConversationSubsystem>(EMassFragmentAccess::ReadWrite);
 	
-	ActiveEntityQuery.AddRequirement<FRecallConversationFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	ActiveEntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::All>(ActiveRequiredTags);
-	ActiveEntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	ActiveEntityQuery.AddRequirement<FRecallConversationFragment>(EMassFragmentAccess::ReadWrite);
+	ActiveEntityQuery.AddTagRequirements<EMassFragmentPresence::All>(ActiveRequiredTags);
+	ActiveEntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassFragmentAccess::ReadOnly);
 	ActiveEntityQuery.RegisterWithProcessor(*this);
 	
-	InactiveEntityQuery.AddRequirement<FRecallConversationFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	InactiveEntityQuery.AddRequirement<FRecallConversationFragment>(EMassFragmentAccess::ReadOnly);
 	InactiveEntityQuery.AddConstSharedRequirement<FRecallConversationConstSharedFragment>();
-	InactiveEntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::None>(ActiveRequiredTags);
-	InactiveEntityQuery.AddSubsystemRequirement<URecallEntitySubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	InactiveEntityQuery.AddTagRequirements<EMassFragmentPresence::None>(ActiveRequiredTags);
+	InactiveEntityQuery.AddSubsystemRequirement<URecallEntitySubsystem>(EMassFragmentAccess::ReadOnly);
 	InactiveEntityQuery.RegisterWithProcessor(*this);
 }
 
-void URecallConversationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallConversationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Conversation_Execute);
 
 	URecallConversationSubsystem& ConversationSystem = Context.GetMutableSubsystemChecked<URecallConversationSubsystem>();
 
-	ActiveEntityQuery.ForEachEntityChunk(Context, [&ConversationSystem](FMassExtendedExecutionContext& Context)
+	ActiveEntityQuery.ForEachEntityChunk(Context, [&ConversationSystem](FMassExecutionContext& Context)
 	{
 		const uint32 Frame = Recall::Simulation::Utils::GetFrame(Context.GetWorld());
 		const int32 FramesPerSeconds = Recall::Simulation::Utils::GetFramesPerSeconds(Context.GetWorld());
@@ -141,7 +141,7 @@ void URecallConversationProcessor::Execute(FMassExtendedEntityManager& EntityMan
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			
 			FRecallConversationFragment& ConversationFragment = ConversationList[EntityIndex];
 			if (!ensure(ConversationFragment.ConversationHandle.IsValid()))
@@ -199,7 +199,7 @@ void URecallConversationProcessor::Execute(FMassExtendedEntityManager& EntityMan
 	}
 	
 	InactiveEntityQuery.ForEachEntityChunk(Context,
-		[&ConversationTriggers](FMassExtendedExecutionContext& Context)
+		[&ConversationTriggers](FMassExecutionContext& Context)
 	{
 		const FRecallConversationConstSharedFragment& ConversationConstSharedFragment = Context.GetConstSharedFragment<FRecallConversationConstSharedFragment>();
 		if (!ConversationTriggers.HasAny(ConversationConstSharedFragment.TriggerSettings.ConversationTriggerTags))
@@ -208,13 +208,13 @@ void URecallConversationProcessor::Execute(FMassExtendedEntityManager& EntityMan
 		}
 			
 		const URecallEntitySubsystem& EntitySystem = Context.GetSubsystemChecked<URecallEntitySubsystem>();
-		const TArray<FMassExtendedEntityHandle> PlayerEntities = EntitySystem.GetControllerEntities();
+		const TArray<FMassEntityHandle> PlayerEntities = EntitySystem.GetControllerEntities();
 			
 		const TConstArrayView<FRecallConversationFragment> ConversationList = Context.GetFragmentView<FRecallConversationFragment>();
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle ConversationEntity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle ConversationEntity = Context.GetEntity(EntityIndex);
 			const FRecallConversationFragment& ConversationFragment = ConversationList[EntityIndex];
 
 			Recall::Conversation::Utils::StartConversation(Context, PlayerEntities,
@@ -229,27 +229,27 @@ void URecallConversationProcessor::Execute(FMassExtendedEntityManager& EntityMan
 URecallConversationDeinitializer::URecallConversationDeinitializer()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallConversationFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Remove;
+	Operation = EMassObservedOperation::Remove;
 }
 
-void URecallConversationDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallConversationDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallConversationDeinitializer::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallConversationDeinitializer::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallConversationFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallConversationSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallConversationFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallConversationSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallConversationDeinitializer::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallConversationDeinitializer::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Conversation_Deinitialize);
 	
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallConversationSubsystem& ConversationSystem = Context.GetMutableSubsystemChecked<URecallConversationSubsystem>();
 

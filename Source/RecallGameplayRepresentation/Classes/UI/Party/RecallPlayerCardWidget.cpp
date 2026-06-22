@@ -14,7 +14,7 @@ URecallPlayerCardWidget::URecallPlayerCardWidget(const FObjectInitializer& Objec
 {
 }
 
-void URecallPlayerCardWidget::SetPlayerEntity(const FMassExtendedEntityHandle& Entity)
+void URecallPlayerCardWidget::SetPlayerEntity(const FMassEntityHandle& Entity)
 {
 	if (AttributeGroup_Player)
 	{

@@ -7,7 +7,7 @@
 
 #include "RecallGridObstacleProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Grid/RecallGridObstacleFragments.h"
 #include "System/Grid/RecallGridSelectionSubsystem.h"
 
@@ -17,25 +17,25 @@
 URecallGridObstacleDeinitializer::URecallGridObstacleDeinitializer()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallGridObstacleFragment::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Remove;
+	Operation = EMassObservedOperation::Remove;
 }
 
-void URecallGridObstacleDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGridObstacleDeinitializer::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallGridObstacleDeinitializer::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGridObstacleDeinitializer::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallGridObstacleFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallGridObstacleFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallGridSelectionSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallGridObstacleDeinitializer::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallGridObstacleDeinitializer::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		auto& GridSelectionSubsystem = Context.GetMutableSubsystemChecked<URecallGridSelectionSubsystem>();
 		

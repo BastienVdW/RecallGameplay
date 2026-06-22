@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallGridObstacleFragments.generated.h"
 
 USTRUCT()
-struct RECALLGRIDSELECTION_API FRecallGridObstacleFragment : public FMassExtendedFragment
+struct RECALLGRIDSELECTION_API FRecallGridObstacleFragment : public FMassFragment
 {
 	GENERATED_BODY()
 

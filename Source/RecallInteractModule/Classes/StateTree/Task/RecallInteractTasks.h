@@ -8,7 +8,7 @@
 
 #include "CoreMinimal.h"
 #include "Data/Interact/RecallInteractTypes.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "StateTreePropertyRef.h"
 #include "StateTree/RecallStateTreeTaskBase.h"
 
@@ -36,7 +36,7 @@ struct RECALLINTERACTMODULE_API FRecallInteractTaskInstanceData
 	ERecallInteractSelection Selection = ERecallInteractSelection::Target;
 	
 	UPROPERTY(EditAnywhere, Category=Input, meta=(Optional, EditCondition="Selection==ERecallInteractSelection::Target", EditConditionHides))
-	TStateTreePropertyRef<FMassExtendedEntityHandle> Target;
+	TStateTreePropertyRef<FMassEntityHandle> Target;
 
 	/**
 	 * Whether the state tree is allowed to exit the interaction on release.
@@ -69,7 +69,7 @@ protected:
 private:
 	FRecallInteractExecuteContext CreateInteractionExecutionContext(FStateTreeExecutionContext& Context) const;
 	float GetInteractionProgressTickRate(FStateTreeExecutionContext& Context) const;
-	FMassExtendedEntityHandle GetInteractSelection(FStateTreeExecutionContext& Context) const;
+	FMassEntityHandle GetInteractSelection(FStateTreeExecutionContext& Context) const;
 	bool IsContextualInteraction(FStateTreeExecutionContext& Context) const;
 };
 
@@ -80,7 +80,7 @@ struct RECALLINTERACTMODULE_API FRecallFindInteractableTaskInstanceData
 
 	/** Array of entities to search through */
 	UPROPERTY(EditAnywhere, Category=Input)
-	TArray<FMassExtendedEntityHandle> Entities;
+	TArray<FMassEntityHandle> Entities;
 
 	/** Interaction input type to validate (Primary, Secondary, etc.) */
 	UPROPERTY(EditAnywhere, Category=Parameter)
@@ -88,7 +88,7 @@ struct RECALLINTERACTMODULE_API FRecallFindInteractableTaskInstanceData
 
 	/** The best interactable entity found (output) */
 	UPROPERTY(VisibleAnywhere, Category=Output)
-	FMassExtendedEntityHandle BestInteractable;
+	FMassEntityHandle BestInteractable;
 
 	/** Nearest position index for the best interactable (INDEX_NONE if center position) */
 	UPROPERTY(VisibleAnywhere, Category=Output)

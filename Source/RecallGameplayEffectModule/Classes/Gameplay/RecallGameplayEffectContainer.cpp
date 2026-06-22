@@ -7,13 +7,13 @@
 
 #include "RecallGameplayEffectContainer.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "RecallGameplayEffect.h"
 #include "RecallGameplayEffectContext.h"
 #include "Simulation/Attribute/RecallAttributeFragments.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 
-void FRecallGameplayEffectContainer::Initialize(const FMassExtendedEntityHandle& InOwnerEntity)
+void FRecallGameplayEffectContainer::Initialize(const FMassEntityHandle& InOwnerEntity)
 {
 	OwnerEntity = InOwnerEntity;
 
@@ -150,7 +150,7 @@ void FRecallGameplayEffectContainer::HandleEffectStack(const FRecallGameplayEffe
 		return;
 	}
 	
-	FMassExtendedEntityHandle EffectOwnerEntity;
+	FMassEntityHandle EffectOwnerEntity;
 	
 	switch (EffectCDO->StackRule)
 	{
@@ -179,7 +179,7 @@ void FRecallGameplayEffectContainer::HandleEffectStack(const FRecallGameplayEffe
 }
 
 FRecallGameplayEffectHandle FRecallGameplayEffectContainer::GetOldestEffectHandle(
-	const TSubclassOf<URecallGameplayEffect>& Effect,	const FMassExtendedEntityHandle& EffectOwnerEntity,
+	const TSubclassOf<URecallGameplayEffect>& Effect,	const FMassEntityHandle& EffectOwnerEntity,
 	int32& OutEffectOwnedCount) const
 {	
 	const TArray<FRecallGameplayEffectHandle> EffectHandles = GetAllEffectHandles(Effect, EffectOwnerEntity);
@@ -206,7 +206,7 @@ FRecallGameplayEffectHandle FRecallGameplayEffectContainer::GetOldestEffectHandl
 void FRecallGameplayEffectContainer::AddEffect_Internal(const FRecallGameplayEffectContext& Context,
 	const URecallGameplayEffect& EffectCDO, FRecallGameplayEffectInstance* Instance) const
 {
-	const FMassExtendedEntityView OwnerView(Context.EntityManager, OwnerEntity);
+	const FMassEntityView OwnerView(Context.EntityManager, OwnerEntity);
 	if (!OwnerView.IsValid())
 	{
 		return;
@@ -243,7 +243,7 @@ void FRecallGameplayEffectContainer::AddEffect_Internal(const FRecallGameplayEff
 void FRecallGameplayEffectContainer::RemoveEffect_Internal(const FRecallGameplayEffectContext& Context,
 	const FRecallGameplayEffectInstance& Instance) const
 {
-	const FMassExtendedEntityView OwnerView(Context.EntityManager, OwnerEntity);
+	const FMassEntityView OwnerView(Context.EntityManager, OwnerEntity);
 	if (!OwnerView.IsValid())
 	{
 		return;
@@ -285,7 +285,7 @@ TArray<TSubclassOf<URecallGameplayEffect>> FRecallGameplayEffectContainer::GetEf
 }
 
 TArray<FRecallGameplayEffectHandle> FRecallGameplayEffectContainer::GetAllEffectHandles(
-	const TSubclassOf<URecallGameplayEffect>& Effect, const FMassExtendedEntityHandle& EffectOwnerEntity) const
+	const TSubclassOf<URecallGameplayEffect>& Effect, const FMassEntityHandle& EffectOwnerEntity) const
 {
 	TArray<FRecallGameplayEffectHandle> Results;
 

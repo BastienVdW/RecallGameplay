@@ -7,7 +7,7 @@
 
 #include "Simulation/StateTree/RecallStateTreeTrait.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/StateTree/RecallStateTreeFragments.h"
 #include "StateTree/RecallStateTreeTypes.h"
 #include "StateTree.h"
@@ -20,9 +20,9 @@ URecallStateTreeTrait::URecallStateTreeTrait()
 {
 }
 
-void URecallStateTreeTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallStateTreeTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	URecallStateTreeSubsystem* StateTreeSubsystem = World.GetSubsystem<URecallStateTreeSubsystem>();
 	if (!StateTreeSubsystem)

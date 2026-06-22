@@ -7,7 +7,7 @@
 
 #include "RecallPathFollowerProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "Navigation/RecallNavigationSignalTypes.h"
 #include "Simulation/Navigation/RecallNavigationFragments.h"
@@ -28,37 +28,37 @@
 URecallPathFollowerProcessor::URecallPathFollowerProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteAfter.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
 }
 
-void URecallPathFollowerProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallPathFollowerProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallPathFollowerProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallPathFollowerProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	FMassExtendedTagBitSet InvalidTags;
+	FMassTagBitSet InvalidTags;
 	InvalidTags.Add(*FRecallNavLinkTraversalTag::StaticStruct());
 
-	EntityQuery.AddRequirement<FRecallPathFollowerFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallMovementFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallNavLinkTraversalFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::None>(InvalidTags);
+	EntityQuery.AddRequirement<FRecallPathFollowerFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallMovementFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallNavLinkTraversalFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddTagRequirements<EMassFragmentPresence::None>(InvalidTags);
 	EntityQuery.AddConstSharedRequirement<FRecallPathFollowingConstSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallNavigationSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallPathFollowerProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallPathFollowerProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_PathFollower_Execute);
 
 	EntityQuery.ParallelForEachEntityChunk(Context,
-		[](FMassExtendedExecutionContext& Context)
+		[](FMassExecutionContext& Context)
 	{
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
 
@@ -75,7 +75,7 @@ void URecallPathFollowerProcessor::Execute(FMassExtendedEntityManager& EntityMan
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			
 			FRecallPathFollowerFragment& PathFollowerFragment = PathFollowerList[EntityIndex];
 			FRecallMovementFragment& MovementFragment = MovementList[EntityIndex];
@@ -155,24 +155,24 @@ static FAutoConsoleVariableRef CVarRecallShowNavigationPath(
 URecallPathFollowerRepresentationProcessor::URecallPathFollowerRepresentationProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::Render;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::Render;
 	bRequiresGameThreadExecution = true;
 }
 
-void URecallPathFollowerRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallPathFollowerRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallPathFollowerRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallPathFollowerRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
 #if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
-	EntityQuery.AddRequirement<FRecallPathFollowerFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallPathFollowerFragment>(EMassFragmentAccess::ReadOnly);
 #endif // UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
 }
 
-void URecallPathFollowerRepresentationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallPathFollowerRepresentationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 #if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_PathFollower_Representation);
@@ -182,7 +182,7 @@ void URecallPathFollowerRepresentationProcessor::Execute(FMassExtendedEntityMana
 		return;
 	}
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const TConstArrayView<FRecallPathFollowerFragment> PathFollowerList = Context.GetFragmentView<FRecallPathFollowerFragment>();
 

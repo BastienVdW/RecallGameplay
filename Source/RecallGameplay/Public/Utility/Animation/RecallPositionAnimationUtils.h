@@ -7,9 +7,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
-struct FMassExtendedExecutionContext;
+struct FMassExecutionContext;
 struct FRecallPositionAnimationSettings;
 
 namespace Recall::Animation::Utils
@@ -23,8 +23,8 @@ namespace Recall::Animation::Utils
      * @param Settings Animation settings (duration, curve, etc.)
      */
     RECALLGAMEPLAY_API void StartPositionAnimation(
-        FMassExtendedExecutionContext& Context,
-        const FMassExtendedEntityHandle& Entity,
+        FMassExecutionContext& Context,
+        const FMassEntityHandle& Entity,
         const FVector& StartPosition,
         const FVector& TargetPosition,
         const FRecallPositionAnimationSettings& Settings
@@ -36,7 +36,7 @@ namespace Recall::Animation::Utils
      * @param Entity The entity to stop animating
      */
     RECALLGAMEPLAY_API void StopPositionAnimation(
-        FMassExtendedExecutionContext& Context,
-        const FMassExtendedEntityHandle& Entity
+        FMassExecutionContext& Context,
+        const FMassEntityHandle& Entity
     );
 }

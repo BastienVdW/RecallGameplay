@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using UnrealBuildTool;
 
 public class RecallGameplay : ModuleRules
@@ -18,9 +19,8 @@ public class RecallGameplay : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core",
 			"CoreUObject",
-			"MultiWorld",
-			"MassExtendedEntity",
-			"MassExtendedSpawner",
+			"MassEntity",
+			"MassSpawner",
 			"RecallCore",
 			"RecallSimulation",
 			"RecallPhysicsModule",
@@ -37,6 +37,12 @@ public class RecallGameplay : ModuleRules
 			"PropertyBindingUtils",
 		});
 		
+		bool bWithMultiWorld = Target.EnablePlugins.Contains("MultiWorld");
+		if (bWithMultiWorld)
+		{
+			PrivateDependencyModuleNames.Add("MultiWorld");
+		}
+
 		// Uncomment if you are using Slate UI
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore", "UMG" });
 	}

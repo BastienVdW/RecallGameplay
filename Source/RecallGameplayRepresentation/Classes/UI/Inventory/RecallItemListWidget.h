@@ -10,7 +10,7 @@
 #include "Observer/Representation/RecallRepresentationReactInterface.h"
 #include "Representation/Tracker/RecallTrackerEntityInterface.h"
 #include "GameplayTagContainer.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallItemListWidget.generated.h"
 
@@ -33,7 +33,7 @@ public:
 	
 	// IRecallTrackerEntityInterface implementation Begin
 public:
-	virtual void SetTrackedEntity_Implementation(const FMassExtendedEntityHandle& Entity) override;
+	virtual void SetTrackedEntity_Implementation(const FMassEntityHandle& Entity) override;
 	// IRecallTrackerEntityInterface implementation End
 
 	// UUserWidget implementation Begin
@@ -56,7 +56,7 @@ protected:
 	FGameplayTagContainer InventoryTags;
 
 	UPROPERTY(Transient, BlueprintReadOnly, meta=(ExposeOnSpawn))
-	FMassExtendedEntityHandle TrackedEntity;
+	FMassEntityHandle TrackedEntity;
 	
 	void RefreshInventory();
 };

@@ -8,7 +8,7 @@
 
 #include "CoreMinimal.h"
 
-struct FMassExtendedEntityManager;
+struct FMassEntityManager;
 
 enum class ERecallGameplayEffectTickSource : uint8
 {
@@ -18,6 +18,6 @@ enum class ERecallGameplayEffectTickSource : uint8
 
 struct RECALLGAMEPLAYEFFECTMODULE_API FRecallGameplayEffectContext
 {
-	const FMassExtendedEntityManager& EntityManager;
-	const FMassExtendedEntityHandle& OwnerEntity;
+	const FMassEntityManager& EntityManager;
+	const FMassEntityHandle& OwnerEntity;
 };

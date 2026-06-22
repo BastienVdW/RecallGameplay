@@ -67,7 +67,7 @@ public:
 	 * Only spawned while the match is in progress.
 	 */
 	UPROPERTY(EditAnywhere, Category=Game)
-	TSoftObjectPtr<class UMassExtendedEntityConfigAsset> GameRuleEntityConfig;
+	TSoftObjectPtr<class UMassEntityConfigAsset> GameRuleEntityConfig;
 	
 protected:
 	/**

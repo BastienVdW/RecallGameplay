@@ -9,7 +9,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "System/Interface/RecallSimulationReactSystemInterface.h"
-#include "MassExtendedExternalSubsystemTraits.h"
+#include "Mass/ExternalSubsystemTraits.h"
 #include "RecallConversationRegistryTypes.h"
 
 #include "RecallConversationSubsystem.generated.h"
@@ -26,17 +26,17 @@ class RECALLCONVERSATIONMODULE_API URecallConversationSubsystem :
 
 public:
 	// Create/release a conversation instance
-	FRecallConversationHandle CreateConversationInstance(const FMassExtendedEntityHandle& Entity);
+	FRecallConversationHandle CreateConversationInstance(const FMassEntityHandle& Entity);
 	void ReleaseConversationInstance(FRecallConversationHandle& Handle);
 
 	// Condition
-	bool CanStartConversation(const FMassExtendedEntityHandle& ConversationEntity,
+	bool CanStartConversation(const FMassEntityHandle& ConversationEntity,
 		const FGameplayTag& EntryPoint, const FString& EntryIdentifier, const TObjectPtr<const UConversationDatabase>& Graph,
-		const FGameplayTag& ParticipantID, const FMassExtendedEntityHandle& ParticipantEntity, FString ParticipantPlayerID = FString());
+		const FGameplayTag& ParticipantID, const FMassEntityHandle& ParticipantEntity, FString ParticipantPlayerID = FString());
 
 	// Participants
 	void AddConversationParticipant(const FRecallConversationHandle& Handle, const FGameplayTag& ParticipantID,
-		const FMassExtendedEntityHandle& Entity, FString PlayerID = FString());
+		const FMassEntityHandle& Entity, FString PlayerID = FString());
 	void RemoveConversationParticipant(const FRecallConversationHandle& Handle, const FGameplayTag& ParticipantID);
 	TArray<FString> GetConversationParticipantPlayers(const FRecallConversationHandle& Handle) const;
 
@@ -83,7 +83,7 @@ protected:
 };
 
 template<>
-struct TMassExtendedExternalSubsystemTraits<URecallConversationSubsystem>
+struct TMassExternalSubsystemTraits<URecallConversationSubsystem>
 {
 	enum
 	{

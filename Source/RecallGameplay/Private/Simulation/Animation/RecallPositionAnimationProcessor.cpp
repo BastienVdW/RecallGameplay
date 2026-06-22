@@ -7,7 +7,7 @@
 
 #include "RecallPositionAnimationProcessor.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Animation/RecallPositionAnimationFragments.h"
 #include "System/Physics/RecallPhysicsSubsystem.h"
 #include "Utility/Animation/RecallPositionAnimationUtils.h"
@@ -39,19 +39,19 @@ static FVector CalculateAnimationPosition(const FRecallPositionAnimationFragment
 URecallPositionAnimationProcessor::URecallPositionAnimationProcessor()
     : EntityQuery(*this)
 {
-    ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-    ProcessingPhase = EMassExtendedProcessingPhase::StartPhysics;
+    ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+    ProcessingPhase = EMassProcessingPhase::StartPhysics;
 }
 
-void URecallPositionAnimationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallPositionAnimationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-    EntityQuery.AddRequirement<FRecallPositionAnimationFragment>(EMassExtendedFragmentAccess::ReadWrite);
-    EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+    EntityQuery.AddRequirement<FRecallPositionAnimationFragment>(EMassFragmentAccess::ReadWrite);
+    EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallPositionAnimationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallPositionAnimationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {    
-    EntityQuery.ForEachEntityChunk(Context, [&EntityManager](FMassExtendedExecutionContext& Context)
+    EntityQuery.ForEachEntityChunk(Context, [&EntityManager](FMassExecutionContext& Context)
     {
         const float DeltaTime = Context.GetDeltaTimeSeconds();
         URecallPhysicsSubsystem& PhysicsSubsystem = Context.GetMutableSubsystemChecked<URecallPhysicsSubsystem>();
@@ -61,7 +61,7 @@ void URecallPositionAnimationProcessor::Execute(FMassExtendedEntityManager& Enti
         
         for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); ++EntityIndex)
         {
-            const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+            const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
             FRecallPositionAnimationFragment& AnimationFragment = AnimationFragmentList[EntityIndex];
             
             // Update animation time

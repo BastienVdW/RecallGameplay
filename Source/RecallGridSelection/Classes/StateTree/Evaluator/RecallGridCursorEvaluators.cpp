@@ -7,8 +7,8 @@
 
 #include "RecallGridCursorEvaluators.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
 #include "Simulation/Grid/RecallGridCursorFragments.h"
@@ -32,7 +32,7 @@ void FRecallGridCursorSelectionEvaluator::TreeStart(FStateTreeExecutionContext& 
 void FRecallGridCursorSelectionEvaluator::Tick(FStateTreeExecutionContext& Context, const float DeltaTime) const
 {
 	const auto& RecallContext = static_cast<const FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityManager& EntityManager = RecallContext.GetEntityManager();
+	const FMassEntityManager& EntityManager = RecallContext.GetEntityManager();
 	
 	const FRecallGridCursorOwnerFragment& CursorOwnerFragment = Context.GetExternalData(GridCursorOwnerFragmentHandle);
 
@@ -41,7 +41,7 @@ void FRecallGridCursorSelectionEvaluator::Tick(FStateTreeExecutionContext& Conte
 	if (EntityManager.IsEntityValid(CursorOwnerFragment.GridSelectionEntity))
 	{
 		const URecallGridSelectionSubsystem& GridSelectionSubsystem = Context.GetExternalData(GridSelectionSystemHandle);
-		const FMassExtendedEntityView CursorView(EntityManager, CursorOwnerFragment.GridSelectionEntity);
+		const FMassEntityView CursorView(EntityManager, CursorOwnerFragment.GridSelectionEntity);
 		const auto& CursorFragment = CursorView.GetFragmentData<FRecallGridSelectionFragment>();
 
 		InstanceData.bFoundCell = CursorFragment.GridCellIndex != INDEX_NONE;

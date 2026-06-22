@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "System/Crowd/RecallCrowdAgentHandle.h"
 
 #include "RecallCrowdFragments.generated.h"
 
 USTRUCT()
-struct RECALLNAVIGATION_API FRecallCrowdAgentFragment : public FMassExtendedFragment
+struct RECALLNAVIGATION_API FRecallCrowdAgentFragment : public FMassFragment
 {
 	GENERATED_BODY()
 

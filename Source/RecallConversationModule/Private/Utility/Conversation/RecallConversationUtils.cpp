@@ -8,10 +8,10 @@
 #include "Utility/Conversation/RecallConversationUtils.h"
 
 #include "Conversation/RecallConversationTypes.h"
-#include "MassExtendedCommandBuffer.h"
-#include "MassExtendedEntityUtils.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassCommandBuffer.h"
+#include "MassEntityUtils.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Conversation/RecallConversationFragments.h"
 #include "Simulation/Controller/RecallControllerFragments.h"
 #include "System/Conversation/RecallConversationSubsystem.h"
@@ -21,7 +21,7 @@ namespace Recall::Conversation::Utils
 
 struct FRecallConversationContext
 {
-	FMassExtendedExecutionContext& ExecutionContext;
+	FMassExecutionContext& ExecutionContext;
 	URecallConversationSubsystem& ConversationSystem;
 	FRecallConversationFragment& ConversationFragment;
 	const FRecallConversationConstSharedFragment& ConversationConstSharedFragment;
@@ -31,15 +31,15 @@ struct FRecallConversationContext
 	
 struct FRecallConversationParticipantContext
 {
-	FMassExtendedExecutionContext& ExecutionContext;
-	const FMassExtendedEntityHandle& ParticipantEntity;
+	FMassExecutionContext& ExecutionContext;
+	const FMassEntityHandle& ParticipantEntity;
 	FRecallConversationParticipantFragment& ConversationParticipantFragment;
 	const FRecallConversationParticipantConstSharedFragment& ConversationParticipantConstSharedFragment;
 	const FString& PlayerID;
 };
 	
-static void ForValidConversationParticipant(FMassExtendedExecutionContext& Context,
-	const TArray<FMassExtendedEntityHandle>& ParticipantEntities,
+static void ForValidConversationParticipant(FMassExecutionContext& Context,
+	const TArray<FMassEntityHandle>& ParticipantEntities,
 	const TFunction<void(const FRecallConversationParticipantContext& ConversationParticipantContext)>& Function)
 {
 	const UWorld* World = Context.GetWorld();
@@ -49,11 +49,11 @@ static void ForValidConversationParticipant(FMassExtendedExecutionContext& Conte
 		return;
 	}
 
-	const FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(*World);
+	const FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(*World);
 	
-	for (const FMassExtendedEntityHandle& ParticipantEntity : ParticipantEntities)
+	for (const FMassEntityHandle& ParticipantEntity : ParticipantEntities)
 	{
-		const FMassExtendedEntityView ParticipantView(EntityManager, ParticipantEntity);
+		const FMassEntityView ParticipantView(EntityManager, ParticipantEntity);
 		auto* ConversationParticipantFragmentPtr = ParticipantView.GetFragmentDataPtr<FRecallConversationParticipantFragment>();
 		if (ConversationParticipantFragmentPtr == nullptr)
 		{
@@ -72,8 +72,8 @@ static void ForValidConversationParticipant(FMassExtendedExecutionContext& Conte
 	}
 }
 	
-static void ForValidConversation(FMassExtendedExecutionContext& Context,
-	const FMassExtendedEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
+static void ForValidConversation(FMassExecutionContext& Context,
+	const FMassEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
 	const FString& ConversationEntryIdentifier,
 	const TFunction<void(const FRecallConversationContext& ConversationContext)>& Function)
 {
@@ -83,8 +83,8 @@ static void ForValidConversation(FMassExtendedExecutionContext& Context,
 		return;
 	}
 	
-	const FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(*World);
-	const FMassExtendedEntityView InteractableView(EntityManager, ConversationEntity);
+	const FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(*World);
+	const FMassEntityView InteractableView(EntityManager, ConversationEntity);
 	FRecallConversationFragment* ConversationFragmentPtr = InteractableView.GetFragmentDataPtr<FRecallConversationFragment>();
 	if (ConversationFragmentPtr == nullptr)
 	{
@@ -110,18 +110,18 @@ static void ForValidConversation(FMassExtendedExecutionContext& Context,
 }
 	
 bool CanStartConversation(
-	FMassExtendedExecutionContext& Context, const FMassExtendedEntityHandle& ParticipantEntity,
-	const FMassExtendedEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
+	FMassExecutionContext& Context, const FMassEntityHandle& ParticipantEntity,
+	const FMassEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
 	const FString& ConversationEntryIdentifier)
 {
-	const TArray<FMassExtendedEntityHandle> ParticipantEntities = { ParticipantEntity };
+	const TArray<FMassEntityHandle> ParticipantEntities = { ParticipantEntity };
 	return CanStartConversation(Context, ParticipantEntities,
 		ConversationEntity, ConversationEntryPoint, ConversationEntryIdentifier);
 }
 	
 bool CanStartConversation(
-	FMassExtendedExecutionContext& Context, const TArray<FMassExtendedEntityHandle>& ParticipantEntities,
-	const FMassExtendedEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
+	FMassExecutionContext& Context, const TArray<FMassEntityHandle>& ParticipantEntities,
+	const FMassEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
 	const FString& ConversationEntryIdentifier)
 {
 	bool bCanStart = false;
@@ -154,17 +154,17 @@ bool CanStartConversation(
 }
 	
 void StartConversation(
-	FMassExtendedExecutionContext& Context, const FMassExtendedEntityHandle& ParticipantEntity,
-	const FMassExtendedEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
+	FMassExecutionContext& Context, const FMassEntityHandle& ParticipantEntity,
+	const FMassEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
 	const FString& ConversationEntryIdentifier)
 {
-	const TArray<FMassExtendedEntityHandle> ParticipantEntities = { ConversationEntity, ParticipantEntity };
+	const TArray<FMassEntityHandle> ParticipantEntities = { ConversationEntity, ParticipantEntity };
 	StartConversation(Context, ParticipantEntities,
 		ConversationEntity, ConversationEntryPoint, ConversationEntryIdentifier);
 }
 	
-void StartConversation(FMassExtendedExecutionContext& Context, const TArray<FMassExtendedEntityHandle>& ParticipantEntities,
-	const FMassExtendedEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
+void StartConversation(FMassExecutionContext& Context, const TArray<FMassEntityHandle>& ParticipantEntities,
+	const FMassEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
 	const FString& ConversationEntryIdentifier)
 {
 	ForValidConversation(Context, ConversationEntity, ConversationEntryPoint, ConversationEntryIdentifier,

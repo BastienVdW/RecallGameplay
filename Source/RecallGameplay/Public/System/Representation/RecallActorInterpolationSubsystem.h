@@ -8,7 +8,7 @@
 
 #include "Subsystems/WorldSubsystem.h"
 #include "System/Interface/RecallSimulationReactSystemInterface.h"
-#include "MassExtendedExternalSubsystemTraits.h"
+#include "Mass/ExternalSubsystemTraits.h"
 #include "System/Actor/RecallActorTypes.h"
 
 #include "RecallActorInterpolationSubsystem.generated.h"
@@ -76,7 +76,7 @@ private:
 };
 
 template<>
-struct TMassExtendedExternalSubsystemTraits<URecallActorInterpolationSubsystem> final
+struct TMassExternalSubsystemTraits<URecallActorInterpolationSubsystem> final
 {
 	enum
 	{

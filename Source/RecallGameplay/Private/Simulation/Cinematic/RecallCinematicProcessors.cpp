@@ -9,7 +9,7 @@
 
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "RecallCinematicInternalFragments.h"
 #include "RecallSignalSubsystem.h"
 #include "MovieScene/RecallMovieSceneLabelSection.h"
@@ -31,7 +31,7 @@ URecallCinematicEventProcessor::URecallCinematicEventProcessor(const FObjectInit
 {
 }
 
-void URecallCinematicEventProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCinematicEventProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
@@ -40,19 +40,19 @@ void URecallCinematicEventProcessor::InitializeInternal(UObject& Owner, const TS
 	SubscribeToSignal(Recall::Cinematic::Signals::Player::Stop);
 }
 
-void URecallCinematicEventProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCinematicEventProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallCinematicFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallCinematicInternalFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallAssetManagerSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallCinematicFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallCinematicInternalFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallAssetManagerSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallCinematicEventProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallCinematicEventProcessor::SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Cinematic_Event);
 
-	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExecutionContext& Context)
 	{
 		URecallActorSubsystem& ActorSystem = Context.GetMutableSubsystemChecked<URecallActorSubsystem>();
 		URecallAssetManagerSubsystem& AssetManagerSystem = Context.GetMutableSubsystemChecked<URecallAssetManagerSubsystem>();
@@ -62,7 +62,7 @@ void URecallCinematicEventProcessor::SignalEntities(FMassExtendedEntityManager& 
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 
 			FRecallCinematicFragment& CinematicFragment = CinematicList[EntityIndex];
 			FRecallCinematicInternalFragment& CinematicInternalFragment = CinematicInternalList[EntityIndex];
@@ -109,28 +109,28 @@ void URecallCinematicEventProcessor::SignalEntities(FMassExtendedEntityManager& 
 URecallCinematicPlayingProcessor::URecallCinematicPlayingProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 }
 
-void URecallCinematicPlayingProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCinematicPlayingProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallCinematicPlayingProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCinematicPlayingProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	FMassExtendedTagBitSet RequiredTags;
+	FMassTagBitSet RequiredTags;
 	RequiredTags.Add(*FRecallCinematicPlayingTag::StaticStruct());
 
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallCinematicFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallCinematicInternalFragment>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallCinematicFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallCinematicInternalFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddConstSharedRequirement<FRecallCinematicInternalSharedFragment>();
-	EntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::All>(RequiredTags);
-	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallAssetManagerSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddTagRequirements<EMassFragmentPresence::All>(RequiredTags);
+	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallAssetManagerSubsystem>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
 static float ExtractLevelSequenceDurationSeconds(const ULevelSequence* Sequence)
@@ -211,11 +211,11 @@ static void BindLabelSignals(
 	);
 }
 
-void URecallCinematicPlayingProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallCinematicPlayingProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Cinematic_Playing);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const URecallAssetManagerSubsystem& AssetManagerSystem = Context.GetSubsystemChecked<URecallAssetManagerSubsystem>();
 
@@ -231,7 +231,7 @@ void URecallCinematicPlayingProcessor::Execute(FMassExtendedEntityManager& Entit
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			const FRecallTransformFragment& TransformFragment = TransformList[EntityIndex];
 
 			FRecallCinematicFragment& CinematicFragment = CinematicList[EntityIndex];
@@ -311,27 +311,27 @@ void URecallCinematicPlayingProcessor::Execute(FMassExtendedEntityManager& Entit
 URecallCinematicRepresentationProcessor::URecallCinematicRepresentationProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::Render;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::Render;
 	bRequiresGameThreadExecution = true;
 }
 
-void URecallCinematicRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallCinematicRepresentationProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallCinematicRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallCinematicRepresentationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	FMassExtendedTagBitSet RequiredTags;
+	FMassTagBitSet RequiredTags;
 	RequiredTags.Add(*FRecallCinematicPlayingTag::StaticStruct());
 
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallCinematicFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallCinematicInternalFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallCinematicFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallCinematicInternalFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddConstSharedRequirement<FRecallCinematicInternalSharedFragment>();
-	EntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::All>(RequiredTags);
-	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddTagRequirements<EMassFragmentPresence::All>(RequiredTags);
+	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassFragmentAccess::ReadOnly);
 }
 
 static void BindLevelSequence(
@@ -389,11 +389,11 @@ static bool ShouldPlayCinematicRepresentation(const UObject* WorldContextObject,
 	return false;
 }
 
-void URecallCinematicRepresentationProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallCinematicRepresentationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Cinematic_Representation);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const URecallActorSubsystem& ActorSystem = Context.GetSubsystemChecked<URecallActorSubsystem>();
 

@@ -8,9 +8,9 @@
 
 #include "CoreMinimal.h"
 
-struct FMassExtendedEntityManager;
-struct FMassExtendedEntityHandle;
-struct FMassExtendedEntityView;
+struct FMassEntityManager;
+struct FMassEntityHandle;
+struct FMassEntityView;
 struct FRecallInteractionEvent;
 
 namespace Recall::Interact::Position::Utils
@@ -23,9 +23,9 @@ namespace Recall::Interact::Position::Utils
 /// @param bUseBoundingBoxProjection If true, project onto bounding box; if false, use center position
 /// @return World space location for interaction display/calculation
 RECALLINTERACTMODULE_API extern FVector GetProjectedInteractionLocation(
-	const FMassExtendedEntityManager& EntityManager,
-	const FMassExtendedEntityHandle& InteractorEntity,
-	const FMassExtendedEntityHandle& InteractableEntity,
+	const FMassEntityManager& EntityManager,
+	const FMassEntityHandle& InteractorEntity,
+	const FMassEntityHandle& InteractableEntity,
 	bool bUseBoundingBoxProjection = true);
 
 /// Calculate closest point on interactable's bounding box to a specific world position.
@@ -35,9 +35,9 @@ RECALLINTERACTMODULE_API extern FVector GetProjectedInteractionLocation(
 /// @param bUseBoundingBoxProjection If true, project onto bounding box; if false, use center position
 /// @return World space location for interaction display/calculation
 RECALLINTERACTMODULE_API extern FVector GetProjectedLocationFromPosition(
-	const FMassExtendedEntityManager& EntityManager,
+	const FMassEntityManager& EntityManager,
 	const FVector& InteractorPosition,
-	const FMassExtendedEntityHandle& InteractableEntity,
+	const FMassEntityHandle& InteractableEntity,
 	bool bUseBoundingBoxProjection = true);
 
 /// Calculate squared distance between interactor and interactable using bounding box projection if enabled.
@@ -47,9 +47,9 @@ RECALLINTERACTMODULE_API extern FVector GetProjectedLocationFromPosition(
 /// @param Event The interaction event containing bounding box projection setting
 /// @return Squared distance for comparison
 RECALLINTERACTMODULE_API extern float GetInteractionDistanceSquared(
-	const FMassExtendedEntityManager& EntityManager,
-	const FMassExtendedEntityHandle& InteractorEntity,
-	const FMassExtendedEntityHandle& InteractableEntity,
+	const FMassEntityManager& EntityManager,
+	const FMassEntityHandle& InteractorEntity,
+	const FMassEntityHandle& InteractableEntity,
 	const FRecallInteractionEvent& Event);
 
 /// Find the closest available (unoccupied) interaction position.
@@ -59,8 +59,8 @@ RECALLINTERACTMODULE_API extern float GetInteractionDistanceSquared(
 /// @return Position index (0-N) or INDEX_NONE if no positions available
 RECALLINTERACTMODULE_API extern int32 FindClosestAvailablePosition(
 	const FVector& InteractorLocation,
-	const FMassExtendedEntityView& InteractableView,
-	const FMassExtendedEntityManager& EntityManager);
+	const FMassEntityView& InteractableView,
+	const FMassEntityManager& EntityManager);
 
 /// Check if a specific interaction position is occupied.
 /// @param InteractableView Entity view of the interactable
@@ -68,17 +68,17 @@ RECALLINTERACTMODULE_API extern int32 FindClosestAvailablePosition(
 /// @param EntityManager Manager for querying entity fragments
 /// @return true if position is occupied, false if available
 RECALLINTERACTMODULE_API extern bool IsPositionOccupied(
-	const FMassExtendedEntityView& InteractableView,
+	const FMassEntityView& InteractableView,
 	int32 PositionIndex,
-	const FMassExtendedEntityManager& EntityManager);
+	const FMassEntityManager& EntityManager);
 
 /// Overload that allows ignoring a specific instigator (e.g., the current interactor),
 /// so a position occupied by self does not count as occupied.
 RECALLINTERACTMODULE_API extern bool IsPositionOccupied(
-	const FMassExtendedEntityView& InteractableView,
+	const FMassEntityView& InteractableView,
 	int32 PositionIndex,
-	const FMassExtendedEntityManager& EntityManager,
-	const FMassExtendedEntityHandle* IgnoredInstigator);
+	const FMassEntityManager& EntityManager,
+	const FMassEntityHandle* IgnoredInstigator);
 
 /// Calculate interaction location and distance for an interactable entity.
 /// Handles both multi-position and single-position interactables.
@@ -92,9 +92,9 @@ RECALLINTERACTMODULE_API extern bool IsPositionOccupied(
 /// @return true if interaction location was calculated successfully, false if no positions available
 RECALLINTERACTMODULE_API extern bool CalculateInteractionLocationAndDistance(
 	const FVector& InteractorLocation,
-	const FMassExtendedEntityHandle& InteractableEntity,
-	const FMassExtendedEntityView& InteractableView,
-	const FMassExtendedEntityManager& EntityManager,
+	const FMassEntityHandle& InteractableEntity,
+	const FMassEntityView& InteractableView,
+	const FMassEntityManager& EntityManager,
 	int32& OutPositionIndex,
 	FVector& OutInteractLocation,
 	float& OutDistanceSquared);

@@ -8,7 +8,7 @@
 #include "RecallDeviceItemCost.h"
 
 #include "Device/RecallDeviceCostContextTypes.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 #include "System/Inventory/RecallInventorySubsystem.h"
 #include "Utility/GameplayTag/RecallGameplayTagUtils.h"
@@ -48,7 +48,7 @@ TArray<FRecallGameplayTagCountMap*> FRecallDeviceItemCost::GetGameplayTagCountMa
 {
 	TArray<FRecallGameplayTagCountMap*> Results;
 	
-	const FMassExtendedEntityView EntityView = Context.GetEntityView();
+	const FMassEntityView EntityView = Context.GetEntityView();
 	auto* GameplayTagFragmentPtr = EntityView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 
 	if (GameplayTagFragmentPtr != nullptr)

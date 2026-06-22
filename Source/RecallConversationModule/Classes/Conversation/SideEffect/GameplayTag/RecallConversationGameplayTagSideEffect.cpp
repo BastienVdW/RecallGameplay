@@ -8,8 +8,8 @@
 #include "RecallConversationGameplayTagSideEffect.h"
 
 #include "ConversationContext.h"
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 #include "Utility/Conversation/RecallConversationNodeUtils.h"
 
@@ -45,7 +45,7 @@ void URecallConversationGameplayTagSideEffectNode::ApplyGameplayTags(const FConv
 {
 	if (bGlobalTags)
 	{
-		FMassExtendedEntityManager& EntityManager = Recall::Conversation::Node::Utils::GetEntityManagerChecked(
+		FMassEntityManager& EntityManager = Recall::Conversation::Node::Utils::GetEntityManagerChecked(
 			Context);
 		FRecallGameplayTagGlobalSharedFragment& SharedFragment = EntityManager.GetOrCreateSharedFragment<FRecallGameplayTagGlobalSharedFragment>()
 			.Get<FRecallGameplayTagGlobalSharedFragment>();
@@ -53,12 +53,12 @@ void URecallConversationGameplayTagSideEffectNode::ApplyGameplayTags(const FConv
 		return;
 	}
 	
-	const TArray<FMassExtendedEntityHandle> Entities = Recall::Conversation::Node::Utils::GetTargetEntities(
+	const TArray<FMassEntityHandle> Entities = Recall::Conversation::Node::Utils::GetTargetEntities(
 		Context, Target);
 
-	for (const FMassExtendedEntityHandle& Entity : Entities)
+	for (const FMassEntityHandle& Entity : Entities)
 	{
-		const FMassExtendedEntityView EntityView = Recall::Conversation::Node::Utils::CreateEntityView(Context, Entity);
+		const FMassEntityView EntityView = Recall::Conversation::Node::Utils::CreateEntityView(Context, Entity);
 		FRecallGameplayTagFragment* GameplayTagFragmentPtr = EntityView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 		if (GameplayTagFragmentPtr == nullptr)
 		{

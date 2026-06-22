@@ -7,14 +7,14 @@
 
 #include "RecallInteractAttributeConditionTypes.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "Simulation/Attribute/RecallAttributeFragments.h"
 #include "Utility/Attribute/RecallAttributeUtils.h"
 
 bool FRecallInteractAttributeCondition::EvaluateCondition(const FRecallInteractContext& Context, FText& OutFailedText) const
 {
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(Target);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(Target);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 	const FRecallAttributeFragment* TargetAttributeFragmentPtr = TargetView.GetFragmentDataPtr<FRecallAttributeFragment>();
 	if (TargetAttributeFragmentPtr == nullptr)
 	{

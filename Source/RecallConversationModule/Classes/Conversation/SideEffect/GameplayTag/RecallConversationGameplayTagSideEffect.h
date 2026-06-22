@@ -12,7 +12,7 @@
 
 #include "RecallConversationGameplayTagSideEffect.generated.h"
 
-struct FMassExtendedEntityHandle;
+struct FMassEntityHandle;
 
 UENUM()
 enum class ERecallConversationGameplayTagOperation : uint8

@@ -6,41 +6,41 @@
 
 #pragma once
 
-#include "MassExtendedProcessor.h"
+#include "MassProcessor.h"
 
 #include "RecallEnvQueryProcessors.generated.h"
 
 UCLASS()
-class URecallEnvQueryProcessor : public UMassExtendedProcessor
+class URecallEnvQueryProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallEnvQueryProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 	virtual bool ShouldAllowQueryBasedPruning(const bool bRuntimeMode = true) const override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 };
 
 UCLASS()
-class URecallEnvQueryRepresentationProcessor : public UMassExtendedProcessor
+class URecallEnvQueryRepresentationProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallEnvQueryRepresentationProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 	virtual bool ShouldAllowQueryBasedPruning(const bool bRuntimeMode = true) const override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 };

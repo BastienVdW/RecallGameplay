@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InstancedStruct.h"
+#include "StructUtils/InstancedStruct.h"
 #include "GameplayTagContainer.h"
 
 #include "RecallGameRuleCommands.generated.h"

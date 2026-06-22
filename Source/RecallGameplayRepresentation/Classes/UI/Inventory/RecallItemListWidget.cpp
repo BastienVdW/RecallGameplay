@@ -26,7 +26,7 @@ void URecallItemListWidget::NativeDestruct()
 	Recall::Frontend::Utils::UnregisterAllGlobalObservers(this);
 }
 
-void URecallItemListWidget::SetTrackedEntity_Implementation(const FMassExtendedEntityHandle& Entity)
+void URecallItemListWidget::SetTrackedEntity_Implementation(const FMassEntityHandle& Entity)
 {
 	TrackedEntity = Entity;
 }

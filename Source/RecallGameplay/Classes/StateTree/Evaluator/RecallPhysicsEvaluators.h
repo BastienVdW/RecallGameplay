@@ -8,7 +8,7 @@
 
 #include "CoreMinimal.h"
 #include "StateTree/RecallStateTreeEvaluatorBase.h"
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallPhysicsEvaluators.generated.h"
 
@@ -21,7 +21,7 @@ struct RECALLGAMEPLAY_API FRecallOverlappingEntityEvaluatorInstanceData
 	bool bFound = false;
 
 	UPROPERTY(VisibleAnywhere, Category=Output)
-	TArray<FMassExtendedEntityHandle> Entities;
+	TArray<FMassEntityHandle> Entities;
 };
 
 /**

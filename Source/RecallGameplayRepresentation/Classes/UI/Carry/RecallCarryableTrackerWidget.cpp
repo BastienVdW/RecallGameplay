@@ -8,7 +8,7 @@
 #include "RecallCarryableTrackerWidget.h"
 
 #include "CommonRichTextBlock.h"
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "RecallFrontendUtils.h"
 #include "Representation/Carry/RecallCarryRepresentationTypes.h"
 #include "Utility/Representation/RecallGameplayRepresentationFunctionLibrary.h"
@@ -35,7 +35,7 @@ void URecallCarryableTrackerWidget::NativeDestruct()
 	Recall::Frontend::Utils::UnregisterAllGlobalObservers(this);
 }
 
-void URecallCarryableTrackerWidget::SetTrackedEntity_Implementation(const FMassExtendedEntityHandle& Entity)
+void URecallCarryableTrackerWidget::SetTrackedEntity_Implementation(const FMassEntityHandle& Entity)
 {
 	TrackedEntity = Entity;
 }

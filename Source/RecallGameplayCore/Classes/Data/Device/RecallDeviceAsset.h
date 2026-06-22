@@ -44,7 +44,7 @@ public:
 	/**
 	 * Entity config of the device to place.
 	 */
-	UPROPERTY(EditAnywhere, meta=(AllowedClasses="/Script/MassExtendedSpawner.MassExtendedEntityConfigAsset"))
+	UPROPERTY(EditAnywhere, meta=(AllowedClasses="/Script/MassSpawner.MassEntityConfigAsset"))
 	FSoftObjectPath EntityConfig;
 
 	/**

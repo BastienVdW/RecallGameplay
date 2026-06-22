@@ -11,7 +11,7 @@
 
 #include "RecallTrackerEntityInterface.generated.h"
 
-struct FMassExtendedEntityHandle;
+struct FMassEntityHandle;
 
 UINTERFACE()
 class RECALLGAMEPLAYCORE_API URecallTrackerEntityInterface : public UInterface
@@ -28,5 +28,5 @@ class RECALLGAMEPLAYCORE_API IRecallTrackerEntityInterface
 	
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category=Tracker)
-	void SetTrackedEntity(const FMassExtendedEntityHandle& Entity);
+	void SetTrackedEntity(const FMassEntityHandle& Entity);
 };

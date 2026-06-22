@@ -7,8 +7,8 @@
 
 #include "Utility/Representation/RecallRepresentationUtils.h"
 
-#include "MassExtendedEntityUtils.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityUtils.h"
+#include "MassEntityView.h"
 #include "Simulation/Controller/RecallControllerFragments.h"
 #include "System/Representation/RecallRepresentationEventSubsystem.h"
 #include "Utility/Player/RecallPlayerUtils.h"
@@ -20,7 +20,7 @@ namespace Recall::Representation::Utils
 {
 
 void SendUIEvent(const UObject* WorldContextObject,
-	const FMassExtendedEntityHandle& Entity, const FGameplayTag& EventTag)
+	const FMassEntityHandle& Entity, const FGameplayTag& EventTag)
 {
 	const UWorld* World = IsValid(WorldContextObject) ? WorldContextObject->GetWorld() : nullptr;
 	if (!ensure(IsValid(World)))
@@ -35,8 +35,8 @@ void SendUIEvent(const UObject* WorldContextObject,
 		return;
 	}
 	
-	const FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(*World);
-	const FMassExtendedEntityView TargetView(EntityManager, Entity);
+	const FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(*World);
+	const FMassEntityView TargetView(EntityManager, Entity);
 	const auto* PlayerControllerFragmentPtr = TargetView.GetFragmentDataPtr<FRecallControllerFragment>();
 	if (PlayerControllerFragmentPtr == nullptr)
 	{

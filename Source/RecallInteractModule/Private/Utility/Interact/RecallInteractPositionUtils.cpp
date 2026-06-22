@@ -8,8 +8,8 @@
 #include "Utility/Interact/RecallInteractPositionUtils.h"
 
 #include "Data/Interact/RecallInteractTypes.h"
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "Simulation/Interact/RecallInteractFragments.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
@@ -17,8 +17,8 @@
 namespace Recall::Interact::Position::Utils
 {
 
-FVector GetProjectedInteractionLocation(const FMassExtendedEntityManager& EntityManager,
-	const FMassExtendedEntityHandle& InteractorEntity, const FMassExtendedEntityHandle& InteractableEntity,
+FVector GetProjectedInteractionLocation(const FMassEntityManager& EntityManager,
+	const FMassEntityHandle& InteractorEntity, const FMassEntityHandle& InteractableEntity,
 	bool bUseBoundingBoxProjection)
 {
 	// Check if interactor is valid for projection calculation
@@ -27,15 +27,15 @@ FVector GetProjectedInteractionLocation(const FMassExtendedEntityManager& Entity
 		return FVector::ZeroVector;
 	}
 
-	const FMassExtendedEntityView InteractorView(EntityManager, InteractorEntity);
+	const FMassEntityView InteractorView(EntityManager, InteractorEntity);
 	const FRecallTransformFragment& InteractorTransformFragment = InteractorView.GetFragmentData<FRecallTransformFragment>();
 
 	// Use the position-based variant
 	return GetProjectedLocationFromPosition(EntityManager, InteractorTransformFragment.Position, InteractableEntity, bUseBoundingBoxProjection);
 }
 
-FVector GetProjectedLocationFromPosition(const FMassExtendedEntityManager& EntityManager,
-	const FVector& InteractorPosition, const FMassExtendedEntityHandle& InteractableEntity,
+FVector GetProjectedLocationFromPosition(const FMassEntityManager& EntityManager,
+	const FVector& InteractorPosition, const FMassEntityHandle& InteractableEntity,
 	bool bUseBoundingBoxProjection)
 {
 	if (!EntityManager.IsEntityValid(InteractableEntity))
@@ -43,7 +43,7 @@ FVector GetProjectedLocationFromPosition(const FMassExtendedEntityManager& Entit
 		return FVector::ZeroVector;
 	}
 
-	const FMassExtendedEntityView InteractableView(EntityManager, InteractableEntity);
+	const FMassEntityView InteractableView(EntityManager, InteractableEntity);
 	const FRecallTransformFragment& InteractableTransformFragment = InteractableView.GetFragmentData<FRecallTransformFragment>();
 
 	// If not using bounding box projection, return center position
@@ -78,8 +78,8 @@ FVector GetProjectedLocationFromPosition(const FMassExtendedEntityManager& Entit
 	return WorldProjectedPosition;
 }
 
-float GetInteractionDistanceSquared(const FMassExtendedEntityManager& EntityManager,
-	const FMassExtendedEntityHandle& InteractorEntity, const FMassExtendedEntityHandle& InteractableEntity,
+float GetInteractionDistanceSquared(const FMassEntityManager& EntityManager,
+	const FMassEntityHandle& InteractorEntity, const FMassEntityHandle& InteractableEntity,
 	const FRecallInteractionEvent& Event)
 {
 	if (!EntityManager.IsEntityValid(InteractorEntity) || !EntityManager.IsEntityValid(InteractableEntity))
@@ -87,7 +87,7 @@ float GetInteractionDistanceSquared(const FMassExtendedEntityManager& EntityMana
 		return MAX_FLT;
 	}
 
-	const FMassExtendedEntityView InteractorView(EntityManager, InteractorEntity);
+	const FMassEntityView InteractorView(EntityManager, InteractorEntity);
 	const FRecallTransformFragment* InteractorTransformFragmentPtr = InteractorView.GetFragmentDataPtr<FRecallTransformFragment>();
 	if (InteractorTransformFragmentPtr == nullptr)
 	{
@@ -102,8 +102,8 @@ float GetInteractionDistanceSquared(const FMassExtendedEntityManager& EntityMana
 
 int32 FindClosestAvailablePosition(
 	const FVector& InteractorLocation,
-	const FMassExtendedEntityView& InteractableView,
-	const FMassExtendedEntityManager& EntityManager)
+	const FMassEntityView& InteractableView,
+	const FMassEntityManager& EntityManager)
 {
 	const FRecallInteractableFragment& InteractableFragment =
 		InteractableView.GetFragmentData<FRecallInteractableFragment>();
@@ -149,10 +149,10 @@ int32 FindClosestAvailablePosition(
 }
 
 bool IsPositionOccupied(
-	const FMassExtendedEntityView& InteractableView,
+	const FMassEntityView& InteractableView,
 	int32 PositionIndex,
-	const FMassExtendedEntityManager& EntityManager,
-	const FMassExtendedEntityHandle* IgnoredInstigator)
+	const FMassEntityManager& EntityManager,
+	const FMassEntityHandle* IgnoredInstigator)
 {
 	// INDEX_NONE is never occupied (fallback to center position)
 	if (PositionIndex == INDEX_NONE)
@@ -164,7 +164,7 @@ bool IsPositionOccupied(
 		InteractableView.GetFragmentData<FRecallInteractableFragment>();
 
 	// Check all in-progress interactors
-	for (const FMassExtendedEntityHandle& InstigatorEntity : InteractableFragment.InProgressInstigators)
+	for (const FMassEntityHandle& InstigatorEntity : InteractableFragment.InProgressInstigators)
 	{
 		if (!EntityManager.IsEntityValid(InstigatorEntity))
 			continue;
@@ -172,7 +172,7 @@ bool IsPositionOccupied(
 		if (IgnoredInstigator && InstigatorEntity == *IgnoredInstigator)
 			continue; // Ignore self occupying the position
 
-		const FMassExtendedEntityView InstigatorView(EntityManager, InstigatorEntity);
+		const FMassEntityView InstigatorView(EntityManager, InstigatorEntity);
 		if (const FRecallInteractorFragment* InstigatorFragmentPtr =
 			InstigatorView.GetFragmentDataPtr<FRecallInteractorFragment>())
 		{
@@ -187,18 +187,18 @@ bool IsPositionOccupied(
 }
 
 bool IsPositionOccupied(
-	const FMassExtendedEntityView& InteractableView,
+	const FMassEntityView& InteractableView,
 	int32 PositionIndex,
-	const FMassExtendedEntityManager& EntityManager)
+	const FMassEntityManager& EntityManager)
 {
 	return IsPositionOccupied(InteractableView, PositionIndex, EntityManager, nullptr);
 }
 
 bool CalculateInteractionLocationAndDistance(
 	const FVector& InteractorLocation,
-	const FMassExtendedEntityHandle& InteractableEntity,
-	const FMassExtendedEntityView& InteractableView,
-	const FMassExtendedEntityManager& EntityManager,
+	const FMassEntityHandle& InteractableEntity,
+	const FMassEntityView& InteractableView,
+	const FMassEntityManager& EntityManager,
 	int32& OutPositionIndex,
 	FVector& OutInteractLocation,
 	float& OutDistanceSquared)

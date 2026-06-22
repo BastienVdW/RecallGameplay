@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedObserverProcessor.h"
+#include "MassObserverProcessor.h"
 #include "RecallSignalProcessorBase.h"
 
 #include "RecallConversationProcessors.generated.h"
@@ -22,46 +22,46 @@ class URecallConversationParticipantSignalProcessor : public URecallSignalProces
 public:
 	URecallConversationParticipantSignalProcessor(const FObjectInitializer& ObjectInitializer);
 
-	void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	void SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	void SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals) override final;
 };
 
 UCLASS()
-class URecallConversationProcessor : public UMassExtendedProcessor
+class URecallConversationProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallConversationProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
 
 private:
-	FMassExtendedEntityQuery ActiveEntityQuery;
-	FMassExtendedEntityQuery InactiveEntityQuery;
+	FMassEntityQuery ActiveEntityQuery;
+	FMassEntityQuery InactiveEntityQuery;
 };
 
 UCLASS()
-class URecallConversationDeinitializer : public UMassExtendedObserverProcessor
+class URecallConversationDeinitializer : public UMassObserverProcessor
 {
 	GENERATED_BODY()
 
 	URecallConversationDeinitializer();
 
 public:
-	void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 };

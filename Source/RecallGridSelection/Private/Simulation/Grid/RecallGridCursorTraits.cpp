@@ -7,7 +7,7 @@
 
 #include "Simulation/Grid/RecallGridCursorTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Controller/RecallControllerFragments.h"
 #include "Simulation/Grid/RecallGridCursorFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------//
 // URecallGridCursorTrait
 //----------------------------------------------------------------------//
-void URecallGridCursorTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallGridCursorTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 	
@@ -25,9 +25,9 @@ void URecallGridCursorTrait::BuildTemplate(FMassExtendedEntityTemplateBuildConte
 //----------------------------------------------------------------------//
 // URecallGridCursorOwnerTrait
 //----------------------------------------------------------------------//
-void URecallGridCursorOwnerTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallGridCursorOwnerTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 	
 	BuildContext.RequireFragment<FRecallControllerFragment>();
 	

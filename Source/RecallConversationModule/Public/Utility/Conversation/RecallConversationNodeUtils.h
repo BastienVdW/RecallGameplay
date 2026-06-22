@@ -12,9 +12,9 @@
 struct FConversationContext;
 struct FGameplayTag;
 
-struct FMassExtendedEntityHandle;
-struct FMassExtendedEntityManager;
-struct FMassExtendedEntityView;
+struct FMassEntityHandle;
+struct FMassEntityManager;
+struct FMassEntityView;
 
 /**
  * Helper methods to use inside conversation nodes.
@@ -38,16 +38,16 @@ RECALLCONVERSATIONMODULE_API TArray<FGameplayTag> GetAllParticipants(const FConv
 /**
  * Return the entity that own the participant.
  */
-RECALLCONVERSATIONMODULE_API extern FMassExtendedEntityHandle GetParticipantEntity(const FConversationContext& Context, const FGameplayTag& ParticipantID);
-RECALLCONVERSATIONMODULE_API extern TArray<FMassExtendedEntityHandle> GetParticipantEntities(const FConversationContext& Context, const TArray<FGameplayTag>& Participants);
-RECALLCONVERSATIONMODULE_API extern TArray<FMassExtendedEntityHandle> GetAllParticipantEntities(const FConversationContext& Context);
-RECALLCONVERSATIONMODULE_API extern TArray<FMassExtendedEntityHandle> GetPlayerParticipantEntities(const FConversationContext& Context);
+RECALLCONVERSATIONMODULE_API extern FMassEntityHandle GetParticipantEntity(const FConversationContext& Context, const FGameplayTag& ParticipantID);
+RECALLCONVERSATIONMODULE_API extern TArray<FMassEntityHandle> GetParticipantEntities(const FConversationContext& Context, const TArray<FGameplayTag>& Participants);
+RECALLCONVERSATIONMODULE_API extern TArray<FMassEntityHandle> GetAllParticipantEntities(const FConversationContext& Context);
+RECALLCONVERSATIONMODULE_API extern TArray<FMassEntityHandle> GetPlayerParticipantEntities(const FConversationContext& Context);
 
-RECALLCONVERSATIONMODULE_API extern FMassExtendedEntityManager& GetEntityManagerChecked(const FConversationContext& Context);
-RECALLCONVERSATIONMODULE_API extern FMassExtendedEntityView CreateEntityView(const FConversationContext& Context, const FMassExtendedEntityHandle& Entity);
+RECALLCONVERSATIONMODULE_API extern FMassEntityManager& GetEntityManagerChecked(const FConversationContext& Context);
+RECALLCONVERSATIONMODULE_API extern FMassEntityView CreateEntityView(const FConversationContext& Context, const FMassEntityHandle& Entity);
 
-RECALLCONVERSATIONMODULE_API extern FMassExtendedEntityHandle GetConversationEntity(const FConversationContext& Context);
-RECALLCONVERSATIONMODULE_API extern TArray<FMassExtendedEntityHandle> GetTargetEntities(
+RECALLCONVERSATIONMODULE_API extern FMassEntityHandle GetConversationEntity(const FConversationContext& Context);
+RECALLCONVERSATIONMODULE_API extern TArray<FMassEntityHandle> GetTargetEntities(
 	const FConversationContext& Context, ERecallConversationNodeTarget Target);
 	
 } // namespace Recall::Conversation::Node::Utils

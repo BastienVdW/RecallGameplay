@@ -9,7 +9,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "System/Interface/RecallSimulationReactSystemInterface.h"
-#include "MassExtendedExternalSubsystemTraits.h"
+#include "Mass/ExternalSubsystemTraits.h"
 #include "RecallCrowdAgentHandle.h"
 
 #include "RecallCrowdSubsystem.generated.h"
@@ -84,7 +84,7 @@ private:
 };
 
 template<>
-struct TMassExtendedExternalSubsystemTraits<URecallCrowdSubsystem> final
+struct TMassExternalSubsystemTraits<URecallCrowdSubsystem> final
 {
 	enum
 	{

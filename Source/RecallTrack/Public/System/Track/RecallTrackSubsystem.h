@@ -8,7 +8,7 @@
 
 #include "Subsystems/WorldSubsystem.h"
 #include "System/Interface/RecallSimulationReactSystemInterface.h"
-#include "MassExtendedExternalSubsystemTraits.h"
+#include "Mass/ExternalSubsystemTraits.h"
 
 #include "RecallTrackSubsystem.generated.h"
 
@@ -53,7 +53,7 @@ private:
 };
 
 template<>
-struct TMassExtendedExternalSubsystemTraits<URecallTrackSubsystem> final
+struct TMassExternalSubsystemTraits<URecallTrackSubsystem> final
 {
 	enum
 	{

@@ -7,9 +7,9 @@
 
 #include "RecallGameplayTagTasks.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityTypes.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "Mass/EntityElementTypes.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
@@ -28,7 +28,7 @@ bool FRecallGetTaggedEntityTask::Link(FStateTreeLinker& Linker)
 
 EStateTreeRunStatus FRecallGetTaggedEntityTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {	
-	const TArray<FMassExtendedEntityHandle> SourceEntities = GetEntities(Context);
+	const TArray<FMassEntityHandle> SourceEntities = GetEntities(Context);
 	if (SourceEntities.Num() == 0)
 	{
 		return EStateTreeRunStatus::Failed;
@@ -36,9 +36,9 @@ EStateTreeRunStatus FRecallGetTaggedEntityTask::EnterState(FStateTreeExecutionCo
 
 	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	
-	const TTuple<FMassExtendedEntityHandle*, TArray<FMassExtendedEntityHandle>*> EntityTuple = InstanceData.Entity.GetMutablePtrTuple(Context);
+	const TTuple<FMassEntityHandle*, TArray<FMassEntityHandle>*> EntityTuple = InstanceData.Entity.GetMutablePtrTuple(Context);
 	const int32 EntityCount = EntityTuple.Key ? 1 : INT32_MAX;
-	const TArray<FMassExtendedEntityHandle> ResultEntities = Recall::Entity::Utils::FilterEntitiesByTag(
+	const TArray<FMassEntityHandle> ResultEntities = Recall::Entity::Utils::FilterEntitiesByTag(
 		Context.GetWorld(), SourceEntities, InstanceData.RequiredGameplayTags, RequiredNameTags, EntityCount);
 	if (ResultEntities.Num() == 0)
 	{
@@ -66,7 +66,7 @@ EStateTreeRunStatus FRecallGetTaggedEntityTask::EnterState(FStateTreeExecutionCo
 	return Super::EnterState(Context, Transition);
 }
 
-TArray<FMassExtendedEntityHandle> FRecallGetTaggedEntityTask::GetEntities(FStateTreeExecutionContext& Context) const
+TArray<FMassEntityHandle> FRecallGetTaggedEntityTask::GetEntities(FStateTreeExecutionContext& Context) const
 {
 	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	
@@ -133,10 +133,10 @@ FRecallGameplayTagFragment* FRecallAddGameplayTagTask::GetTargetGameplayTagFragm
 	case ERecallAddGameplayTagTarget::Entity:
 		{
 			const FRecallStateTreeExecutionContext& MassContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
-			const FMassExtendedEntityManager& EntityManager = MassContext.GetEntityManager();
+			const FMassEntityManager& EntityManager = MassContext.GetEntityManager();
 			if (EntityManager.IsEntityValid(InstanceData.Entity))
 			{
-				const FMassExtendedEntityView EntityView(MassContext.GetEntityManager(), InstanceData.Entity);
+				const FMassEntityView EntityView(MassContext.GetEntityManager(), InstanceData.Entity);
 				return EntityView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 			}	
 		}

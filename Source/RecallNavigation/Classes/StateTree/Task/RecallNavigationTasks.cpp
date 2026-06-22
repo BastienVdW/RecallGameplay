@@ -7,7 +7,7 @@
 
 #include "RecallNavigationTasks.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "Desync/RecallDesyncLog.h"
 #include "RecallSignalSubsystem.h"
 #include "StateTreeLinker.h"
@@ -249,10 +249,10 @@ FRecallEnvQueryRequest FRecallEnvQueryTask::GenerateEnvQueryRequest(
 
 	case ERecallEnvQueryTarget::Entity:
 		{
-			const FMassExtendedEntityManager& EntityManager = MassContext.GetEntityManager();
+			const FMassEntityManager& EntityManager = MassContext.GetEntityManager();
 			if (EntityManager.IsEntityValid(InstanceData.Entity))
 			{
-				const FMassExtendedEntityView TargetView(EntityManager, InstanceData.Entity);
+				const FMassEntityView TargetView(EntityManager, InstanceData.Entity);
 				if (const auto* TargetTransformFragmentPtr = TargetView.GetFragmentDataPtr<FRecallTransformFragment>())
 				{
 					EnvQueryRequest.TargetLocation = TargetTransformFragmentPtr->Position;
@@ -263,7 +263,7 @@ FRecallEnvQueryRequest FRecallEnvQueryTask::GenerateEnvQueryRequest(
 				{
 					if (EntityManager.IsEntityValid(ControllerFragmentPtr->ViewTargetEntity))
 					{
-						const FMassExtendedEntityView ViewTargetView(EntityManager, ControllerFragmentPtr->ViewTargetEntity);
+						const FMassEntityView ViewTargetView(EntityManager, ControllerFragmentPtr->ViewTargetEntity);
 						if (const auto* ViewTargetTransformFragmentPtr = ViewTargetView.GetFragmentDataPtr<FRecallTransformFragment>())
 						{
 							EnvQueryRequest.ViewTargetLocation = ViewTargetTransformFragmentPtr->Position;

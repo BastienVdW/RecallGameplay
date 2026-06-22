@@ -21,7 +21,7 @@ struct RECALLGAMEPLAYEFFECTMODULE_API FRecallGameplayEffectInstance
 	 * Entity owning this gameplay effect instance.
 	 */
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle OwnerEntity;
+	FMassEntityHandle OwnerEntity;
 
 	/**
 	 * Class of the gameplay effect for this instance.

@@ -7,7 +7,7 @@
 
 #include "Simulation/Navigation/RecallNavigationTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Crowd/RecallCrowdFragments.h"
 #include "Simulation/Movement/RecallMovementFragments.h"
 #include "Simulation/Navigation/RecallNavigationFragments.h"
@@ -20,7 +20,7 @@
 //----------------------------------------------------------------------//
 // URecallNavigationAgentBaseTrait
 //----------------------------------------------------------------------//
-void URecallNavigationAgentBaseTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallNavigationAgentBaseTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 	BuildContext.RequireFragment<FRecallMovementFragment>();
@@ -37,7 +37,7 @@ void URecallNavigationAgentBaseTrait::BuildTemplate(FMassExtendedEntityTemplateB
 	}
 
 	// Add path following configuration shared fragment
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 	FRecallPathFollowingConstSharedFragment PathFollowingFragment;
 	PathFollowingFragment.Settings = PathFollowingSettings;
 	BuildContext.AddConstSharedFragment(EntityManager.GetOrCreateConstSharedFragment(PathFollowingFragment));
@@ -62,12 +62,12 @@ void URecallNavigationAgentBaseTrait::BuildTemplate(FMassExtendedEntityTemplateB
 //----------------------------------------------------------------------//
 // URecallNavigationAgentTrait
 //----------------------------------------------------------------------//
-void URecallNavigationAgentTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallNavigationAgentTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	// Build base fragments first (now includes path following and crowd agent collision shared fragments, and obstacle fragment)
 	Super::BuildTemplate(BuildContext, World);
 
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	// Add NavMesh-specific path request fragment
 	BuildContext.AddFragment<FRecallNavMeshPathRequestFragment>();

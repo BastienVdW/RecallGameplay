@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "StateTree/RecallStateTreeTaskBase.h"
 #include "StateTreePropertyRef.h"
 
@@ -28,10 +28,10 @@ struct RECALLGAMEPLAY_API FRecallGetTaggedEntityTaskInstanceData
 	ERecallGetTaggedEntityTaskSource Source = ERecallGetTaggedEntityTaskSource::AllMutable;
 
 	UPROPERTY(EditAnywhere, meta=(EditCondition="Source == ERecallGetTaggedEntityTaskSource::Selection", EditConditionHides))
-	TArray<FMassExtendedEntityHandle> SelectedEntities;
+	TArray<FMassEntityHandle> SelectedEntities;
 	
 	UPROPERTY(EditAnywhere, Category=Input, meta=(CanRefToArray), DisplayName="Result")
-	TStateTreePropertyRef<FMassExtendedEntityHandle> Entity;
+	TStateTreePropertyRef<FMassEntityHandle> Entity;
 	
 	UPROPERTY(EditAnywhere, Category=Parameter)
 	FGameplayTagContainer RequiredGameplayTags;
@@ -57,7 +57,7 @@ protected:
 	TArray<FName> RequiredNameTags;
 
 private:
-	TArray<FMassExtendedEntityHandle> GetEntities(FStateTreeExecutionContext& Context) const;
+	TArray<FMassEntityHandle> GetEntities(FStateTreeExecutionContext& Context) const;
 };
 
 UENUM()
@@ -76,7 +76,7 @@ struct RECALLGAMEPLAY_API FRecallAddGameplayTagTaskInstanceData
 	ERecallAddGameplayTagTarget Target = ERecallAddGameplayTagTarget::Self;
 	
 	UPROPERTY(EditAnywhere, Category=Parameter, meta=(EditCondition="Target == ERecallAddGameplayTagTarget::Entity", EditConditionHides))
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 };
 
 /**

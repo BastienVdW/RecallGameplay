@@ -7,14 +7,14 @@
 
 #include "Simulation/_template/RecallTemplateTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/_template/RecallTemplateFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 #include "Utility/Trait/RecallTraitUtils.h"
 
-void URecallTemplateTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallTemplateTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 

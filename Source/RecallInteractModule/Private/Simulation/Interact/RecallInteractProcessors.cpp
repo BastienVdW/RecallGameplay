@@ -10,7 +10,7 @@
 #include "Desync/RecallDesyncLog.h"
 #include "Interact/RecallInteractProgressReactInterface.h"
 #include "Interact/RecallInteractReactInterface.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Simulation/Interact/RecallInteractFragments.h"
@@ -37,12 +37,12 @@
 URecallInteractorSignalProcessor::URecallInteractorSignalProcessor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteBefore.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
 	bRequiresGameThreadExecution = true;
 }
 
-void URecallInteractorSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallInteractorSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
@@ -51,20 +51,20 @@ void URecallInteractorSignalProcessor::InitializeInternal(UObject& Owner, const 
 	SubscribeToSignal(Recall::Interact::Signals::OverlapTick);
 }
 
-void URecallInteractorSignalProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallInteractorSignalProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallInteractorFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallPhysicsSensorFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallInteractorFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallPhysicsSensorFragment>(EMassFragmentAccess::ReadOnly);
 	EntityQuery.AddConstSharedRequirement<FRecallInteractorSharedFragment>();
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallInteractorSignalProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallInteractorSignalProcessor::SignalEntities(FMassEntityManager& EntityManager, FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_Interactor_Signal);
 
-	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&EntitySignals](FMassExecutionContext& Context)
 	{
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
 
@@ -77,7 +77,7 @@ void URecallInteractorSignalProcessor::SignalEntities(FMassExtendedEntityManager
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 
 			const FRecallTransformFragment& TransformFragment = TransformList[EntityIndex];
 			const FRecallPhysicsSensorFragment& SensorFragment = SensorList[EntityIndex];
@@ -117,33 +117,33 @@ void URecallInteractorSignalProcessor::SignalEntities(FMassExtendedEntityManager
 URecallInteractorInputProcessor::URecallInteractorInputProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteAfter.Add(Recall::Player::ProcessorGroupNames::Input);
 	ExecutionOrder.ExecuteBefore.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
 }
 
-void URecallInteractorInputProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallInteractorInputProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallInteractorInputProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallInteractorInputProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallInteractorFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallInteractorFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallStateTreeInstanceFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallStateTreeSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.RegisterWithProcessor(*this);	
 }
 
-void URecallInteractorInputProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallInteractorInputProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_InteractorInput_Execute);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		const URecallInputQueueSubsystem& InputQueueSystem = Context.GetSubsystemChecked<URecallInputQueueSubsystem>();
 		
@@ -156,7 +156,7 @@ void URecallInteractorInputProcessor::Execute(FMassExtendedEntityManager& Entity
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 
 			const FRecallInteractorFragment& InteractorFragment = InteractorList[EntityIndex];
 			const FRecallControllerFragment& PlayerControllerFragment = PlayerControllerList[EntityIndex];
@@ -217,8 +217,8 @@ void URecallInteractorInputProcessor::Execute(FMassExtendedEntityManager& Entity
 URecallInteractorRepresentationEventProcessor::URecallInteractorRepresentationEventProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 }
 
 struct FRecallInteractorRepresentationCacheManager
@@ -231,24 +231,24 @@ struct FRecallInteractorRepresentationCacheManager
 	}
 };
 
-void URecallInteractorRepresentationEventProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallInteractorRepresentationEventProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 
 	CacheManager = MakeShared<FRecallInteractorRepresentationCacheManager>();
 }
 
-void URecallInteractorRepresentationEventProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallInteractorRepresentationEventProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallInteractorFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
-	EntityQuery.AddSubsystemRequirement<URecallRepresentationEventSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallInteractorFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
+	EntityQuery.AddSubsystemRequirement<URecallRepresentationEventSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallActorSubsystem>(EMassFragmentAccess::ReadOnly);
 	
-	ProcessorRequirements.AddSubsystemRequirement<URecallRepresentationEventSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallRepresentationEventSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallInteractorRepresentationEventProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallInteractorRepresentationEventProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_InteractorRepresentation_Execute);
 
@@ -257,7 +257,7 @@ void URecallInteractorRepresentationEventProcessor::Execute(FMassExtendedEntityM
 	
 	TArray<FRecallInteractProgress>& Interactions = CacheManager->Interactions;
 	
-	EntityQuery.ForEachEntityChunk(Context, [&Interactions](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [&Interactions](FMassExecutionContext& Context)
 	{
 		URecallRepresentationEventSubsystem& RepresentationEventSystem = Context.GetMutableSubsystemChecked<URecallRepresentationEventSubsystem>();
 		const URecallActorSubsystem& ActorSubsystem = Context.GetSubsystemChecked<URecallActorSubsystem>();
@@ -267,7 +267,7 @@ void URecallInteractorRepresentationEventProcessor::Execute(FMassExtendedEntityM
 
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			const FRecallControllerFragment* PlayerControllerFragmentPtr =
 				PlayerControllerList.IsValidIndex(EntityIndex) ? &PlayerControllerList[EntityIndex] : nullptr;
 			const FRecallInteractorFragment& InteractorFragment = InteractorList[EntityIndex];

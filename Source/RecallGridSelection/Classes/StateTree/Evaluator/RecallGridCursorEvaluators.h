@@ -8,7 +8,7 @@
 
 #include "StateTree/RecallStateTreeEvaluatorBase.h"
 #include "StateTreeExecutionTypes.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallGridCursorEvaluators.generated.h"
 
@@ -27,7 +27,7 @@ struct RECALLGRIDSELECTION_API FRecallGridCursorSelectionEvaluatorInstanceData
 	FVector GridCellPosition = FVector::ZeroVector;
 	
 	UPROPERTY(VisibleAnywhere, Category=Output)
-	FMassExtendedEntityHandle GridCellEntity;
+	FMassEntityHandle GridCellEntity;
 	
 	UPROPERTY(VisibleAnywhere, Category=Output)
 	bool bIsGridCellEmpty = false;

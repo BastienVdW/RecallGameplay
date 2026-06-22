@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 
 #include "RecallDeviceTraits.generated.h"
 
@@ -14,10 +14,10 @@
 * Trait for entities that can place devices.
 */
 UCLASS(meta=(DisplayName="RE Device Placer"))
-class RECALLDEVICEMODULE_API URecallDevicePlacerTrait : public UMassExtendedEntityTraitBase
+class RECALLDEVICEMODULE_API URecallDevicePlacerTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 };

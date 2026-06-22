@@ -11,7 +11,7 @@
 #include "Desync/RecallDesyncLog.h"
 #include "Entity/RecallGameRuleSpawnCommand.h"
 #include "Game/RecallGameRuleReactInterface.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "System/Entity/RecallEntityAsyncSpawnSubsystem.h"
 #include "System/Game/RecallGameRuleSubsystem.h"
 #include "System/Representation/RecallRepresentationEventSubsystem.h"
@@ -23,11 +23,11 @@
 //----------------------------------------------------------------------//
 URecallGameRuleProcessor::URecallGameRuleProcessor()
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 }
 
-void URecallGameRuleProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGameRuleProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
@@ -37,14 +37,14 @@ bool URecallGameRuleProcessor::ShouldAllowQueryBasedPruning(const bool bRuntimeM
 	return false;
 }
 
-void URecallGameRuleProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGameRuleProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	ProcessorRequirements.AddSubsystemRequirement<URecallEntityAsyncSpawnSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	ProcessorRequirements.AddSubsystemRequirement<URecallRepresentationEventSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallGameRuleSubsystem>(EMassFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallEntityAsyncSpawnSubsystem>(EMassFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallRepresentationEventSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallGameRuleProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallGameRuleProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_GameRule_Execute);
 	

@@ -7,15 +7,15 @@
 
 #include "Simulation/Carry/RecallCarryTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Carry/RecallCarryFragments.h"
 #include "Simulation/Interact/RecallInteractFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 #include "Utility/Trait/RecallTraitUtils.h"
 
-void URecallCarryableTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallCarryableTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 	BuildContext.RequireFragment<FRecallInteractableFragment>();

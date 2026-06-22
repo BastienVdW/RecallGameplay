@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityElementTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallGameRuleFragments.generated.h"
 
@@ -14,7 +14,7 @@
  * Tag to identify the game rule entity.
  */
 USTRUCT()
-struct RECALLGAMERULEMODULE_API FRecallGameRuleTag : public FMassExtendedTag
+struct RECALLGAMERULEMODULE_API FRecallGameRuleTag : public FMassTag
 {
 	GENERATED_BODY()
 };

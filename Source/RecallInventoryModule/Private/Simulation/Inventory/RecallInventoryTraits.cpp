@@ -7,16 +7,16 @@
 
 #include "Simulation/Inventory/RecallInventoryTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Inventory/RecallInventoryFragments.h"
 #include "Simulation/Inventory/RecallDropItemFragments.h"
 
 //----------------------------------------------------------------------//
 // URecallEquipmentTrait
 //----------------------------------------------------------------------//
-void URecallEquipmentTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallEquipmentTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 	
 	FRecallEquipmentFragment& EquipmentFragment = BuildContext.AddFragment_GetRef<FRecallEquipmentFragment>();
 	EquipmentFragment.SelectedEquipSlot = DefaultSelectedEquipSlot;
@@ -34,9 +34,9 @@ void URecallEquipmentTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContex
 //----------------------------------------------------------------------//
 // URecallDropItemTrait
 //----------------------------------------------------------------------//
-void URecallDropItemTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallDropItemTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 	
 	BuildContext.AddFragment<FRecallDropItemFragment>();
 

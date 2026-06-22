@@ -17,7 +17,7 @@ namespace UnrealBuildTool.Rules
 				new string[] {
 					"Core",
 					"CoreUObject",
-					"MassExtendedEntity",
+					"MassEntity",
 					"RecallCore",
 					"RecallSimulation",
 					"RecallSnapshot",

@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include "MassExtendedEntityElementTypes.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityElementTypes.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallDeviceFragments.generated.h"
 
 USTRUCT()
-struct RECALLDEVICEMODULE_API FRecallDevicePlacerFragment : public FMassExtendedFragment
+struct RECALLDEVICEMODULE_API FRecallDevicePlacerFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -20,7 +20,7 @@ struct RECALLDEVICEMODULE_API FRecallDevicePlacerFragment : public FMassExtended
 	 * Keep track of the entity handle of the device currently being placed.
 	 */
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle PlaceDeviceEntity;
+	FMassEntityHandle PlaceDeviceEntity;
 
 	/**
 	 * In the process of building a device.
@@ -32,5 +32,5 @@ struct RECALLDEVICEMODULE_API FRecallDevicePlacerFragment : public FMassExtended
 	 * Keep track of the current device slot entity where we can build an entity.
 	 */
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle BuildDeviceSlotEntity;
+	FMassEntityHandle BuildDeviceSlotEntity;
 };

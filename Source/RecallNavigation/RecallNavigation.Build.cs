@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using UnrealBuildTool;
 
 public class RecallNavigation : ModuleRules
@@ -23,8 +24,8 @@ public class RecallNavigation : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core",
 			"CoreUObject",
-			"MassExtendedEntity",
-			"MassExtendedSpawner",
+			"MassEntity",
+			"MassSpawner",
 			"RecallCore",
 			"RecallSimulation",
 			"RecallPhysicsModule",
@@ -32,11 +33,16 @@ public class RecallNavigation : ModuleRules
 			"RecallGameplayCore",
 			"RecallGameplay",
 			"StateTreeModule",
-			"MultiWorld",
 			"NavigationSystem",
 			"AIModule",
 			"PropertyBindingUtils",
 			"Navmesh",
 		});
+		
+		bool bWithMultiWorld = Target.EnablePlugins.Contains("MultiWorld");
+		if (bWithMultiWorld)
+		{
+			PrivateDependencyModuleNames.Add("MultiWorld");
+		}
 	}
 }

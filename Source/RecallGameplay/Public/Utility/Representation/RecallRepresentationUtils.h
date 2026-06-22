@@ -8,7 +8,7 @@
 
 #include "CoreMinimal.h"
 
-struct FMassExtendedEntityHandle;
+struct FMassEntityHandle;
 struct FGameplayTag;
 class URecallRepresentationEventSubsystem;
 
@@ -16,7 +16,7 @@ namespace Recall::Representation::Utils
 {
 
 RECALLGAMEPLAY_API extern void SendUIEvent(
-	const UObject* WorldContextObject, const FMassExtendedEntityHandle& Entity, const FGameplayTag& EventTag);
+	const UObject* WorldContextObject, const FMassEntityHandle& Entity, const FGameplayTag& EventTag);
 
 RECALLGAMEPLAY_API extern void PushUIPopup(URecallRepresentationEventSubsystem& EventSystem,
 	const FText& Text, const FVector& Location, float Duration = 3.0f);

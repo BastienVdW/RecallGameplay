@@ -12,8 +12,8 @@
 
 struct FRecallNavLinkTraversalContext
 {
-	struct FMassExtendedExecutionContext& ExecutionContext;
-	const struct FMassExtendedEntityHandle& Entity;
+	struct FMassExecutionContext& ExecutionContext;
+	const struct FMassEntityHandle& Entity;
 	const struct FRecallTransformFragment& TransformFragment;
 	const struct FRecallNavLinkTraversalFragment& NavLinkTraversalFragment;
 	const TWeakPtr<class FRecallPhysicsBody> PhysicsBody;

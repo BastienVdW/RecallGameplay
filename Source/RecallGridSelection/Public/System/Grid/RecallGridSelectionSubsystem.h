@@ -8,7 +8,7 @@
 
 #include "Subsystems/WorldSubsystem.h"
 #include "System/Interface/RecallSimulationReactSystemInterface.h"
-#include "MassExtendedExternalSubsystemTraits.h"
+#include "Mass/ExternalSubsystemTraits.h"
 #include "RecallGridRegistry.h"
 
 #include "RecallGridSelectionSubsystem.generated.h"
@@ -30,7 +30,7 @@ public:
 	RECALLGRIDSELECTION_API int32 GetGridCellIndex(const FIntVector& Coordinates, const FName& GridName = NAME_None) const;
 	RECALLGRIDSELECTION_API int32 GetGridCellIndexFromPosition(const FVector& WorldPosition, const FName& GridName = NAME_None) const;
 	RECALLGRIDSELECTION_API bool IsEntityRegistered(int32 CellIndex, const FName& GridName = NAME_None) const;
-	RECALLGRIDSELECTION_API FMassExtendedEntityHandle GetGridCellEntity(int32 CellIndex, const FName& GridName = NAME_None) const;
+	RECALLGRIDSELECTION_API FMassEntityHandle GetGridCellEntity(int32 CellIndex, const FName& GridName = NAME_None) const;
 	RECALLGRIDSELECTION_API FVector GetGridCellPosition(int32 CellIndex, const FName& GridName = NAME_None) const;
 	
 	RECALLGRIDSELECTION_API bool IsEmptyCell(int32 CellIndex, const FName& GridName = NAME_None) const;
@@ -49,8 +49,8 @@ public:
 	RECALLGRIDSELECTION_API int32 GetNextCellTowardsTarget(int32 CurrentCellIndex, int32 TargetCellIndex, const FName& GridName = NAME_None) const;
 	
 	int32 ReserveCell(int32 CellIndex, const FName& GridName = NAME_None);
-	void RegisterCell(int32 CellIndex, const FMassExtendedEntityHandle& Entity, const FName& GridName = NAME_None);
-	void RegisterCell(const FVector& Position, const FMassExtendedEntityHandle& Entity, const FName& GridName = NAME_None);
+	void RegisterCell(int32 CellIndex, const FMassEntityHandle& Entity, const FName& GridName = NAME_None);
+	void RegisterCell(const FVector& Position, const FMassEntityHandle& Entity, const FName& GridName = NAME_None);
 	void UnregisterCell(int32 CellIndex, const FName& GridName = NAME_None);
 	
 	int32 GetCellReservationNumber(int32 CellIndex, const FName& GridName = NAME_None) const;
@@ -75,7 +75,7 @@ private:
 };
 
 template<>
-struct TMassExtendedExternalSubsystemTraits<URecallGridSelectionSubsystem> final
+struct TMassExternalSubsystemTraits<URecallGridSelectionSubsystem> final
 {
 	enum
 	{

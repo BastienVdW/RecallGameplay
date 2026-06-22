@@ -21,7 +21,7 @@ public:
 	 * Entity owning the spawned device.
 	 */
 	UPROPERTY(EditAnywhere, Category=Parameter)
-	FMassExtendedEntityHandle OwnerEntity;
+	FMassEntityHandle OwnerEntity;
 
 	/**
 	 * Destroy the spawned entities if the owned is invalid.
@@ -49,6 +49,6 @@ public:
 	
 	// FRecallEntityAsyncSpawnCommand implementation Begin
 public:	
-	virtual void OnSpawn(FMassExtendedEntityManager& System, const TArray<FMassExtendedEntityHandle>& Entities) const override;
+	virtual void OnSpawn(FMassEntityManager& System, const TArray<FMassEntityHandle>& Entities) const override;
 	// FRecallEntityAsyncSpawnCommand implementation End
 };

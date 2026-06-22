@@ -6,9 +6,10 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "System/Actor/RecallActorTypes.h"
 #include "System/Asset/RecallASsetManagerTypes.h"
+#include "UObject/SoftObjectPath.h"
 
 #include "RecallCinematicInternalFragments.generated.h"
 
@@ -28,7 +29,7 @@ struct FRecallCinematicLabelSignal
 * Internal data for our cinematic
 */
 USTRUCT()
-struct FRecallCinematicInternalFragment : public FMassExtendedFragment
+struct FRecallCinematicInternalFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -53,8 +54,12 @@ struct FRecallCinematicInternalFragment : public FMassExtendedFragment
 	TArray<FRecallCinematicLabelSignal> LabelSignals;
 };
 
+template <>
+struct TMassFragmentTraits<FRecallCinematicInternalFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };
+
 USTRUCT()
-struct FRecallCinematicInternalSharedFragment : public FMassExtendedConstSharedFragment
+struct FRecallCinematicInternalSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

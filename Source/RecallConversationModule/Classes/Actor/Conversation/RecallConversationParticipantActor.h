@@ -9,7 +9,7 @@
 #include "ConversationTypes.h"
 #include "Gameframework/Actor.h"
 #include "GameplayTagContainer.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallConversationParticipantActor.generated.h"
 
@@ -25,11 +25,11 @@ class RECALLCONVERSATIONMODULE_API ARecallConversationParticipantActor : public 
 
 public:
 	void SetConversationStatus(bool bStarted);
-	void SetConversationParticipant(const FMassExtendedEntityHandle& InConversationEntity, const FGameplayTag& ParticipantID,
-		const FMassExtendedEntityHandle& ParticipantEntity, const FString& PlayerID);
+	void SetConversationParticipant(const FMassEntityHandle& InConversationEntity, const FGameplayTag& ParticipantID,
+		const FMassEntityHandle& ParticipantEntity, const FString& PlayerID);
 
-	const FMassExtendedEntityHandle& GetConversationEntity() const;
-	const FMassExtendedEntityHandle& GetParticipantEntity() const;
+	const FMassEntityHandle& GetConversationEntity() const;
+	const FMassEntityHandle& GetParticipantEntity() const;
 	const FString& GetParticipantPlayerID() const;
 	bool IsPlayerParticipant() const;
 
@@ -46,11 +46,11 @@ protected:
 	TObjectPtr<UConversationParticipantComponent> ConversationParticipantComponent;
 
 	UPROPERTY(Transient, BlueprintReadOnly, Category=Conversation)
-	FMassExtendedEntityHandle ConversationEntity;
+	FMassEntityHandle ConversationEntity;
 	UPROPERTY(Transient, BlueprintReadOnly, Category=Conversation)
 	FGameplayTag ConversationParticipantID;
 	UPROPERTY(Transient, BlueprintReadOnly, Category=Conversation)
-	FMassExtendedEntityHandle ConversationParticipantEntity;
+	FMassEntityHandle ConversationParticipantEntity;
 	UPROPERTY(Transient, BlueprintReadOnly, Category=Conversation)
 	FString ConversationParticipantPlayerID;
 	UPROPERTY(Transient, BlueprintReadOnly, Category=Conversation)

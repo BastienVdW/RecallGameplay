@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
+#include "MassEntityTypes.h"
 #include "Gameplay/RecallGameplayEffectContainer.h"
 
 #include "RecallGameplayEffectFragments.generated.h"
@@ -15,7 +16,7 @@
  * Allows an entity to hold gameplay effects.
  */
 USTRUCT()
-struct RECALLGAMEPLAYEFFECTMODULE_API FRecallGameplayEffectFragment : public FMassExtendedFragment
+struct RECALLGAMEPLAYEFFECTMODULE_API FRecallGameplayEffectFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -23,6 +24,10 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	FRecallGameplayEffectContainer Container;
 };
+
+template <>
+struct TMassFragmentTraits<FRecallGameplayEffectFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };
 
 USTRUCT()
 struct RECALLGAMEPLAYEFFECTMODULE_API FRecallGameplayEffectAreaInstance
@@ -34,7 +39,7 @@ struct RECALLGAMEPLAYEFFECTMODULE_API FRecallGameplayEffectAreaInstance
 };
 
 USTRUCT()
-struct RECALLGAMEPLAYEFFECTMODULE_API FRecallGameplayEffectAreaFragment : public FMassExtendedFragment
+struct RECALLGAMEPLAYEFFECTMODULE_API FRecallGameplayEffectAreaFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -42,5 +47,9 @@ struct RECALLGAMEPLAYEFFECTMODULE_API FRecallGameplayEffectAreaFragment : public
 	TSubclassOf<URecallGameplayEffect> EffectClass;
 	
 	UPROPERTY(VisibleAnywhere)
-	TMap<FMassExtendedEntityHandle, FRecallGameplayEffectAreaInstance> InstanceMap;
+	TMap<FMassEntityHandle, FRecallGameplayEffectAreaInstance> InstanceMap;
 };
+
+template <>
+struct TMassFragmentTraits<FRecallGameplayEffectAreaFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };

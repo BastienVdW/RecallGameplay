@@ -38,7 +38,7 @@ public:
 	 * Representation will be generated using MeshDesc, and collectable will be set with this item's tag.
 	 */
 	UPROPERTY(EditAnywhere, Category=Item)
-	TSoftObjectPtr<class UMassExtendedEntityConfigAsset> DropBaseEntityConfig;
+	TSoftObjectPtr<class UMassEntityConfigAsset> DropBaseEntityConfig;
 
 	/**
 	 * Ability collection that can be used by this item.

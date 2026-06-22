@@ -7,7 +7,7 @@
 #pragma once
 
 #include "StateTree/RecallStateTreeTaskBase.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "StateTreePropertyRef.h"
 #include "System/AI/RecallStateTreeInstanceTypes.h"
 
@@ -78,7 +78,7 @@ struct RECALLGAMEPLAY_API FRecallSendEventTaskInstanceData
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category=Parameter)
-	TArray<FMassExtendedEntityHandle> TargetEntities;
+	TArray<FMassEntityHandle> TargetEntities;
 	
 	/** Tag describing the event */
 	UPROPERTY(EditAnywhere, Category=Parameter, meta=(Categories="StateTreeEvent"))
@@ -95,7 +95,7 @@ struct RECALLGAMEPLAY_API FRecallSendEventTaskInstanceData
 	FVector VectorPayload = FVector::ZeroVector;
 
 	UPROPERTY(EditAnywhere, Category=Parameter, meta=(EditCondition="PayloadType == ERecallSendEventPayloadType::Entity", EditConditionHides), DisplayName="Payload")
-	FMassExtendedEntityHandle EntityPayload;
+	FMassEntityHandle EntityPayload;
 
 	/** Optional info to describe who sent the event. */
 	UPROPERTY(EditAnywhere, Category=Parameter)
@@ -133,7 +133,7 @@ private:
 	bool SendEvent(FStateTreeExecutionContext& Context) const;
 	FInstancedStruct GetPayload(FStateTreeExecutionContext& Context) const;
 
-	TArray<FRecallStateTreeInstanceHandle> GetStateTreeHandlesFromEntities(FStateTreeExecutionContext& Context, const TArray<FMassExtendedEntityHandle>& Entities) const;
+	TArray<FRecallStateTreeInstanceHandle> GetStateTreeHandlesFromEntities(FStateTreeExecutionContext& Context, const TArray<FMassEntityHandle>& Entities) const;
 };
 
 USTRUCT()
@@ -218,7 +218,7 @@ struct RECALLGAMEPLAY_API FRecallDestroyTaskInstanceData
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category=Parameter)
-	TArray<FMassExtendedEntityHandle> Entities;
+	TArray<FMassEntityHandle> Entities;
 };
 
 USTRUCT(meta=(DisplayName="Destroy Entity"))

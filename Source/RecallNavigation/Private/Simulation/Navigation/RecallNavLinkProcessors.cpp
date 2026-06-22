@@ -7,7 +7,7 @@
 
 #include "RecallNavLinkProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "NavigationSystem.h"
 #include "Navigation/RecallNavLinkProxy.h"
 #include "Navigation/RecallNavLinkTraversal.h"
@@ -42,29 +42,29 @@ static const FRecallNavLinkTraversalBase* GetNavLinkTraversal(const UWorld* Worl
 URecallNavLinkConstructor::URecallNavLinkConstructor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ObservedType = FRecallNavLinkTraversalTag::StaticStruct();
-	Operation = EMassExtendedObservedOperation::Add;
+	Operation = EMassObservedOperation::Add;
 }
 
-void URecallNavLinkConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallNavLinkConstructor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallNavLinkConstructor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) 
+void URecallNavLinkConstructor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) 
 {
-	EntityQuery.AddRequirement<FRecallNavLinkTraversalFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallNavLinkTraversalFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallNavLinkConstructor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallNavLinkConstructor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_NavLink_Constructor);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallPhysicsSubsystem& PhysicsSystem = Context.GetMutableSubsystemChecked<URecallPhysicsSubsystem>();
 		
@@ -83,7 +83,7 @@ void URecallNavLinkConstructor::Execute(FMassExtendedEntityManager& EntityManage
 				continue;
 			}
 			
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			const FRecallTransformFragment& TransformFragment = TransformList[EntityIndex];
 			const FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
 			const TWeakPtr<FRecallPhysicsBody> Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
@@ -102,32 +102,32 @@ void URecallNavLinkConstructor::Execute(FMassExtendedEntityManager& EntityManage
 URecallNavLinkTraversalProcessor::URecallNavLinkTraversalProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::StartPhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::StartPhysics;
 }
 
-void URecallNavLinkTraversalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallNavLinkTraversalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallNavLinkTraversalProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) 
+void URecallNavLinkTraversalProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) 
 {
-	FMassExtendedTagBitSet RequiredTags;
+	FMassTagBitSet RequiredTags;
 	RequiredTags.Add(*FRecallNavLinkTraversalTag::StaticStruct());
 	
-	EntityQuery.AddRequirement<FRecallNavLinkTraversalFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddTagRequirements<EMassExtendedFragmentPresence::All>(RequiredTags);
-	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallNavLinkTraversalFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallPhysicsBodyFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddTagRequirements<EMassFragmentPresence::All>(RequiredTags);
+	EntityQuery.AddSubsystemRequirement<URecallPhysicsSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallNavLinkTraversalProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallNavLinkTraversalProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_NavLinkTraversal_Execute);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallPhysicsSubsystem& PhysicsSystem = Context.GetMutableSubsystemChecked<URecallPhysicsSubsystem>();
 		
@@ -146,7 +146,7 @@ void URecallNavLinkTraversalProcessor::Execute(FMassExtendedEntityManager& Entit
 				continue;
 			}
 			
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			const FRecallTransformFragment& TransformFragment = TransformList[EntityIndex];
 			const FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
 			const TWeakPtr<FRecallPhysicsBody> Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);

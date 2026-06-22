@@ -8,9 +8,9 @@
 #include "Simulation/Interact/RecallInteractTraits.h"
 
 #include "Data/Interact/RecallInteractAsset.h"
-#include "MassExtendedEntityConfigAsset.h"
-#include "MassExtendedEntityTemplateRegistry.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityConfigAsset.h"
+#include "MassEntityTemplateRegistry.h"
+#include "MassEntityView.h"
 #include "Simulation/Interact/RecallInteractFragments.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
 #include "Simulation/Physics/RecallPhysicsSensorFragment.h"
@@ -21,9 +21,9 @@
 //----------------------------------------------------------------------//
 // URecallInteractorTrait
 //----------------------------------------------------------------------//
-void URecallInteractorTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallInteractorTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 	BuildContext.RequireFragment<FRecallPhysicsSensorFragment>();
@@ -42,7 +42,7 @@ TArray<FName> URecallInteractorTrait::GetSensorNames() const
 {
 	TArray<FName> Results;
 
-	if (const FMassExtendedEntityConfig* EntityConfig = Recall::Trait::Utils::GetEntityConfig(GetOuter()))
+	if (const FMassEntityConfig* EntityConfig = Recall::Trait::Utils::GetEntityConfig(GetOuter()))
 	{
 		if (const URecallSensorTrait* SensorTrait = Cast<URecallSensorTrait>(EntityConfig->FindTrait(URecallSensorTrait::StaticClass())))
 		{
@@ -70,9 +70,9 @@ URecallInteractableTrait::URecallInteractableTrait()
 	InteractionPositionTag = TEXT("Interact");
 }
 
-void URecallInteractableTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallInteractableTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 	BuildContext.RequireFragment<FRecallPhysicsBodyFragment>();
@@ -83,8 +83,8 @@ void URecallInteractableTrait::BuildTemplate(FMassExtendedEntityTemplateBuildCon
 	BuildContext.GetMutableObjectFragmentInitializers().Add(
 		[InteractionPositionTag = this->InteractionPositionTag](
 			UObject& Owner,
-			FMassExtendedEntityView& EntityView,
-			const EMassExtendedTranslationDirection CurrentDirection)
+			FMassEntityView& EntityView,
+			const EMassTranslationDirection CurrentDirection)
 		{
 			// Skip if no tag configured (backward compatibility)
 			if (InteractionPositionTag == NAME_None)

@@ -8,36 +8,36 @@
 
 #include "CoreMinimal.h"
 
-struct FMassExtendedEntityHandle;
-struct FMassExtendedEntityManager;
-struct FMassExtendedExecutionContext;
+struct FMassEntityHandle;
+struct FMassEntityManager;
+struct FMassExecutionContext;
 struct FRecallPhysicsBodyFragment;
 struct FRecallTransformFragment;
 class URecallDeviceAsset;
 class URecallEntitySubsystem;
 class URecallPhysicsSubsystem;
 class URecallRepresentationEventSubsystem;
-class UMassExtendedEntityConfigAsset;
+class UMassEntityConfigAsset;
 
 namespace Recall::Device::Utils
 {
 
-RECALLDEVICEMODULE_API FVector GetDevicePosition(const UMassExtendedEntityConfigAsset* EntityConfigAsset,
+RECALLDEVICEMODULE_API FVector GetDevicePosition(const UMassEntityConfigAsset* EntityConfigAsset,
 	const FRecallTransformFragment& TransformFragment, const FRecallPhysicsBodyFragment* BodyFragmentPtr = nullptr,
 	bool bSnapToGrid = true, float GridSize = 100.0f);	
-RECALLDEVICEMODULE_API extern bool CheckDevicePosition(const FMassExtendedEntityManager& EntityManager, const URecallPhysicsSubsystem& PhysicsSystem,
-	const FMassExtendedEntityHandle& DeviceEntity, const FVector& Position);
+RECALLDEVICEMODULE_API extern bool CheckDevicePosition(const FMassEntityManager& EntityManager, const URecallPhysicsSubsystem& PhysicsSystem,
+	const FMassEntityHandle& DeviceEntity, const FVector& Position);
 	
-RECALLDEVICEMODULE_API extern void RequestChangeDeviceColor(const FMassExtendedEntityManager& EntityManager,
-	const FMassExtendedEntityHandle& DeviceEntity, const FName& ParameterName, const FColor& Color,
+RECALLDEVICEMODULE_API extern void RequestChangeDeviceColor(const FMassEntityManager& EntityManager,
+	const FMassEntityHandle& DeviceEntity, const FName& ParameterName, const FColor& Color,
 	URecallRepresentationEventSubsystem& RepresentationEventSystem);
-RECALLDEVICEMODULE_API extern void SpawnDevicePlaceEntity(const FMassExtendedExecutionContext& Context, const FMassExtendedEntityHandle& OwnerEntity,
-	const UMassExtendedEntityConfigAsset* DeviceEntityConfig, const FVector& DevicePosition, const FName& ColorParameterName, const FColor& Color,
+RECALLDEVICEMODULE_API extern void SpawnDevicePlaceEntity(const FMassExecutionContext& Context, const FMassEntityHandle& OwnerEntity,
+	const UMassEntityConfigAsset* DeviceEntityConfig, const FVector& DevicePosition, const FName& ColorParameterName, const FColor& Color,
 	URecallEntitySubsystem& EntitySystem, URecallRepresentationEventSubsystem& RepresentationEventSystem);
 
-RECALLDEVICEMODULE_API bool EvaluateDeviceCost(const UWorld* World, const FMassExtendedEntityHandle& OwnerEntity,
+RECALLDEVICEMODULE_API bool EvaluateDeviceCost(const UWorld* World, const FMassEntityHandle& OwnerEntity,
 	const TObjectPtr<const URecallDeviceAsset>& DeviceAsset);
-RECALLDEVICEMODULE_API void ConsumeDeviceCost(const UWorld* World, const FMassExtendedEntityHandle& OwnerEntity,
+RECALLDEVICEMODULE_API void ConsumeDeviceCost(const UWorld* World, const FMassEntityHandle& OwnerEntity,
 	const TObjectPtr<const URecallDeviceAsset>& DeviceAsset);
 	
 } // namespace Recall::Device::Utils

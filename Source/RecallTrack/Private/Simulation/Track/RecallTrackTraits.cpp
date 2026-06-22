@@ -9,7 +9,7 @@
 
 #include "Actor/RecallTrackEntityActor.h"
 #include "Component/RecallEntityComponent.h"
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Track/RecallTrackFragments.h"
 
 //----------------------------------------------------------------------//
@@ -34,11 +34,11 @@ void URecallTrackTrait::PostLoad()
 #endif // WITH_EDITOR
 }
 
-void URecallTrackTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallTrackTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	Super::BuildTemplate(BuildContext, World);
 	
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 	
 	FRecallTrackFragment& TrackFragment = BuildContext.AddFragment_GetRef<FRecallTrackFragment>();
 

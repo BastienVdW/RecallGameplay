@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "Simulation/Physics/RecallPhysicsColliderTraits.h"
 
 #include "RecallVoxelTraits.generated.h"
@@ -20,7 +20,7 @@ class RECALLVOXEL_API URecallFlatVoxelShapeTrait : public URecallPhysicsBodyTrai
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere, meta=(RowType="/Script/RecallVoxel.RecallFlatVoxelShapeTableRow"))

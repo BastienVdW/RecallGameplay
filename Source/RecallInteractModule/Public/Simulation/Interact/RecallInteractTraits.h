@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "Data/Interact/RecallInteractTypes.h"
 
 #include "RecallInteractTraits.generated.h"
@@ -15,12 +15,12 @@
 * Trait for entities that can interact with other entities
 */
 UCLASS(meta=(DisplayName="RE Interactor"))
-class RECALLINTERACTMODULE_API URecallInteractorTrait : public UMassExtendedEntityTraitBase
+class RECALLINTERACTMODULE_API URecallInteractorTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere, meta=(GetOptions="GetSensorNames"))
@@ -35,7 +35,7 @@ private:
 * Trait for entities that can be interacted with
 */
 UCLASS(meta=(DisplayName="RE Interactable"))
-class RECALLINTERACTMODULE_API URecallInteractableTrait : public UMassExtendedEntityTraitBase
+class RECALLINTERACTMODULE_API URecallInteractableTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
@@ -43,7 +43,7 @@ public:
 	URecallInteractableTrait();
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere)

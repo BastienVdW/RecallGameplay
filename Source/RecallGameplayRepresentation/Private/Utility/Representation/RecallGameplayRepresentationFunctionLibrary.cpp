@@ -8,9 +8,9 @@
 #include "Utility/Representation/RecallGameplayRepresentationFunctionLibrary.h"
 
 #include "Attribute/RecallAttributeDefinitionTypes.h"
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityUtils.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityUtils.h"
+#include "MassEntityView.h"
 #include "Representation/Attribute/RecallAttributeRepresentationTypes.h"
 #include "Representation/Carry/RecallCarryRepresentationTypes.h"
 #include "Simulation/Attribute/RecallAttributeFragments.h"
@@ -22,31 +22,31 @@
 #include "Utility/Simulation/RecallSimulationUtils.h"
 #include "Utility/GameplayTag/RecallGameplayTagUtils.h"
 
-static FMassExtendedEntityView GetEntityView(
-	const UObject* WorldContextObject, const FMassExtendedEntityHandle& Entity)
+static FMassEntityView GetEntityView(
+	const UObject* WorldContextObject, const FMassEntityHandle& Entity)
 {
 	const UWorld* World = IsValid(WorldContextObject) ? WorldContextObject->GetWorld() : nullptr;
 	if (!IsValid(World))
 	{
-		return FMassExtendedEntityView();
+		return FMassEntityView();
 	}
 
 	checkf(Recall::Simulation::Utils::IsSimulationRenderPhase(WorldContextObject),
 		TEXT("%hs Entities should only be accessed during render phase"), __FUNCTION__);
 	
-	const FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(*World);
+	const FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(*World);
 	if (!EntityManager.IsEntityValid(Entity))
 	{
-		return FMassExtendedEntityView();
+		return FMassEntityView();
 	}
 	
-	return FMassExtendedEntityView(EntityManager, Entity);
+	return FMassEntityView(EntityManager, Entity);
 }
 
 static const FRecallGameplayTagFragment* GetEntityGameplayTagFragment(
-	const UObject* WorldContextObject, const FMassExtendedEntityHandle& Entity)
+	const UObject* WorldContextObject, const FMassEntityHandle& Entity)
 {
-	const FMassExtendedEntityView EntityView = GetEntityView(WorldContextObject, Entity);
+	const FMassEntityView EntityView = GetEntityView(WorldContextObject, Entity);
 	if (!EntityView.IsValid())
 	{
 		return nullptr;
@@ -70,11 +70,11 @@ FString URecallGameplayRepresentationFunctionLibrary::GetControllerIdByControlle
 int32 URecallGameplayRepresentationFunctionLibrary::GetControllerGameplayTagCount(
 	const UObject* WorldContextObject, const FGameplayTag& Tag, const FString& ControllerId)
 {
-	const FMassExtendedEntityHandle PlayerEntity = GetPlayerEntity(WorldContextObject, ControllerId);
+	const FMassEntityHandle PlayerEntity = GetPlayerEntity(WorldContextObject, ControllerId);
 	return GetGameplayTagCount(WorldContextObject, Tag, PlayerEntity);
 }
 
-FMassExtendedEntityHandle URecallGameplayRepresentationFunctionLibrary::GetPlayerEntity(
+FMassEntityHandle URecallGameplayRepresentationFunctionLibrary::GetPlayerEntity(
 	const UObject* WorldContextObject, const FString& PlayerID)
 {
 	const UWorld* World = IsValid(WorldContextObject) ? WorldContextObject->GetWorld() : nullptr;
@@ -82,13 +82,13 @@ FMassExtendedEntityHandle URecallGameplayRepresentationFunctionLibrary::GetPlaye
 	checkf(Recall::Simulation::Utils::IsSimulationRenderPhase(WorldContextObject),
 		TEXT("%hs Entities should only be accessed during render phase"), __FUNCTION__);
 	
-	FMassExtendedEntityHandle PlayerEntity;
+	FMassEntityHandle PlayerEntity;
 	Recall::Player::Utils::FindPlayerEntityInWorld(World, PlayerID, PlayerEntity);
 	return PlayerEntity;
 }
 
 int32 URecallGameplayRepresentationFunctionLibrary::GetGameplayTagCount(const UObject* WorldContextObject,
-                                                                          const FGameplayTag& Tag, const FMassExtendedEntityHandle& Entity)
+                                                                          const FGameplayTag& Tag, const FMassEntityHandle& Entity)
 {
 	const FRecallGameplayTagFragment* GameplayTagFragment = GetEntityGameplayTagFragment(WorldContextObject, Entity);
 	if (GameplayTagFragment == nullptr)
@@ -125,7 +125,7 @@ int32 URecallGameplayRepresentationFunctionLibrary::GetFactionGameplayTagCount(c
 }
 
 FGameplayTagContainer URecallGameplayRepresentationFunctionLibrary::GetGameplayTagsByEntity(
-	const UObject* WorldContextObject, const FMassExtendedEntityHandle& Entity)
+	const UObject* WorldContextObject, const FMassEntityHandle& Entity)
 {	
 	const FRecallGameplayTagFragment* GameplayTagFragment = GetEntityGameplayTagFragment(WorldContextObject, Entity);
 	if (GameplayTagFragment == nullptr)
@@ -139,19 +139,19 @@ FGameplayTagContainer URecallGameplayRepresentationFunctionLibrary::GetGameplayT
 FGameplayTagContainer URecallGameplayRepresentationFunctionLibrary::GetGameplayTagsByControllerID(
 	const UObject* WorldContextObject, const FString& ControllerId)
 {
-	const FMassExtendedEntityHandle PlayerEntity = GetPlayerEntity(WorldContextObject, ControllerId);
+	const FMassEntityHandle PlayerEntity = GetPlayerEntity(WorldContextObject, ControllerId);
 	return GetGameplayTagsByEntity(WorldContextObject, PlayerEntity);
 }
 
 FGameplayTagContainer URecallGameplayRepresentationFunctionLibrary::GetSubGameplayTagsByControllerID(
 	const UObject* WorldContextObject, const FGameplayTag& Tag, const FString& ControllerId)
 {
-	const FMassExtendedEntityHandle Entity = GetPlayerEntity(WorldContextObject, ControllerId);
+	const FMassEntityHandle Entity = GetPlayerEntity(WorldContextObject, ControllerId);
 	return GetSubGameplayTagsByEntity(WorldContextObject, Tag, Entity);
 }
 
 FGameplayTagContainer URecallGameplayRepresentationFunctionLibrary::GetSubGameplayTagsByEntity(
-	const UObject* WorldContextObject, const FGameplayTag& Tag, const FMassExtendedEntityHandle& Entity)
+	const UObject* WorldContextObject, const FGameplayTag& Tag, const FMassEntityHandle& Entity)
 {
 	const FGameplayTagContainer Tags = GetGameplayTagsByEntity(WorldContextObject, Entity);
 	return Tags.Filter(Tag.GetSingleTagContainer());
@@ -164,29 +164,29 @@ FGameplayTagContainer URecallGameplayRepresentationFunctionLibrary::GetFactionGa
 	return Recall::GameplayTag::Utils::GetFactionTags(GetGameplayTagsByControllerID(WorldContextObject, PlayerID));
 }
 
-FMassExtendedEntityHandle URecallGameplayRepresentationFunctionLibrary::GetEntityByTags(
+FMassEntityHandle URecallGameplayRepresentationFunctionLibrary::GetEntityByTags(
 	const UObject* WorldContextObject, const FGameplayTagContainer& Tags, TArray<FName> NameTags)
 {
 	checkf(Recall::Simulation::Utils::IsSimulationRenderPhase(WorldContextObject),
 		TEXT("%hs Entities should only be accessed during render phase"), __FUNCTION__);
 	
 	const UWorld* World = IsValid(WorldContextObject) ? WorldContextObject->GetWorld() : nullptr;	
-	const TArray<FMassExtendedEntityHandle> Entities = Recall::Entity::Utils::GetAllEntitiesByTag(
+	const TArray<FMassEntityHandle> Entities = Recall::Entity::Utils::GetAllEntitiesByTag(
 		World, Tags, NameTags, 1);
 	if (Entities.Num())
 	{
 		return Entities[0];
 	}
 
-	return FMassExtendedEntityHandle();
+	return FMassEntityHandle();
 }
 
 FRecallAttributeTrackerRepresentation URecallGameplayRepresentationFunctionLibrary::GetAttributeTrackerRepresentation(
-	const UObject* WorldContextObject, const FMassExtendedEntityHandle& Entity)
+	const UObject* WorldContextObject, const FMassEntityHandle& Entity)
 {
 	FRecallAttributeTrackerRepresentation Tracker;
 	
-	const FMassExtendedEntityView EntityView = GetEntityView(WorldContextObject, Entity);
+	const FMassEntityView EntityView = GetEntityView(WorldContextObject, Entity);
 	if (!EntityView.IsValid())
 	{
 		return Tracker;
@@ -216,11 +216,11 @@ FRecallAttributeTrackerRepresentation URecallGameplayRepresentationFunctionLibra
 }
 
 FRecallCarryableRepresentation URecallGameplayRepresentationFunctionLibrary::GetCarryableRepresentation(
-	const UObject* WorldContextObject, const FMassExtendedEntityHandle& Entity)
+	const UObject* WorldContextObject, const FMassEntityHandle& Entity)
 {
 	FRecallCarryableRepresentation Representation;
 	
-	const FMassExtendedEntityView EntityView = GetEntityView(WorldContextObject, Entity);
+	const FMassEntityView EntityView = GetEntityView(WorldContextObject, Entity);
 	if (!EntityView.IsSet())
 	{
 		return Representation;

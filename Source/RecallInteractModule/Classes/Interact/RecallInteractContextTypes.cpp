@@ -7,7 +7,7 @@
 
 #include "RecallInteractContextTypes.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 
 //----------------------------------------------------------------------//
 // FRecallInteractCommandContext
@@ -26,12 +26,12 @@ UGameInstance* FRecallInteractContext::GetGameInstance() const
 	return nullptr;
 }
 
-FMassExtendedEntityManager& FRecallInteractContext::GetEntityManagerChecked() const
+FMassEntityManager& FRecallInteractContext::GetEntityManagerChecked() const
 {
 	return ExecutionContext.GetEntityManagerChecked();
 }
 
-const FMassExtendedEntityHandle& FRecallInteractContext::GetTargetEntity(ERecallInteractTarget Target) const
+const FMassEntityHandle& FRecallInteractContext::GetTargetEntity(ERecallInteractTarget Target) const
 {
 	switch (Target)
 	{

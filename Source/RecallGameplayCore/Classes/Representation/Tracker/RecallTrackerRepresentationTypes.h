@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallTrackerRepresentationTypes.generated.h"
 
@@ -20,7 +20,7 @@ struct RECALLGAMEPLAYCORE_API FRecallTrackedEntityRepresentation
 	 * Entity being tracked.
 	 */
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 
 	/**
 	 * Entity location.

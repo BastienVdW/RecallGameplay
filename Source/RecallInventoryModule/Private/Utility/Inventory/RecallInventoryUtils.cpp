@@ -9,7 +9,7 @@
 
 #include "Data/Inventory/RecallInventoryItemAsset.h"
 #include "GameplayTagContainer.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "Interact/RecallInteractCollectCommandTypes.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
@@ -169,7 +169,7 @@ void UpdateEquipmentEffects(const FRecallEquipmentContext& Context)
 	Context.EquipmentFragment.EquippedItems = EquippedItems;
 }
 
-void CreateDropItem(FMassExtendedEntityManager& System,
+void CreateDropItem(FMassEntityManager& System,
 	const FRecallDropItemDefinition& Definition, const FVector& Position)
 {
 	if (Definition.Items.Num() == 0)
@@ -202,7 +202,7 @@ void CreateDropItem(FMassExtendedEntityManager& System,
 	}
 }
 
-void CreateDropItem(FMassExtendedEntityManager& System, const FGameplayTag& ItemTag, int32 ItemCount,
+void CreateDropItem(FMassEntityManager& System, const FGameplayTag& ItemTag, int32 ItemCount,
 	const FVector& Location, float Force /*= 0.0f*/)
 {
 	const URecallItemSubsystem& ItemSystem = URecallItemSubsystem::GetRef(System.GetWorld());	

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 
 #include "RecallTrackerRepresentationTraits.generated.h"
 
@@ -14,12 +14,12 @@
  * Trait for an entity that can be tracked by the UI.
  */
 UCLASS(meta=(DisplayName="RE Tracker UI"))
-class URecallTrackerRepresentationTrait : public UMassExtendedEntityTraitBase
+class URecallTrackerRepresentationTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere, meta=(MustImplement="/Script/RecallGameplayCore.RecallTrackerEntityInterface"))

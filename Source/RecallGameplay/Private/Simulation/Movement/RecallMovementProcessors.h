@@ -6,25 +6,25 @@
 
 #pragma once
 
-#include "MassExtendedProcessor.h"
+#include "MassProcessor.h"
 
 #include "RecallMovementProcessors.generated.h"
 
 UCLASS()
-class URecallMovementProcessor : public UMassExtendedProcessor
+class URecallMovementProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 
 	URecallMovementProcessor();
 
 public:
-	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager) override final;
+	virtual void InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager) override final;
 
 protected:
-	virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override final;
-	virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override final;
+	virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override final;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override final;
 
 private:
-	FMassExtendedEntityQuery EntityQuery;
+	FMassEntityQuery EntityQuery;
 
 };

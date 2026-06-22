@@ -112,7 +112,7 @@ protected:
 	FFloatRange Speed{ 5.0f, 10.0f };
 	
 	UPROPERTY(EditAnywhere, Category=Parameter)
-	TObjectPtr<class UMassExtendedEntityConfigAsset> DropItemEntity;
+	TObjectPtr<class UMassEntityConfigAsset> DropItemEntity;
 	
 protected:
 	TStateTreeExternalDataHandle<class URecallEntitySubsystem> EntitySystemHandle;

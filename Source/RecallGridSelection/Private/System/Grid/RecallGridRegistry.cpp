@@ -19,7 +19,7 @@ int32 FRecallGridRegistry::ReserveCell(int32 CellIndex)
 	return CellEntry.CellSerialNumber;
 }
 
-void FRecallGridRegistry::RegisterCell(int32 CellIndex, const FMassExtendedEntityHandle& Entity)
+void FRecallGridRegistry::RegisterCell(int32 CellIndex, const FMassEntityHandle& Entity)
 {
 	if (!ensure(CellIndex >= 0 && Entity.IsValid()))
 	{
@@ -46,13 +46,13 @@ bool FRecallGridRegistry::IsEmptyCell(int32 CellIndex) const
 	return !Cells.Contains(CellIndex);
 }
 
-FMassExtendedEntityHandle FRecallGridRegistry::GetCellEntity(int32 CellIndex) const
+FMassEntityHandle FRecallGridRegistry::GetCellEntity(int32 CellIndex) const
 {
 	if (const FRecallGridCellEntry* CellPtr = Cells.Find(CellIndex))
 	{
 		return CellPtr->Entity;
 	}
-	return FMassExtendedEntityHandle();
+	return FMassEntityHandle();
 }
 
 int32 FRecallGridRegistry::GetCellReservationNumber(int32 CellIndex) const

@@ -7,7 +7,7 @@
 
 #include "RecallNavigationObstacleProcessors.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Navigation/RecallNavigationObstacleFragments.h"
 #include "Simulation/Navigation/RecallPathFollowingFragments.h"
 #include "Simulation/StateTree/RecallStateTreeProcessorGroupTypes.h"
@@ -20,29 +20,29 @@
 URecallNavigationObstacleInitializeProcessor::URecallNavigationObstacleInitializeProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteBefore.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
 }
 
-void URecallNavigationObstacleInitializeProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallNavigationObstacleInitializeProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallNavigationObstacleInitializeProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallNavigationObstacleInitializeProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallPathFollowerFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
-	EntityQuery.AddRequirement<FRecallNavigationObstacleFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddSubsystemRequirement<URecallNavigationObstacleSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallTransformFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallPathFollowerFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
+	EntityQuery.AddRequirement<FRecallNavigationObstacleFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddSubsystemRequirement<URecallNavigationObstacleSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallNavigationObstacleInitializeProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallNavigationObstacleInitializeProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_NavigationObstacleInitialize_Execute);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{
 		URecallNavigationObstacleSubsystem& NavigationObstacleSystem = Context.GetMutableSubsystemChecked<URecallNavigationObstacleSubsystem>();
 
@@ -82,11 +82,11 @@ void URecallNavigationObstacleInitializeProcessor::Execute(FMassExtendedEntityMa
 //----------------------------------------------------------------------//
 URecallNavigationObstacleResetProcessor::URecallNavigationObstacleResetProcessor()
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::FrameEnd;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::FrameEnd;
 }
 
-void URecallNavigationObstacleResetProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallNavigationObstacleResetProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
@@ -96,12 +96,12 @@ bool URecallNavigationObstacleResetProcessor::ShouldAllowQueryBasedPruning(const
 	return false;
 }
 
-void URecallNavigationObstacleResetProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallNavigationObstacleResetProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	ProcessorRequirements.AddSubsystemRequirement<URecallNavigationObstacleSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	ProcessorRequirements.AddSubsystemRequirement<URecallNavigationObstacleSubsystem>(EMassFragmentAccess::ReadWrite);
 }
 
-void URecallNavigationObstacleResetProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallNavigationObstacleResetProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_NavigationObstacleReset_Execute);
 

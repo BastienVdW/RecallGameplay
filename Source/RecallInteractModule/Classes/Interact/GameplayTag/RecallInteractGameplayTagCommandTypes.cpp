@@ -7,14 +7,14 @@
 
 #include "RecallInteractGameplayTagCommandTypes.h"
 
-#include "MassExtendedEntityTypes.h"
-#include "MassExtendedEntityView.h"
+#include "Mass/EntityElementTypes.h"
+#include "MassEntityView.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 
 void FRecallInteractGameplayTagCommand::OnExecute(const FRecallInteractContext& Context) const
 {
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(Target);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(Target);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 
 	FRecallGameplayTagFragment* InstigatorGameplayTagFragmentPtr = TargetView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 	if (InstigatorGameplayTagFragmentPtr == nullptr)

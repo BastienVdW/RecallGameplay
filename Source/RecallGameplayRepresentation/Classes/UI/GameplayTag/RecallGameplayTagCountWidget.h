@@ -9,7 +9,7 @@
 #include "ExtendedCommonUserWidget.h"
 #include "Observer/Representation/RecallRepresentationReactInterface.h"
 #include "GameplayTagContainer.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 #include "RecallGameplayTagCountWidget.generated.h"
 
@@ -31,7 +31,7 @@ class RECALLGAMEPLAYREPRESENTATION_API URecallGameplayTagCountWidget :
 	GENERATED_BODY()
 
 public:
-	void SetEntity(const FMassExtendedEntityHandle& InEntity);
+	void SetEntity(const FMassEntityHandle& InEntity);
 	void SetGameplayTag(const FGameplayTag& Tag);
 
 	// IRecallRepresentationReactInterface implementation Begin
@@ -93,7 +93,7 @@ protected:
 	 * Entity which own the gameplay tag.
 	 */
 	UPROPERTY(Transient, BlueprintReadOnly, meta=(ExposeOnSpawn))
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 
 private:
 	void SetGameplayTagCountFromController();

@@ -7,8 +7,8 @@
 
 #include "Utility/Interact/RecallInteractSearchUtils.h"
 
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Simulation/Interact/RecallInteractFragments.h"
 #include "Simulation/Physics/RecallPhysicsSensorFragment.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
@@ -32,12 +32,12 @@ namespace Recall::Interact::Search::Utils
 static bool CalculateDistanceAndValidateRange(
 	const FRecallUpdateClosestInteractableEntityContext& Context,
 	const FRecallInteractableFragment& InteractableFragment,
-	const FMassExtendedEntityView& OverlappingView,
-	const FMassExtendedEntityHandle& InteractableEntity,
+	const FMassEntityView& OverlappingView,
+	const FMassEntityHandle& InteractableEntity,
 	int32 InteractEventIndex,
 	float& OutSqrDistance)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
 
 	if (InteractEventIndex != INDEX_NONE)
 	{
@@ -78,8 +78,8 @@ static bool CalculateDistanceAndValidateRange(
 
 void UpdateClosestInteractableEntity(const FRecallUpdateClosestInteractableEntityContext& Context)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
-	const TArray<FMassExtendedEntityHandle> OverlappingEntities = Context.SensorFragment.GetOverlappingEntities(
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const TArray<FMassEntityHandle> OverlappingEntities = Context.SensorFragment.GetOverlappingEntities(
 		Context.InteractorSharedFragment.SensorName);
 
 	struct FRecallInteractableEntityCache
@@ -95,13 +95,13 @@ void UpdateClosestInteractableEntity(const FRecallUpdateClosestInteractableEntit
 
 	for (int32 OverlappingEntityIndex = 0; OverlappingEntityIndex < OverlappingEntities.Num(); OverlappingEntityIndex++)
 	{
-		const FMassExtendedEntityHandle& OverlappingEntity = OverlappingEntities[OverlappingEntityIndex];
+		const FMassEntityHandle& OverlappingEntity = OverlappingEntities[OverlappingEntityIndex];
 		if (!EntityManager.IsEntityValid(OverlappingEntity))
 		{
 			continue;
 		}
 
-		const FMassExtendedEntityView OverlappingView(EntityManager, OverlappingEntity);
+		const FMassEntityView OverlappingView(EntityManager, OverlappingEntity);
 		const FRecallInteractableFragment* InteractableFragmentPtr = OverlappingView.GetFragmentDataPtr<FRecallInteractableFragment>();
 		if (InteractableFragmentPtr == nullptr || !InteractableFragmentPtr->bAllowInteraction)
 		{
@@ -158,7 +158,7 @@ void UpdateClosestInteractableEntity(const FRecallUpdateClosestInteractableEntit
 	if (InteractableEntities.Num())
 	{
 		const int32 ClosestEntityIndex = InteractableEntities[0].EntityIndex;
-		const FMassExtendedEntityHandle& ClosestEntity = OverlappingEntities[ClosestEntityIndex];
+		const FMassEntityHandle& ClosestEntity = OverlappingEntities[ClosestEntityIndex];
 
 		Context.InteractorFragment.ClosestInteractableEntity = ClosestEntity;
 
@@ -166,11 +166,11 @@ void UpdateClosestInteractableEntity(const FRecallUpdateClosestInteractableEntit
 		if (!Context.InteractorFragment.CurrentInteractEntity.IsValid())
 		{
 			// Find closest available interaction position (multi-position support)
-			const FMassExtendedEntityView ClosestView(EntityManager, ClosestEntity);
+			const FMassEntityView ClosestView(EntityManager, ClosestEntity);
 			Context.InteractorFragment.ClosestPositionIndex = Recall::Interact::Position::Utils::FindClosestAvailablePosition(
 				Context.TransformFragment.Position,
 				ClosestView,
-				const_cast<FMassExtendedEntityManager&>(EntityManager)
+				const_cast<FMassEntityManager&>(EntityManager)
 			);
 		}
 		// else: Keep position index locked during active interaction

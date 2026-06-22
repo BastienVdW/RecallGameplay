@@ -6,14 +6,15 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
+#include "MassEntityTypes.h"
 #include "Physics/RecallPhysicsTypes.h"
 #include "RecallVoxelTypes.h"
 
 #include "RecallVoxelFragments.generated.h"
 
 USTRUCT()
-struct RECALLVOXEL_API FRecallVoxelShapeFragment : public FMassExtendedFragment
+struct RECALLVOXEL_API FRecallVoxelShapeFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -26,8 +27,12 @@ struct RECALLVOXEL_API FRecallVoxelShapeFragment : public FMassExtendedFragment
 	FRecallVoxelGrid VoxelGrid;
 };
 
+template <>
+struct TMassFragmentTraits<FRecallVoxelShapeFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };
+
 USTRUCT()
-struct RECALLVOXEL_API FRecallVoxelShapeConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLVOXEL_API FRecallVoxelShapeConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

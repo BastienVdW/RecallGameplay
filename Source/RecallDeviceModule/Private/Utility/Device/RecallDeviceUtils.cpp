@@ -8,9 +8,9 @@
 #include "Utility/Device/RecallDeviceUtils.h"
 
 #include "Components/DecalComponent.h"
-#include "MassExtendedEntityConfigAsset.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityConfigAsset.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Data/Device/RecallDeviceAsset.h"
 #include "Device/RecallDeviceCostTypes.h"
 #include "Device/RecallDeviceCostContextTypes.h"
@@ -30,7 +30,7 @@
 namespace Recall::Device::Utils
 {
 	
-FVector GetDevicePosition(const UMassExtendedEntityConfigAsset* EntityConfigAsset,
+FVector GetDevicePosition(const UMassEntityConfigAsset* EntityConfigAsset,
 	const FRecallTransformFragment& TransformFragment, const FRecallPhysicsBodyFragment* BodyFragmentPtr,
 	bool bSnapToGrid, float GridSize)
 {
@@ -63,7 +63,7 @@ FVector GetDevicePosition(const UMassExtendedEntityConfigAsset* EntityConfigAsse
 	return PlacementPosition;
 }
 
-void RequestChangeDeviceColor(const FMassExtendedEntityManager& EntityManager, const FMassExtendedEntityHandle& DeviceEntity,
+void RequestChangeDeviceColor(const FMassEntityManager& EntityManager, const FMassEntityHandle& DeviceEntity,
 	const FName& ParameterName, const FColor& Color, URecallRepresentationEventSubsystem& RepresentationEventSystem)
 {
 	RepresentationEventSystem.PushEvent([&EntityManager, DeviceEntity, ParameterName, Color]()
@@ -74,7 +74,7 @@ void RequestChangeDeviceColor(const FMassExtendedEntityManager& EntityManager, c
 			return;
 		}
 
-		const FMassExtendedEntityView DeviceView(EntityManager, DeviceEntity);
+		const FMassEntityView DeviceView(EntityManager, DeviceEntity);
 		const auto* DeviceActorFragmentPtr = DeviceView.GetFragmentDataPtr<FRecallActorRepresentationFragment>();
 		const TWeakObjectPtr<AActor> DeviceActor = DeviceActorFragmentPtr != nullptr ?
 			ActorSystem->GetActor(DeviceActorFragmentPtr->ActorHandle) : nullptr;
@@ -110,15 +110,15 @@ void RequestChangeDeviceColor(const FMassExtendedEntityManager& EntityManager, c
 	});
 }
 
-bool CheckDevicePosition(const FMassExtendedEntityManager& EntityManager, const URecallPhysicsSubsystem& PhysicsSystem,
-	const FMassExtendedEntityHandle& DeviceEntity, const FVector& Position)
+bool CheckDevicePosition(const FMassEntityManager& EntityManager, const URecallPhysicsSubsystem& PhysicsSystem,
+	const FMassEntityHandle& DeviceEntity, const FVector& Position)
 {
 	if (!EntityManager.IsEntityValid(DeviceEntity))
 	{
 		return false;
 	}
 	
-	const FMassExtendedEntityView DeviceView(EntityManager, DeviceEntity);
+	const FMassEntityView DeviceView(EntityManager, DeviceEntity);
 	const FRecallPhysicsBodyFragment* DeviceBodyFragmentPtr = DeviceView.GetFragmentDataPtr<FRecallPhysicsBodyFragment>();
 	const TWeakPtr<const FRecallPhysicsBody> Body = DeviceBodyFragmentPtr != nullptr ?
 		PhysicsSystem.GetBody(DeviceBodyFragmentPtr->BodyHandle) : nullptr;
@@ -133,14 +133,14 @@ bool CheckDevicePosition(const FMassExtendedEntityManager& EntityManager, const 
 	return !Body.Pin()->CollideShape(Position, ContactBodyID, ContactPosition, ContactNormal);
 }
 
-void SpawnDevicePlaceEntity(const FMassExtendedExecutionContext& Context, const FMassExtendedEntityHandle& OwnerEntity,
-	const UMassExtendedEntityConfigAsset* DeviceEntityConfig, const FVector& DevicePosition, const FName& ColorParameterName, const FColor& Color,
+void SpawnDevicePlaceEntity(const FMassExecutionContext& Context, const FMassEntityHandle& OwnerEntity,
+	const UMassEntityConfigAsset* DeviceEntityConfig, const FVector& DevicePosition, const FName& ColorParameterName, const FColor& Color,
 	URecallEntitySubsystem& EntitySystem, URecallRepresentationEventSubsystem& RepresentationEventSystem)
 {
-	Context.Defer().PushCommand<FMassExtendedDeferredCreateCommand>(
+	Context.Defer().PushCommand<FMassDeferredCreateCommand>(
 		[&EntitySystem, &RepresentationEventSystem, OwnerEntity, ColorParameterName, Color,
 			DeviceEntityConfig, DevicePosition]
-				(FMassExtendedEntityManager& System)
+				(FMassEntityManager& System)
 	{
 		if (!IsValid(DeviceEntityConfig) || !System.IsEntityValid(OwnerEntity))
 		{
@@ -148,18 +148,18 @@ void SpawnDevicePlaceEntity(const FMassExtendedExecutionContext& Context, const 
 		}
 
 		// Make sure that the owner is still placing the device when it spawns.
-		const FMassExtendedEntityView OwnerView(System, OwnerEntity);
+		const FMassEntityView OwnerView(System, OwnerEntity);
 		const FRecallGameplayTagFragment& OwnerGameplayTagFragment = OwnerView.GetFragmentData<FRecallGameplayTagFragment>();
 		if (!OwnerGameplayTagFragment.GameplayTagCountMap.HasTag(State_DevicePlace))
 		{
 			return;
 		}
 			
-		TArray<FMassExtendedEntityHandle> Entities;
+		TArray<FMassEntityHandle> Entities;
 		EntitySystem.CreateEntities(DeviceEntityConfig, 1, Entities);
 
-		const FMassExtendedEntityHandle& DeviceEntity = Entities[0];
-		const FMassExtendedEntityView DeviceView(System, DeviceEntity);
+		const FMassEntityHandle& DeviceEntity = Entities[0];
+		const FMassEntityView DeviceView(System, DeviceEntity);
 		FRecallTransformFragment& DeviceTransformFragment = DeviceView.GetFragmentData<FRecallTransformFragment>();
 		DeviceTransformFragment.Position = DevicePosition;
 
@@ -176,7 +176,7 @@ void SpawnDevicePlaceEntity(const FMassExtendedExecutionContext& Context, const 
 	});
 }
 
-bool EvaluateDeviceCost(const UWorld* World, const FMassExtendedEntityHandle& OwnerEntity,
+bool EvaluateDeviceCost(const UWorld* World, const FMassEntityHandle& OwnerEntity,
 	const TObjectPtr<const URecallDeviceAsset>& DeviceAsset)
 {
 	if (!ensure(IsValid(World) && DeviceAsset))
@@ -184,7 +184,7 @@ bool EvaluateDeviceCost(const UWorld* World, const FMassExtendedEntityHandle& Ow
 		return false;
 	}
 	
-	const FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(*World);
+	const FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(*World);
 	
 	const FRecallDeviceCostContext DeviceCostContext(EntityManager, OwnerEntity);
 
@@ -199,7 +199,7 @@ bool EvaluateDeviceCost(const UWorld* World, const FMassExtendedEntityHandle& Ow
 	return true;
 }
 
-void ConsumeDeviceCost(const UWorld* World, const FMassExtendedEntityHandle& OwnerEntity,
+void ConsumeDeviceCost(const UWorld* World, const FMassEntityHandle& OwnerEntity,
 	const TObjectPtr<const URecallDeviceAsset>& DeviceAsset)
 {
 	if (!ensure(IsValid(World) && DeviceAsset))
@@ -207,7 +207,7 @@ void ConsumeDeviceCost(const UWorld* World, const FMassExtendedEntityHandle& Own
 		return;
 	}
 	
-	const FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(*World);
+	const FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(*World);
 	
 	const FRecallDeviceCostContext DeviceCostContext(EntityManager, OwnerEntity);
 

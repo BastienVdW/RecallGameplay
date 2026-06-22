@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "RecallCarryTypes.h"
 
 #include "RecallCarryTraits.generated.h"
@@ -15,12 +15,12 @@
 * Trait for entities that can be carried
 */
 UCLASS(meta=(DisplayName="RE Carryable"))
-class RECALLINTERACTMODULE_API URecallCarryableTrait : public UMassExtendedEntityTraitBase
+class RECALLINTERACTMODULE_API URecallCarryableTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere)

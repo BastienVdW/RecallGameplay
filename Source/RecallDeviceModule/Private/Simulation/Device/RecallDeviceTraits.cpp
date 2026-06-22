@@ -7,7 +7,7 @@
 
 #include "Simulation/Device/RecallDeviceTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Device/RecallDeviceFragments.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------//
 // URecallDevicePlacerTrait
 //----------------------------------------------------------------------//
-void URecallDevicePlacerTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallDevicePlacerTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 	BuildContext.RequireFragment<FRecallGameplayTagFragment>();

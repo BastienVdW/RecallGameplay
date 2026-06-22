@@ -7,8 +7,8 @@
 
 #include "Simulation/Representation/RecallTrackerRepresentationTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityTemplateRegistry.h"
+#include "MassEntityView.h"
 #include "Simulation/Representation/RecallTrackerRepresentationFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 #include "Utility/Trait/RecallTraitUtils.h"
@@ -16,9 +16,9 @@
 //----------------------------------------------------------------------//
 // URecallTrackerRepresentationTrait
 //----------------------------------------------------------------------//
-void URecallTrackerRepresentationTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallTrackerRepresentationTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 	
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 

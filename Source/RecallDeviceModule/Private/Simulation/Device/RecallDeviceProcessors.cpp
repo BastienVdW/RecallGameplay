@@ -11,8 +11,8 @@
 #include "Entity/RecallDeviceSpawnCommand.h"
 #include "Input/RecallDeviceInputOptionTypes.h"
 #include "Kismet/GameplayStatics.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "Simulation/Device/RecallDeviceFragments.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
@@ -34,33 +34,33 @@
 URecallDeviceBuildProcessor::URecallDeviceBuildProcessor()
 	: EntityQuery(*this)
 {
-	ExecutionFlags = static_cast<int32>(EExtendedProcessorExecutionFlags::All);
-	ProcessingPhase = EMassExtendedProcessingPhase::PrePhysics;
+	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
+	ProcessingPhase = EMassProcessingPhase::PrePhysics;
 	ExecutionOrder.ExecuteAfter.Add(Recall::Player::ProcessorGroupNames::Input);
 	ExecutionOrder.ExecuteBefore.Add(Recall::StateTree::ProcessorGroupNames::StateTreeUpdate);
 }
 
-void URecallDeviceBuildProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallDeviceBuildProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 }
 
-void URecallDeviceBuildProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallDeviceBuildProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallDevicePlacerFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassExtendedFragmentAccess::ReadOnly);
-	EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassExtendedFragmentAccess::ReadOnly, EMassExtendedFragmentPresence::Optional);
-	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddSubsystemRequirement<URecallEntityAsyncSpawnSubsystem>(EMassExtendedFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallDevicePlacerFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallControllerFragment>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallGameplayTagFragment>(EMassFragmentAccess::ReadOnly, EMassFragmentPresence::Optional);
+	EntityQuery.AddSubsystemRequirement<URecallSignalSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallInputQueueSubsystem>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddSubsystemRequirement<URecallEntityAsyncSpawnSubsystem>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.RegisterWithProcessor(*this);	
 }
 
 /**
  * Spawn the device attached to the device slot entity.
  */
-static void BuildDevice(FMassExtendedExecutionContext& Context, const FString& DeviceName,
-	const FMassExtendedEntityHandle DevicePlacerEntity,
+static void BuildDevice(FMassExecutionContext& Context, const FString& DeviceName,
+	const FMassEntityHandle DevicePlacerEntity,
 	const FRecallDevicePlacerFragment& DevicePlacerFragment, const FRecallGameplayTagFragment* GameplayTagFragmentPtr)
 {
 	const URecallDeviceSubsystem& DeviceSystem = URecallDeviceSubsystem::GetRef(Context.GetWorld());
@@ -70,13 +70,13 @@ static void BuildDevice(FMassExtendedExecutionContext& Context, const FString& D
 		return;
 	}	
 	
-	const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 	if (!ensure(EntityManager.IsEntityValid(DevicePlacerFragment.BuildDeviceSlotEntity)))
 	{
 		return;
 	}
 	
-	const FMassExtendedEntityView BuildDeviceSlotView(EntityManager, DevicePlacerFragment.BuildDeviceSlotEntity);
+	const FMassEntityView BuildDeviceSlotView(EntityManager, DevicePlacerFragment.BuildDeviceSlotEntity);
 	const FRecallTransformFragment& BuildDeviceSlotTransformFragment = BuildDeviceSlotView.GetFragmentData<FRecallTransformFragment>();
 
 	// Hide the device slot when device is built.
@@ -105,11 +105,11 @@ static void BuildDevice(FMassExtendedExecutionContext& Context, const FString& D
 	Recall::Device::Utils::ConsumeDeviceCost(Context.GetWorld(), DevicePlacerEntity, DeviceAsset);
 }
 
-void URecallDeviceBuildProcessor::Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context)
+void URecallDeviceBuildProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_DeviceBuild_Execute);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{		
 		URecallInputQueueSubsystem& InputQueueSystem = Context.GetMutableSubsystemChecked<URecallInputQueueSubsystem>();
 		URecallSignalSubsystem& SignalSystem = Context.GetMutableSubsystemChecked<URecallSignalSubsystem>();
@@ -136,7 +136,7 @@ void URecallDeviceBuildProcessor::Execute(FMassExtendedEntityManager& EntityMana
 				continue;
 			}
 			
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			const FRecallGameplayTagFragment* const GameplayTagFragmentPtr = GameplayTagList.IsValidIndex(EntityIndex) ?
 				&GameplayTagList[EntityIndex] : nullptr;
 

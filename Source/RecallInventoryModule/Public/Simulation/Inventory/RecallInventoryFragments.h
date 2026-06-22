@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
+#include "MassEntityTypes.h"
 #include "System/Actor/RecallActorTypes.h"
 #include "RecallEquipmentTypes.h"
 
@@ -27,7 +28,7 @@ struct RECALLINVENTORYMODULE_API FRecallEquipSlotRepresentation
  * Fragment that contains the equipment carried by an entity.
  */
 USTRUCT()
-struct RECALLINVENTORYMODULE_API FRecallEquipmentFragment : public FMassExtendedFragment
+struct RECALLINVENTORYMODULE_API FRecallEquipmentFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -56,8 +57,12 @@ struct RECALLINVENTORYMODULE_API FRecallEquipmentFragment : public FMassExtended
 	TArray<TObjectPtr<const URecallInventoryItemAsset>> EquippedItems;
 };
 
+template <>
+struct TMassFragmentTraits<FRecallEquipmentFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };
+
 USTRUCT()
-struct RECALLINVENTORYMODULE_API FRecallEquipmentConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLINVENTORYMODULE_API FRecallEquipmentConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

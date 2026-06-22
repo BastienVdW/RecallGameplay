@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
+#include "MassEntityTypes.h"
 #include "GameplayTagContainer.h"
 #include "Conversation/RecallConversationTriggerSettings.h"
 #include "Conversation/RecallConversationHandle.h"
@@ -14,13 +15,13 @@
 #include "RecallConversationFragments.generated.h"
 
 /** Tag assigned to participant entities who participate in a conversation. */
-USTRUCT() struct RECALLCONVERSATIONMODULE_API FRecallConversationParticipantInsideTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct RECALLCONVERSATIONMODULE_API FRecallConversationParticipantInsideTag : public FMassTag { GENERATED_BODY() };
 
 /** Tag assigned to conversation which are currently active. */
-USTRUCT() struct RECALLCONVERSATIONMODULE_API FRecallConversationActiveTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct RECALLCONVERSATIONMODULE_API FRecallConversationActiveTag : public FMassTag { GENERATED_BODY() };
 
 USTRUCT()
-struct RECALLCONVERSATIONMODULE_API FRecallConversationFragment : public FMassExtendedFragment
+struct RECALLCONVERSATIONMODULE_API FRecallConversationFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -40,8 +41,12 @@ struct RECALLCONVERSATIONMODULE_API FRecallConversationFragment : public FMassEx
 	FString ConversationEntryIdentifier;
 };
 
+template <>
+struct TMassFragmentTraits<FRecallConversationFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };
+
 USTRUCT()
-struct RECALLCONVERSATIONMODULE_API FRecallConversationConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLCONVERSATIONMODULE_API FRecallConversationConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 
@@ -68,7 +73,7 @@ struct RECALLCONVERSATIONMODULE_API FRecallConversationConstSharedFragment : pub
 };
 
 USTRUCT()
-struct RECALLCONVERSATIONMODULE_API FRecallConversationParticipantFragment : public FMassExtendedFragment
+struct RECALLCONVERSATIONMODULE_API FRecallConversationParticipantFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -80,7 +85,7 @@ struct RECALLCONVERSATIONMODULE_API FRecallConversationParticipantFragment : pub
 };
 
 USTRUCT()
-struct RECALLCONVERSATIONMODULE_API FRecallConversationParticipantConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLCONVERSATIONMODULE_API FRecallConversationParticipantConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

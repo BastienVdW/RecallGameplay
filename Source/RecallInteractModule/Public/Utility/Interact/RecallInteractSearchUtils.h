@@ -8,10 +8,10 @@
 
 #include "CoreMinimal.h"
 
-struct FMassExtendedEntityManager;
-struct FMassExtendedEntityView;
-struct FMassExtendedEntityHandle;
-struct FMassExtendedExecutionContext;
+struct FMassEntityManager;
+struct FMassEntityView;
+struct FMassEntityHandle;
+struct FMassExecutionContext;
 struct FRecallInteractorFragment;
 struct FRecallInteractorSharedFragment;
 struct FRecallTransformFragment;
@@ -19,8 +19,8 @@ struct FRecallPhysicsSensorFragment;
 
 struct FRecallUpdateClosestInteractableEntityContext
 {
-	FMassExtendedExecutionContext& ExecutionContext;
-	const FMassExtendedEntityHandle& InteractorEntity;
+	FMassExecutionContext& ExecutionContext;
+	const FMassEntityHandle& InteractorEntity;
 	const FRecallTransformFragment& TransformFragment;
 	const FRecallPhysicsSensorFragment& SensorFragment;
 	FRecallInteractorFragment& InteractorFragment;

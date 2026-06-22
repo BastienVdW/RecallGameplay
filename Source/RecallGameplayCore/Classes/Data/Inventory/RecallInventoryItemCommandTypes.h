@@ -7,18 +7,18 @@
 #pragma once
 
 #include "GameplayTagContainer.h"
-#include "InstancedStruct.h"
+#include "StructUtils/InstancedStruct.h"
 
 #include "RecallInventoryItemCommandTypes.generated.h"
 
-struct FMassExtendedEntityHandle;
-struct FMassExtendedExecutionContext;
+struct FMassEntityHandle;
+struct FMassExecutionContext;
 class URecallSignalSubsystem;
 
 struct FRecallInventoryItemExecutionContext
 {
-	FMassExtendedExecutionContext& MassExecutionContext;
-	const FMassExtendedEntityHandle& Entity;
+	FMassExecutionContext& MassExecutionContext;
+	const FMassEntityHandle& Entity;
 	URecallSignalSubsystem& SignalSystem;
 	const FRandomStream& RandomStream;
 	const FGameplayTag EquipSlot;

@@ -7,8 +7,8 @@
 
 #include "RecallGameplayEffectAreaProcessors.h"
 
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "Gameplay/RecallGameplayEffect.h"
 #include "Simulation/GameplayEffect/RecallGameplayEffectFragments.h"
 #include "Simulation/Physics/RecallPhysicsSensorFragment.h"
@@ -22,7 +22,7 @@ URecallGameplayEffectAreaSignalProcessor::URecallGameplayEffectAreaSignalProcess
 {
 }
 
-void URecallGameplayEffectAreaSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassExtendedEntityManager>& InEntityManager)
+void URecallGameplayEffectAreaSignalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
 {
 	Super::InitializeInternal(Owner, InEntityManager);
 	
@@ -30,22 +30,22 @@ void URecallGameplayEffectAreaSignalProcessor::InitializeInternal(UObject& Owner
 	SubscribeToSignal(Recall::Physics::Signals::MinusOverlap);
 }
 
-void URecallGameplayEffectAreaSignalProcessor::ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager)
+void URecallGameplayEffectAreaSignalProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
 {
-	EntityQuery.AddRequirement<FRecallGameplayEffectAreaFragment>(EMassExtendedFragmentAccess::ReadWrite);
-	EntityQuery.AddRequirement<FRecallPhysicsSensorFragment>(EMassExtendedFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FRecallGameplayEffectAreaFragment>(EMassFragmentAccess::ReadWrite);
+	EntityQuery.AddRequirement<FRecallPhysicsSensorFragment>(EMassFragmentAccess::ReadOnly);
 }
 
-static void UpdateAreaGameplayEffects(const FMassExtendedExecutionContext& Context, const FMassExtendedEntityHandle& OwnerEntity,
-	FRecallGameplayEffectAreaFragment& GameplayEffectAreaFragment, const TArray<FMassExtendedEntityHandle>& OverlappingEntities)
+static void UpdateAreaGameplayEffects(const FMassExecutionContext& Context, const FMassEntityHandle& OwnerEntity,
+	FRecallGameplayEffectAreaFragment& GameplayEffectAreaFragment, const TArray<FMassEntityHandle>& OverlappingEntities)
 {	
-	const FMassExtendedEntityManager& EntityManager = Context.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.GetEntityManagerChecked();
 
-	TArray<FMassExtendedEntityHandle> OldOverlappingEntities;
+	TArray<FMassEntityHandle> OldOverlappingEntities;
 	GameplayEffectAreaFragment.InstanceMap.GetKeys(OldOverlappingEntities);
 
 	// Remove effect from entities that do not overlap anymore
-	for (const FMassExtendedEntityHandle& OldOverlappingEntity : OldOverlappingEntities)
+	for (const FMassEntityHandle& OldOverlappingEntity : OldOverlappingEntities)
 	{
 		if (OverlappingEntities.Contains(OldOverlappingEntity))
 		{
@@ -63,7 +63,7 @@ static void UpdateAreaGameplayEffects(const FMassExtendedExecutionContext& Conte
 			continue;
 		}
 
-		const FMassExtendedEntityView OldOverlappingView(EntityManager, OldOverlappingEntity);
+		const FMassEntityView OldOverlappingView(EntityManager, OldOverlappingEntity);
 		auto* GameplayEffectFragmentPtr = OldOverlappingView.GetFragmentDataPtr<FRecallGameplayEffectFragment>();
 		if (GameplayEffectFragmentPtr == nullptr)
 		{
@@ -81,7 +81,7 @@ static void UpdateAreaGameplayEffects(const FMassExtendedExecutionContext& Conte
 	// Add effect to newly overlapping entities
 	if (GameplayEffectAreaFragment.EffectClass)
 	{
-		for (const FMassExtendedEntityHandle& NewOverlappingEntity : OverlappingEntities)
+		for (const FMassEntityHandle& NewOverlappingEntity : OverlappingEntities)
 		{
 			if (GameplayEffectAreaFragment.InstanceMap.Contains(NewOverlappingEntity) ||
 				!EntityManager.IsEntityValid(NewOverlappingEntity))
@@ -89,7 +89,7 @@ static void UpdateAreaGameplayEffects(const FMassExtendedExecutionContext& Conte
 				continue;
 			}
 			
-			const FMassExtendedEntityView NewOverlappingView(EntityManager, NewOverlappingEntity);
+			const FMassEntityView NewOverlappingView(EntityManager, NewOverlappingEntity);
 			auto* GameplayEffectFragmentPtr = NewOverlappingView.GetFragmentDataPtr<FRecallGameplayEffectFragment>();
 			if (GameplayEffectFragmentPtr == nullptr)
 			{
@@ -108,23 +108,23 @@ static void UpdateAreaGameplayEffects(const FMassExtendedExecutionContext& Conte
 	}
 }
 
-void URecallGameplayEffectAreaSignalProcessor::SignalEntities(FMassExtendedEntityManager& EntityManager,
-	FMassExtendedExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
+void URecallGameplayEffectAreaSignalProcessor::SignalEntities(FMassEntityManager& EntityManager,
+	FMassExecutionContext& Context, FRecallSignalNameLookup& EntitySignals)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(Recall_GameplayEffectArea_Signal);
 
-	EntityQuery.ForEachEntityChunk(Context, [](FMassExtendedExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(Context, [](FMassExecutionContext& Context)
 	{		
 		const TConstArrayView<FRecallPhysicsSensorFragment> SensorList = Context.GetFragmentView<FRecallPhysicsSensorFragment>();
 		const TArrayView<FRecallGameplayEffectAreaFragment> GameplayEffectAreaList = Context.GetMutableFragmentView<FRecallGameplayEffectAreaFragment>();
 		
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); EntityIndex++)
 		{
-			const FMassExtendedEntityHandle Entity = Context.GetEntity(EntityIndex);
+			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			FRecallGameplayEffectAreaFragment& GameplayEffectAreaFragment = GameplayEffectAreaList[EntityIndex];
 			
 			const FRecallPhysicsSensorFragment& SensorFragment = SensorList[EntityIndex];
-			const TArray<FMassExtendedEntityHandle> OverlappingEntities = SensorFragment.GetOverlappingEntities();
+			const TArray<FMassEntityHandle> OverlappingEntities = SensorFragment.GetOverlappingEntities();
 
 			UpdateAreaGameplayEffects(Context, Entity, GameplayEffectAreaFragment, OverlappingEntities);
 		}

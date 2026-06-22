@@ -7,15 +7,15 @@
 
 #include "Simulation/Conversation/RecallConversationTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
+#include "MassEntityTemplateRegistry.h"
 #include "Simulation/Conversation/RecallConversationFragments.h"
 
 //----------------------------------------------------------------------//
 // URecallConversationTrait
 //----------------------------------------------------------------------//
-void URecallConversationTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallConversationTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	FRecallConversationFragment& ConversationFragment = BuildContext.AddFragment_GetRef<FRecallConversationFragment>();
 	ConversationFragment.ConversationEntryPoint = DefaultConversationEntryPoint;
@@ -33,9 +33,9 @@ void URecallConversationTrait::BuildTemplate(FMassExtendedEntityTemplateBuildCon
 //----------------------------------------------------------------------//
 // URecallConversationParticipantTrait
 //----------------------------------------------------------------------//
-void URecallConversationParticipantTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallConversationParticipantTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
-	FMassExtendedEntityManager& EntityManager = UE::MassExtended::Utils::GetEntityManagerChecked(World);
+	FMassEntityManager& EntityManager = UE::Mass::Utils::GetEntityManagerChecked(World);
 
 	BuildContext.AddFragment<FRecallConversationParticipantFragment>();
 

@@ -7,8 +7,8 @@
 
 #include "RecallAttributeConditions.h"
 
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "Simulation/Attribute/RecallAttributeFragments.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTreeLinker.h"
@@ -61,13 +61,13 @@ bool FRecallStateTreeAttributeCompareCondition::TestCondition(FStateTreeExecutio
 	const FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 	const FRecallStateTreeExecutionContext& MassContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
 	
-	const FMassExtendedEntityManager& EntityManager = MassContext.GetEntityManager();	
+	const FMassEntityManager& EntityManager = MassContext.GetEntityManager();	
 	if (!EntityManager.IsEntityValid(InstanceData.EntityHandle))
 	{
 		return false;
 	}
 	
-	const FMassExtendedEntityView EntityView(EntityManager, InstanceData.EntityHandle);
+	const FMassEntityView EntityView(EntityManager, InstanceData.EntityHandle);
 	const FRecallAttributeFragment* AttributeFragmentPtr = EntityView.GetFragmentDataPtr<FRecallAttributeFragment>();
 	if (AttributeFragmentPtr == nullptr)
 	{

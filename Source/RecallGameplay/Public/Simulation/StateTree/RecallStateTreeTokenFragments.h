@@ -6,18 +6,18 @@
 
 #pragma once
 
-#include "MassExtendedEntityElementTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "RecallStateTreeTokenRegistry.h"
 
 #include "RecallStateTreeTokenFragments.generated.h"
 
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallStateTreeTokenSharedFragment : public FMassExtendedSharedFragment
+struct RECALLGAMEPLAY_API FRecallStateTreeTokenSharedFragment : public FMassSharedFragment
 {
 	GENERATED_BODY()
 
 public:
-	FORCEINLINE FRecallStateTreeTokenHandle RequestToken(const FMassExtendedEntityHandle& Entity)
+	FORCEINLINE FRecallStateTreeTokenHandle RequestToken(const FMassEntityHandle& Entity)
 	{
 		FRecallStateTreeTokenRegistry& TokenRegistry = TokenRegistryMap.FindOrAdd(Entity);
 		return TokenRegistry.RequestToken(Entity);
@@ -25,7 +25,7 @@ public:
 	
 	FORCEINLINE void ReleaseToken(FRecallStateTreeTokenHandle& Handle)
 	{
-		const FMassExtendedEntityHandle OwnerEntity = Handle.GetTokenOwnerEntity();
+		const FMassEntityHandle OwnerEntity = Handle.GetTokenOwnerEntity();
 		if (FRecallStateTreeTokenRegistry* TokenRegistry = TokenRegistryMap.Find(OwnerEntity))
 		{
 			TokenRegistry->ReleaseToken(Handle);			
@@ -40,7 +40,7 @@ public:
 		}
 	}
 
-	FORCEINLINE int32 GetTokenCount(const FMassExtendedEntityHandle& Entity) const
+	FORCEINLINE int32 GetTokenCount(const FMassEntityHandle& Entity) const
 	{		
 		if (const FRecallStateTreeTokenRegistry* TokenRegistry = TokenRegistryMap.Find(Entity))
 		{
@@ -51,5 +51,5 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-	TMap<FMassExtendedEntityHandle, FRecallStateTreeTokenRegistry> TokenRegistryMap;
+	TMap<FMassEntityHandle, FRecallStateTreeTokenRegistry> TokenRegistryMap;
 };

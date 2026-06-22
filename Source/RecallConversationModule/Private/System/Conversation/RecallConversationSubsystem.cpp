@@ -109,7 +109,7 @@ void URecallConversationSubsystem::Restore(const FRecallSnapshotContext& Context
 	}
 }
 
-FRecallConversationHandle URecallConversationSubsystem::CreateConversationInstance(const FMassExtendedEntityHandle& Entity)
+FRecallConversationHandle URecallConversationSubsystem::CreateConversationInstance(const FMassEntityHandle& Entity)
 {	
 	Recall::Simulation::Utils::CheckSimulationProcessingPhase(this);
 	
@@ -157,7 +157,7 @@ void URecallConversationSubsystem::ReleaseConversationInstance(FRecallConversati
 
 		if (Instance.MutableData.bStarted)
 		{
-			const TArray<FMassExtendedEntityHandle> ParticipantEntities = Instance.MutableData.GetParticipantEntities();
+			const TArray<FMassEntityHandle> ParticipantEntities = Instance.MutableData.GetParticipantEntities();
 			GetSignalSystemChecked().SignalEntities(
 				Recall::Conversation::Signals::Callback::OnConversationEnd, ParticipantEntities);
 		}
@@ -170,9 +170,9 @@ void URecallConversationSubsystem::ReleaseConversationInstance(FRecallConversati
 	Handle.Reset();
 }
 
-bool URecallConversationSubsystem::CanStartConversation(const FMassExtendedEntityHandle& ConversationEntity,
+bool URecallConversationSubsystem::CanStartConversation(const FMassEntityHandle& ConversationEntity,
 	const FGameplayTag& EntryPoint, const FString& EntryIdentifier, const TObjectPtr<const UConversationDatabase>& Graph,
-	const FGameplayTag& ParticipantID, const FMassExtendedEntityHandle& ParticipantEntity, FString ParticipantPlayerID)
+	const FGameplayTag& ParticipantID, const FMassEntityHandle& ParticipantEntity, FString ParticipantPlayerID)
 {
 	FRecallConversationHandle Handle = CreateConversationInstance(ConversationEntity);
 	if (!Handle.IsValid())
@@ -251,7 +251,7 @@ class URecallSignalSubsystem& URecallConversationSubsystem::GetSignalSystemCheck
 }
 
 void URecallConversationSubsystem::AddConversationParticipant(const FRecallConversationHandle& Handle,
-                                                                const FGameplayTag& ParticipantID, const FMassExtendedEntityHandle& Entity, FString PlayerID)
+                                                                const FGameplayTag& ParticipantID, const FMassEntityHandle& Entity, FString PlayerID)
 {
 	Recall::Simulation::Utils::CheckSimulationProcessingPhase(this);
 	
@@ -426,7 +426,7 @@ bool URecallConversationSubsystem::StartConversation(FRecallConversationHandle& 
 		
 		if (ConversationInstance->GetCurrentNodeHandle().IsValid())
 		{
-			const TArray<FMassExtendedEntityHandle> ParticipantEntities = Instance.MutableData.GetParticipantEntities();
+			const TArray<FMassEntityHandle> ParticipantEntities = Instance.MutableData.GetParticipantEntities();
 			
 			GetSignalSystemChecked().SignalEntities(
 				Recall::Conversation::Signals::Callback::OnConversationStart, ParticipantEntities);
@@ -476,7 +476,7 @@ void URecallConversationSubsystem::AdvanceConversation(FRecallConversationHandle
 
 	if (const TObjectPtr<UConversationInstance>& ConversationInstance = Instance.ConversationInstance)
 	{
-		const TArray<FMassExtendedEntityHandle> ParticipantEntities = Instance.MutableData.GetParticipantEntities();
+		const TArray<FMassEntityHandle> ParticipantEntities = Instance.MutableData.GetParticipantEntities();
 		const TArray<FConversationParticipantEntry> ParticipantEntries = ConversationInstance->GetParticipantListCopy();
 		
 		Instance.SetConversationSeed(Seed);

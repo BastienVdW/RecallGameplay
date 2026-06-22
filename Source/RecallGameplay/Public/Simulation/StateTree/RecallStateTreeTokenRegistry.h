@@ -17,7 +17,7 @@ struct FRecallStateTreeTokenRegistry
 	GENERATED_BODY()
 
 public:
-	FORCEINLINE FRecallStateTreeTokenHandle RequestToken(const FMassExtendedEntityHandle& OwnerEntity)
+	FORCEINLINE FRecallStateTreeTokenHandle RequestToken(const FMassEntityHandle& OwnerEntity)
 	{
 		const FRecallStateTreeTokenHandle NewHandle = FRecallStateTreeTokenHandle::Make(OwnerEntity, ++TokenIdGenerator);
 		Tokens.Add(NewHandle);

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "MassExtendedProcessor.h"
-#include "MassExtendedEntityQuery.h"
+#include "MassProcessor.h"
+#include "MassEntityQuery.h"
 
 #include "RecallPositionAnimationProcessor.generated.h"
 
@@ -16,7 +16,7 @@
  * Removes animation fragment when complete
  */
 UCLASS()
-class URecallPositionAnimationProcessor : public UMassExtendedProcessor
+class URecallPositionAnimationProcessor : public UMassProcessor
 {
     GENERATED_BODY()
 
@@ -24,9 +24,9 @@ public:
     URecallPositionAnimationProcessor();
 
 protected:
-    virtual void ConfigureQueries(const TSharedRef<FMassExtendedEntityManager>& EntityManager) override;
-    virtual void Execute(FMassExtendedEntityManager& EntityManager, FMassExtendedExecutionContext& Context) override;
+    virtual void ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager) override;
+    virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
 
 private:
-    FMassExtendedEntityQuery EntityQuery;
+    FMassEntityQuery EntityQuery;
 };

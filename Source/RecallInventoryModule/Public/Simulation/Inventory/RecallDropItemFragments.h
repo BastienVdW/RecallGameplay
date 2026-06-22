@@ -6,19 +6,19 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityElementTypes.h"
 #include "RecallDropItemTypes.h"
 
 #include "RecallDropItemFragments.generated.h"
 
 USTRUCT()
-struct RECALLINVENTORYMODULE_API FRecallDropItemFragment : public FMassExtendedFragment
+struct RECALLINVENTORYMODULE_API FRecallDropItemFragment : public FMassFragment
 {
 	GENERATED_BODY()
 };
 
 USTRUCT()
-struct RECALLINVENTORYMODULE_API FRecallDropItemConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLINVENTORYMODULE_API FRecallDropItemConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 	

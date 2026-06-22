@@ -20,5 +20,5 @@ struct RECALLGAMERULEMODULE_API FRecallGameRuleSpawnCommand : public FRecallEnti
 	GENERATED_BODY()
 
 public:
-	virtual void OnSpawn(FMassExtendedEntityManager& System, const TArray<FMassExtendedEntityHandle>& Entities) const override;
+	virtual void OnSpawn(FMassEntityManager& System, const TArray<FMassEntityHandle>& Entities) const override;
 };

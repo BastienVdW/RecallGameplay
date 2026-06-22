@@ -7,7 +7,7 @@
 
 #include "RecallNavLinkTraversal.h"
 
-#include "MassExtendedExecutionContext.h"
+#include "MassExecutionContext.h"
 
 UWorld* FRecallNavLinkTraversalContext::GetWorld() const
 {

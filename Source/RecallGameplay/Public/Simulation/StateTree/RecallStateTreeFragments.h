@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include "MassExtendedEntityElementTypes.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityElementTypes.h"
+#include "Mass/EntityHandle.h"
+#include "MassEntityTypes.h"
 #include "System/AI/RecallStateTreeInstanceTypes.h"
 
 #include "RecallStateTreeFragments.generated.h"
@@ -15,13 +16,13 @@
 class UStateTree;
 
 // Special tag to know if the state tree has been activated
-USTRUCT() struct RECALLGAMEPLAY_API FRecallStateTreeActivatedTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct RECALLGAMEPLAY_API FRecallStateTreeActivatedTag : public FMassTag { GENERATED_BODY() };
 
 // Special tag to know if the state tree is running
-USTRUCT() struct RECALLGAMEPLAY_API FRecallStateTreeRunningTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct RECALLGAMEPLAY_API FRecallStateTreeRunningTag : public FMassTag { GENERATED_BODY() };
 
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallStateTreeSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLGAMEPLAY_API FRecallStateTreeSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 
@@ -33,12 +34,12 @@ struct RECALLGAMEPLAY_API FRecallStateTreeSharedFragment : public FMassExtendedC
 };
 
 USTRUCT()
-struct RECALLGAMEPLAY_API FRecallStateTreeInstanceFragment : public FMassExtendedFragment
+struct RECALLGAMEPLAY_API FRecallStateTreeInstanceFragment : public FMassFragment
 {
 	GENERATED_BODY()
 	
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle OwnerEntityHandle;
+	FMassEntityHandle OwnerEntityHandle;
 
 	/** Handle to a StateTree instance data in MassStateTreeSubsystem. */
 	UPROPERTY(VisibleAnywhere, DisplayName="Root Instance Handle")
@@ -54,3 +55,7 @@ struct RECALLGAMEPLAY_API FRecallStateTreeInstanceFragment : public FMassExtende
 	UPROPERTY(VisibleAnywhere)
 	TMap<FName, FRecallStateTreeInstanceHandle> SubInstanceHandleMap;
 };
+
+template <>
+struct TMassFragmentTraits<FRecallStateTreeInstanceFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };

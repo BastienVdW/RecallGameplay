@@ -7,7 +7,7 @@
 #pragma once
 
 #include "StateTree/RecallStateTreeTaskBase.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 #include "StateTreePropertyRef.h"
 
 #include "RecallEntityTasks.generated.h"
@@ -18,7 +18,7 @@ struct RECALLGAMEPLAY_API FRecallEntityLocationTaskInstanceData
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, Category=Parameter)
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 
 	UPROPERTY(EditAnywhere, Category=Input)
 	TStateTreePropertyRef<FVector> Location;
@@ -54,10 +54,10 @@ struct RECALLGAMEPLAY_API FRecallFilterEntityTaskInstanceData
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, Category=Parameter)
-	TArray<FMassExtendedEntityHandle> Entities;
+	TArray<FMassEntityHandle> Entities;
 	
 	UPROPERTY(EditAnywhere, Category=Input, meta=(CanRefToArray))
-	TStateTreePropertyRef<FMassExtendedEntityHandle> Result;
+	TStateTreePropertyRef<FMassEntityHandle> Result;
 };
 
 /**
@@ -89,7 +89,7 @@ struct RECALLGAMEPLAY_API FRecallDestroyEntityTaskInstanceData
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, Category=Input)
-	TArray<FMassExtendedEntityHandle> Entities;
+	TArray<FMassEntityHandle> Entities;
 };
 
 /**
@@ -117,7 +117,7 @@ struct RECALLGAMEPLAY_API FRecallSpawnEntityTaskInstanceData
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, Category=Parameter)
-	TObjectPtr<class UMassExtendedEntityConfigAsset> EntityConfig;
+	TObjectPtr<class UMassEntityConfigAsset> EntityConfig;
 
 	UPROPERTY(EditAnywhere, Category=Parameter)
 	FVector Position = FVector::ZeroVector;

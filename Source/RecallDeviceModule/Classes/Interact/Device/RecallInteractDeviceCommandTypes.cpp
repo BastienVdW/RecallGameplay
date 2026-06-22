@@ -7,15 +7,15 @@
 
 #include "RecallInteractDeviceCommandTypes.h"
 
-#include "MassExtendedEntityTypes.h"
-#include "MassExtendedEntityView.h"
+#include "Mass/EntityElementTypes.h"
+#include "MassEntityView.h"
 #include "Simulation/Device/RecallDeviceFragments.h"
 #include "Utility/Representation/RecallRepresentationUtils.h"
 
 static FRecallDevicePlacerFragment* GetDevicePlacerFragment(const FRecallInteractContext& Context)
 {
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(ERecallInteractTarget::Instigator);
-	const FMassExtendedEntityView TargetEntityView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(ERecallInteractTarget::Instigator);
+	const FMassEntityView TargetEntityView(Context.GetEntityManagerChecked(), TargetEntity);
 
 	auto* DevicePlacerFragmentPtr = TargetEntityView.GetFragmentDataPtr<FRecallDevicePlacerFragment>();
 	if (DevicePlacerFragmentPtr == nullptr)

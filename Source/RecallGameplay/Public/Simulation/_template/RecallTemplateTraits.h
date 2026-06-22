@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 
 #include "RecallTemplateTraits.generated.h"
 
@@ -14,10 +14,10 @@
 * Trait to attach to our entity config
 */
 UCLASS(Abstract) // meta=(DisplayName="RE Templateor"))
-class RECALLGAMEPLAY_API URecallTemplateTrait : public UMassExtendedEntityTraitBase
+class RECALLGAMEPLAY_API URecallTemplateTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 };

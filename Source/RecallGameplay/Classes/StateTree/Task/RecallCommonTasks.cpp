@@ -8,9 +8,9 @@
 #include "RecallCommonTasks.h"
 
 #include "Desync/RecallDesyncLog.h"
-#include "MassExtendedCommands.h"
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassCommands.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "RecallSignalSubsystem.h"
 #include "StateTreeExecutionContext.h"
 #include "StateTree/RecallStateTreeExecutionContext.h"
@@ -150,23 +150,23 @@ bool FRecallSendEventTask::Link(FStateTreeLinker& Linker)
 	return true;
 }
 
-TArray<FRecallStateTreeInstanceHandle> FRecallSendEventTask::GetStateTreeHandlesFromEntities(FStateTreeExecutionContext& Context, const TArray<FMassExtendedEntityHandle>& Entities) const
+TArray<FRecallStateTreeInstanceHandle> FRecallSendEventTask::GetStateTreeHandlesFromEntities(FStateTreeExecutionContext& Context, const TArray<FMassEntityHandle>& Entities) const
 {
 	const FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
 	TArray<FRecallStateTreeInstanceHandle> Results;
 
 	FRecallStateTreeExecutionContext& RecallContext = static_cast<FRecallStateTreeExecutionContext&>(Context);
-	const FMassExtendedEntityManager& EntityManager = RecallContext.GetEntityManager();
+	const FMassEntityManager& EntityManager = RecallContext.GetEntityManager();
 
-	for (const FMassExtendedEntityHandle& Entity : Entities)
+	for (const FMassEntityHandle& Entity : Entities)
 	{
 		if (!EntityManager.IsEntityValid(Entity))
 		{
 			continue;
 		}
 
-		const FMassExtendedEntityView EntityView(EntityManager, Entity);
+		const FMassEntityView EntityView(EntityManager, Entity);
 		const FRecallStateTreeInstanceFragment* StateTreeInstanceFragmentPtr = EntityView.GetFragmentDataPtr<FRecallStateTreeInstanceFragment>();
 		if (StateTreeInstanceFragmentPtr == nullptr)
 		{
@@ -193,7 +193,7 @@ TArray<FRecallStateTreeInstanceHandle> FRecallSendEventTask::GetStateTreeHandles
 				}
 				else
 				{
-					UE_LOG(LogMassExtended, Log, TEXT("Could not find running sub state tree named: %s"), *SubStateTreeName.ToString());
+					UE_LOG(LogMass, Log, TEXT("Could not find running sub state tree named: %s"), *SubStateTreeName.ToString());
 				}
 			}
 		}
@@ -209,7 +209,7 @@ FInstancedStruct FRecallSendEventTask::GetPayload(FStateTreeExecutionContext& Co
 	switch (InstanceData.PayloadType)
 	{
 	case ERecallSendEventPayloadType::Entity:
-		return FInstancedStruct::Make<FMassExtendedEntityHandle>(InstanceData.EntityPayload);
+		return FInstancedStruct::Make<FMassEntityHandle>(InstanceData.EntityPayload);
 
 	case ERecallSendEventPayloadType::Vector:
 		return FInstancedStruct::Make<FVector>(InstanceData.VectorPayload);

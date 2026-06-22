@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "System/Navigation/RecallNavigationTypes.h"
 #include "Simulation/Navigation/RecallPathFollowingSettings.h"
 #include "Simulation/Crowd/RecallCrowdAgentCollisionSettings.h"
@@ -18,12 +18,12 @@
 * Adds common path following fragments that work with any navigation system
 */
 UCLASS(Abstract, Blueprintable, meta=(DisplayName="RE Navigation Agent Base"))
-class RECALLNAVIGATION_API URecallNavigationAgentBaseTrait : public UMassExtendedEntityTraitBase
+class RECALLNAVIGATION_API URecallNavigationAgentBaseTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -50,7 +50,7 @@ class RECALLNAVIGATION_API URecallNavigationAgentTrait : public URecallNavigatio
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere)

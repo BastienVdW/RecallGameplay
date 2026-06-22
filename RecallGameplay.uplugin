@@ -13,7 +13,7 @@
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"Installed": false,
-	"EnabledByDefault" : true,
+	"EnabledByDefault" : false,
 	"Modules": [
 		{
 			"Name": "RecallGameplayCore",
@@ -100,10 +100,6 @@
 	],
 	"Plugins": [
 		{
-			"Name": "MassExtended",
-			"Enabled": true
-		},
-		{
 			"Name": "Recall",
 			"Enabled": true
 		},
@@ -132,7 +128,7 @@
 			"Enabled": true
 		},
 		{
-			"Name": "ExtendedCommonConversation",
+			"Name": "CommonConversation",
 			"Enabled": true
 		}
 	]

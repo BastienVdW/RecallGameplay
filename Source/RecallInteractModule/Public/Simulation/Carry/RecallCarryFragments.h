@@ -6,32 +6,37 @@
 
 #pragma once
 
-#include "MassExtendedEntityElementTypes.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityElementTypes.h"
+#include "Mass/EntityHandle.h"
+#include "MassEntityTypes.h"
 #include "RecallCarryTypes.h"
 
 #include "RecallCarryFragments.generated.h"
 
 // Tag to identify entities
-USTRUCT() struct FRecallCarryableTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct FRecallCarryableTag : public FMassTag { GENERATED_BODY() };
 
 // Tag to indicate entity is currently being carried
-USTRUCT() struct FRecallCarriedTag : public FMassExtendedTag { GENERATED_BODY() };
+USTRUCT() struct FRecallCarriedTag : public FMassTag { GENERATED_BODY() };
 
 // Fragment
 USTRUCT()
-struct RECALLINTERACTMODULE_API FRecallCarryableFragment : public FMassExtendedFragment
+struct RECALLINTERACTMODULE_API FRecallCarryableFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<FMassExtendedEntityHandle> CarrierEntities;
+	TArray<FMassEntityHandle> CarrierEntities;
 
 	FORCEINLINE int32 GetCarrierCount() const { return CarrierEntities.Num(); }
 };
 
+template <>
+struct TMassFragmentTraits<FRecallCarryableFragment> final
+{ enum { AuthorAcceptsItsNotTriviallyCopyable = true }; };
+
 USTRUCT()
-struct RECALLINTERACTMODULE_API FRecallCarryableConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLINTERACTMODULE_API FRecallCarryableConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 

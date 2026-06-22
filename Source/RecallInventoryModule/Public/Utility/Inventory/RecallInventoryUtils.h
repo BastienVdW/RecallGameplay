@@ -9,7 +9,7 @@
 #include "CoreMinimal.h"
 
 struct FGameplayTag;
-struct FMassExtendedEntityManager;
+struct FMassEntityManager;
 struct FRecallDropItemDefinition;
 class URecallInventoryItemAsset;
 
@@ -19,7 +19,7 @@ struct FRecallEquipmentContext
 	class URecallActorSubsystem& ActorSystem;
 	class URecallSignalSubsystem& SignalSystem;
 	
-	const struct FMassExtendedEntityHandle& Entity;
+	const struct FMassEntityHandle& Entity;
 	const struct FRecallEquipmentConstSharedFragment& EquipmentConstSharedFragment;
 	struct FRecallEquipmentFragment& EquipmentFragment;
 	struct FRecallGameplayTagFragment* const GameplayTagFragmentPtr = nullptr;
@@ -32,7 +32,7 @@ RECALLINVENTORYMODULE_API extern void AutoEquipItem(const FRecallEquipmentContex
 RECALLINVENTORYMODULE_API extern void UpdateEquipmentRepresentation(const FRecallEquipmentContext& Context);
 RECALLINVENTORYMODULE_API extern void UpdateEquipmentEffects(const FRecallEquipmentContext& Context);
 
-RECALLINVENTORYMODULE_API extern void CreateDropItem(FMassExtendedEntityManager& System,
+RECALLINVENTORYMODULE_API extern void CreateDropItem(FMassEntityManager& System,
 	const FRecallDropItemDefinition& Definition, const FVector& Position);
 	
 /// Generate a drop item entity based on item data.
@@ -43,7 +43,7 @@ RECALLINVENTORYMODULE_API extern void CreateDropItem(FMassExtendedEntityManager&
 /// @param Force Force applied to the item on spawn
 /// @param ColliderSize Size of the entity collider
 /// @param bCollectable Make this item as a collectable
-RECALLINVENTORYMODULE_API extern void CreateDropItem(FMassExtendedEntityManager& System, const FGameplayTag& ItemTag, int32 ItemCount,
+RECALLINVENTORYMODULE_API extern void CreateDropItem(FMassEntityManager& System, const FGameplayTag& ItemTag, int32 ItemCount,
 	const FVector& Location, float Force = 0.0f);
 	
 } // namespace Recall::Inventory::Utils

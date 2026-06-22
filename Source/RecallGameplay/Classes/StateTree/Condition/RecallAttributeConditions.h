@@ -8,8 +8,8 @@
 
 #include "StateTree/RecallStateTreeConditionBase.h"
 #include "AITypes.h"
-#include "MassExtendedEntityHandle.h"
-#include "MassExtendedEntityTypes.h"
+#include "Mass/EntityHandle.h"
+#include "Mass/EntityElementTypes.h"
 
 #include "RecallAttributeConditions.generated.h"
 
@@ -17,17 +17,17 @@ USTRUCT()
 struct RECALLGAMEPLAY_API FRecallStateTreeAttributeCompareConditionInstanceData
 {
 	GENERATED_BODY()
-	
+
 	UPROPERTY(EditAnywhere, Category=Input)
-	FMassExtendedEntityHandle EntityHandle;
-	
+	FMassEntityHandle EntityHandle;
+
 	UPROPERTY(EditAnywhere, Category=Parameter, meta=(GameplayTagFilter="Attribute"))
 	FGameplayTag Left;
 
 	UPROPERTY(EditAnywhere, Category=Parameter)
 	float Right = 0.0f;
 };
-STATETREE_POD_INSTANCEDATA(FRecallStateTreeAttributeCompareConditionInstanceData);
+UE_STATETREE_ZEROED_TRIVIALLY_COPIED_NO_DESTRUCTOR_INSTANCEDATA(FRecallStateTreeAttributeCompareConditionInstanceData);
 
 USTRUCT(DisplayName="Attribute Compare")
 struct RECALLGAMEPLAY_API FRecallStateTreeAttributeCompareCondition : public FRecallStateTreeConditionBase

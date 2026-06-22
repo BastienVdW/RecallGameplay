@@ -8,7 +8,7 @@
 
 #include "CoreMinimal.h"
 #include "HierarchicalHashGrid2D.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityHandle.h"
 
 UENUM()
 enum class ERecallNavigationObstacleFlags : uint8
@@ -25,7 +25,7 @@ struct FRecallNavigationObstacleItem
 		return Entity == Other.Entity;
 	}
 
-	FMassExtendedEntityHandle Entity;
+	FMassEntityHandle Entity;
 	ERecallNavigationObstacleFlags ItemFlags = ERecallNavigationObstacleFlags::None;
 	FVector Location = FVector::ZeroVector;
 };

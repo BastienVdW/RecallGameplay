@@ -9,8 +9,8 @@
 
 #include "Interact/RecallInteractCommandTypes.h"
 #include "Interact/RecallInteractConditionTypes.h"
-#include "MassExtendedEntityView.h"
-#include "MassExtendedExecutionContext.h"
+#include "MassEntityView.h"
+#include "MassExecutionContext.h"
 #include "RecallSignalSubsystem.h"
 #include "Simulation/Attribute/RecallAttributeFragments.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
@@ -59,10 +59,10 @@ static bool TestEventConditions(const FRecallInteractionEvent& Event,
 }
 
 int32 FindInteractEventIndexByInput(const FRecallInteractExecuteContext& Context,
-	const FMassExtendedEntityHandle& InteractionTarget, ERecallInteractInput Input,
+	const FMassEntityHandle& InteractionTarget, ERecallInteractInput Input,
 	bool bIsContextual, FText* OutText, TObjectPtr<UInputAction>* OutUIAction)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
 	if (!EntityManager.IsEntityValid(InteractionTarget))
 	{
 		return INDEX_NONE;
@@ -73,14 +73,14 @@ int32 FindInteractEventIndexByInput(const FRecallInteractExecuteContext& Context
 		return INDEX_NONE;
 	}
 	
-	const FMassExtendedEntityView InteractorView(EntityManager, Context.InteractorEntity);
+	const FMassEntityView InteractorView(EntityManager, Context.InteractorEntity);
 	const FRecallGameplayTagFragment* GameplayTagFragmentPtr = InteractorView.GetFragmentDataPtr<FRecallGameplayTagFragment>();
 	if (GameplayTagFragmentPtr != nullptr && GameplayTagFragmentPtr->GameplayTagCountMap.HasTag(State_BlockInteraction))
 	{
 		return INDEX_NONE;
 	}
 	
-	const FMassExtendedEntityView InteractionTargetView(EntityManager, InteractionTarget);	
+	const FMassEntityView InteractionTargetView(EntityManager, InteractionTarget);	
 	const FRecallInteractableFragment* InteractableFragmentPtr = InteractionTargetView.GetFragmentDataPtr<FRecallInteractableFragment>();
 	if (InteractableFragmentPtr == nullptr)
 	{
@@ -142,8 +142,8 @@ static void ExecuteInteractionCommand(const FRecallInteractExecuteContext& Conte
 {
 	check(Context.InteractorFragmentPtr != nullptr);
 	
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
-	const FMassExtendedEntityView CurrentInteractView(EntityManager, Context.InteractorFragmentPtr->CurrentInteractEntity);
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityView CurrentInteractView(EntityManager, Context.InteractorFragmentPtr->CurrentInteractEntity);
 
 	const auto* InteractableConstSharedFragmentPtr = CurrentInteractView.GetConstSharedFragmentDataPtr<FRecallInteractableConstSharedFragment>();
 	const FRecallInteractableFragment& InteractableFragment = CurrentInteractView.GetFragmentData<FRecallInteractableFragment>();
@@ -176,8 +176,8 @@ static bool CanEndInteraction(const FRecallInteractExecuteContext& Context)
 {
 	check(Context.InteractorFragmentPtr != nullptr);
 	
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
-	const FMassExtendedEntityView CurrentInteractView(EntityManager, Context.InteractorFragmentPtr->CurrentInteractEntity);
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityView CurrentInteractView(EntityManager, Context.InteractorFragmentPtr->CurrentInteractEntity);
 
 	const auto* InteractableConstSharedFragmentPtr = CurrentInteractView.GetConstSharedFragmentDataPtr<FRecallInteractableConstSharedFragment>();
 	const FRecallInteractableFragment& InteractableFragment = CurrentInteractView.GetFragmentData<FRecallInteractableFragment>();
@@ -231,7 +231,7 @@ static bool IsInteractionOnCooldown(const FRecallInteractableFragment* Interacta
 	return TimeSinceLastExecution < InteractionEvent.CooldownSeconds;
 }
 	
-bool BeginInteract(const FRecallInteractExecuteContext& Context, const FMassExtendedEntityHandle& InteractionTarget, int32 EventIndex)
+bool BeginInteract(const FRecallInteractExecuteContext& Context, const FMassEntityHandle& InteractionTarget, int32 EventIndex)
 {
 	if (!ensureAlwaysMsgf(Context.InteractorFragmentPtr != nullptr
 			&& !Context.InteractorFragmentPtr->CurrentInteractEntity.IsSet(),
@@ -240,14 +240,14 @@ bool BeginInteract(const FRecallInteractExecuteContext& Context, const FMassExte
 		return false;
 	}
 	
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
 	if (!ensureAlwaysMsgf(EntityManager.IsEntityValid(InteractionTarget),
 			TEXT("%hs Invalid interaction target"), __FUNCTION__))
 	{
 		return false;
 	}
 	
-	const FMassExtendedEntityView CurrentInteractView(EntityManager, InteractionTarget);	
+	const FMassEntityView CurrentInteractView(EntityManager, InteractionTarget);	
 	FRecallInteractableFragment* InteractableFragmentPtr = CurrentInteractView.GetFragmentDataPtr<FRecallInteractableFragment>();
 	if (!ensureAlwaysMsgf(InteractableFragmentPtr != nullptr,
 			TEXT("%hs Can only interact with interactable"), __FUNCTION__))
@@ -311,10 +311,10 @@ void EndInteract(const FRecallInteractExecuteContext& Context)
 	
 	const uint32 Frame = Recall::Simulation::Utils::GetFrame(Context.ExecutionContext.GetWorld());
 	
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
 	if (EntityManager.IsEntityValid(Context.InteractorFragmentPtr->CurrentInteractEntity))
 	{
-		const FMassExtendedEntityView CurrentInteractView(EntityManager, Context.InteractorFragmentPtr->CurrentInteractEntity);
+		const FMassEntityView CurrentInteractView(EntityManager, Context.InteractorFragmentPtr->CurrentInteractEntity);
 		const auto* InteractableConstSharedFragmentPtr = CurrentInteractView.GetConstSharedFragmentDataPtr<FRecallInteractableConstSharedFragment>();
 		FRecallInteractableFragment& InteractableFragment = CurrentInteractView.GetFragmentData<FRecallInteractableFragment>();
 
@@ -387,7 +387,7 @@ static float GetInteractSpeedModifier(const FRecallInteractExecuteContext& Conte
 ERecallInteractResult UpdateInteract(const FRecallInteractExecuteContext& Context, ERecallInteractInput Input,
 	float DeltaTime, bool& bOutCanEndInteraction, bool bIsContextual)
 {
-	const FMassExtendedEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
+	const FMassEntityManager& EntityManager = Context.ExecutionContext.GetEntityManagerChecked();
 
 	bOutCanEndInteraction = true;
 	
@@ -406,7 +406,7 @@ ERecallInteractResult UpdateInteract(const FRecallInteractExecuteContext& Contex
 		return ERecallInteractResult::Failed;
 	}
 
-	const FMassExtendedEntityView CurrentInteractView(EntityManager,Context.InteractorFragmentPtr->CurrentInteractEntity);
+	const FMassEntityView CurrentInteractView(EntityManager,Context.InteractorFragmentPtr->CurrentInteractEntity);
 	const auto* InteractableConstSharedFragmentPtr = CurrentInteractView.GetConstSharedFragmentDataPtr<FRecallInteractableConstSharedFragment>();
 	FRecallInteractableFragment& InteractableFragment = CurrentInteractView.GetFragmentData<FRecallInteractableFragment>();
 	

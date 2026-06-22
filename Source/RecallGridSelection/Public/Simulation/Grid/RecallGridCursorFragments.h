@@ -6,15 +6,15 @@
 
 #pragma once
 
-#include "MassExtendedEntityTypes.h"
-#include "MassExtendedEntityHandle.h"
+#include "Mass/EntityElementTypes.h"
+#include "Mass/EntityHandle.h"
 #include "Simulation/Representation/RecallActorRepresentationFragments.h"
 #include "Representation/Actor/RecallActorMeshRepresentationTypes.h"
 
 #include "RecallGridCursorFragments.generated.h"
 
 USTRUCT()
-struct RECALLGRIDSELECTION_API FRecallGridSelectionFragment : public FMassExtendedFragment
+struct RECALLGRIDSELECTION_API FRecallGridSelectionFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
@@ -23,12 +23,12 @@ struct RECALLGRIDSELECTION_API FRecallGridSelectionFragment : public FMassExtend
 };
 
 USTRUCT()
-struct RECALLGRIDSELECTION_API FRecallGridCursorOwnerFragment : public FMassExtendedFragment
+struct RECALLGRIDSELECTION_API FRecallGridCursorOwnerFragment : public FMassFragment
 {
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere)
-	FMassExtendedEntityHandle GridSelectionEntity;
+	FMassEntityHandle GridSelectionEntity;
 
 	UPROPERTY(VisibleAnywhere)
 	FRecallActorHandle CursorActorHandle;
@@ -41,11 +41,11 @@ struct RECALLGRIDSELECTION_API FRecallGridCursorOwnerFragment : public FMassExte
 };
 
 USTRUCT()
-struct RECALLGRIDSELECTION_API FRecallGridCursorOwnerConstSharedFragment : public FMassExtendedConstSharedFragment
+struct RECALLGRIDSELECTION_API FRecallGridCursorOwnerConstSharedFragment : public FMassConstSharedFragment
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, meta=(AllowedClasses="/Script/MassExtendedSpawner.MassExtendedEntityConfigAsset"))
+	UPROPERTY(VisibleAnywhere, meta=(AllowedClasses="/Script/MassSpawner.MassEntityConfigAsset"))
 	FSoftObjectPath GridSelectionEntityConfig;
 
 	UPROPERTY(VisibleAnywhere)

@@ -9,28 +9,28 @@
 #include "CoreMinimal.h"
 
 struct FGameplayTag;
-struct FMassExtendedEntityHandle;
-struct FMassExtendedExecutionContext;
+struct FMassEntityHandle;
+struct FMassExecutionContext;
 
 namespace Recall::Conversation::Utils
 {
 
 RECALLCONVERSATIONMODULE_API extern bool CanStartConversation(
-	FMassExtendedExecutionContext& Context, const TArray<FMassExtendedEntityHandle>& ParticipantEntities,
-	const FMassExtendedEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
+	FMassExecutionContext& Context, const TArray<FMassEntityHandle>& ParticipantEntities,
+	const FMassEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
 	const FString& ConversationEntryIdentifier);
 RECALLCONVERSATIONMODULE_API extern bool CanStartConversation(
-	FMassExtendedExecutionContext& Context, const FMassExtendedEntityHandle& ParticipantEntity,
-	const FMassExtendedEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
+	FMassExecutionContext& Context, const FMassEntityHandle& ParticipantEntity,
+	const FMassEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
 	const FString& ConversationEntryIdentifier);
 	
 RECALLCONVERSATIONMODULE_API extern void StartConversation(
-	FMassExtendedExecutionContext& Context, const TArray<FMassExtendedEntityHandle>& ParticipantEntities,
-	const FMassExtendedEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
+	FMassExecutionContext& Context, const TArray<FMassEntityHandle>& ParticipantEntities,
+	const FMassEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
 	const FString& ConversationEntryIdentifier);
 RECALLCONVERSATIONMODULE_API extern void StartConversation(
-	FMassExtendedExecutionContext& Context, const FMassExtendedEntityHandle& ParticipantEntity,
-	const FMassExtendedEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
+	FMassExecutionContext& Context, const FMassEntityHandle& ParticipantEntity,
+	const FMassEntityHandle& ConversationEntity, const FGameplayTag& ConversationEntryPoint,
 	const FString& ConversationEntryIdentifier);
 
 } // namespace Recall::Conversation::Utils

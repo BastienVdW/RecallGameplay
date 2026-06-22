@@ -18,8 +18,8 @@ public class RecallDeviceModule : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core",
 			"CoreUObject",
-			"MassExtendedEntity",
-			"MassExtendedSpawner",
+			"MassEntity",
+			"MassSpawner",
 			"RecallSimulation",
 			"RecallPhysicsModule",
 			"RecallSignals",

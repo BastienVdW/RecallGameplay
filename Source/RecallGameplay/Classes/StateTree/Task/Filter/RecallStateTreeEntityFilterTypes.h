@@ -12,7 +12,7 @@
 #include "RecallStateTreeEntityFilterTypes.generated.h"
 
 struct FRecallStateTreeExecutionContext;
-struct FMassExtendedEntityHandle;
+struct FMassEntityHandle;
 
 USTRUCT()
 struct RECALLGAMEPLAY_API FRecallStateTreeEntityFilterBase
@@ -21,7 +21,7 @@ struct RECALLGAMEPLAY_API FRecallStateTreeEntityFilterBase
 	
 	virtual ~FRecallStateTreeEntityFilterBase() = default;
 
-	virtual void FilterEntities(const FRecallStateTreeExecutionContext& Context, TArray<FMassExtendedEntityHandle>& Entities) const
+	virtual void FilterEntities(const FRecallStateTreeExecutionContext& Context, TArray<FMassEntityHandle>& Entities) const
 	{
 		unimplemented();
 	}
@@ -33,7 +33,7 @@ struct RECALLGAMEPLAY_API FRecallStateTreeEntityFilterGameplayTag : public FReca
 	GENERATED_BODY()
 
 public:
-	virtual void FilterEntities(const FRecallStateTreeExecutionContext& Context, TArray<FMassExtendedEntityHandle>& Entities) const override;
+	virtual void FilterEntities(const FRecallStateTreeExecutionContext& Context, TArray<FMassEntityHandle>& Entities) const override;
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -53,7 +53,7 @@ struct RECALLGAMEPLAY_API FRecallStateTreeEntityFilterSelect : public FRecallSta
 	GENERATED_BODY()
 
 public:
-	virtual void FilterEntities(const FRecallStateTreeExecutionContext& Context, TArray<FMassExtendedEntityHandle>& Entities) const override;
+	virtual void FilterEntities(const FRecallStateTreeExecutionContext& Context, TArray<FMassEntityHandle>& Entities) const override;
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -63,8 +63,8 @@ protected:
 	int32 MaxCount = 1;
 
 private:
-	void Sort(const FRecallStateTreeExecutionContext& Context, TArray<FMassExtendedEntityHandle>& Entities) const;
+	void Sort(const FRecallStateTreeExecutionContext& Context, TArray<FMassEntityHandle>& Entities) const;
 	
-	static void SortByDistance(const FRecallStateTreeExecutionContext& Context, TArray<FMassExtendedEntityHandle>& Entities);
-	static void SortShuffle(const FRecallStateTreeExecutionContext& Context, TArray<FMassExtendedEntityHandle>& Entities);
+	static void SortByDistance(const FRecallStateTreeExecutionContext& Context, TArray<FMassEntityHandle>& Entities);
+	static void SortShuffle(const FRecallStateTreeExecutionContext& Context, TArray<FMassEntityHandle>& Entities);
 };

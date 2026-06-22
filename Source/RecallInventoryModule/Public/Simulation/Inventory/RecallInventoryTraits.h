@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "MassExtendedEntityTraitBase.h"
+#include "MassEntityTraitBase.h"
 #include "RecallDropItemTypes.h"
 #include "RecallEquipmentTypes.h"
 
@@ -16,12 +16,12 @@
 * Trait for entities that can equip items
 */
 UCLASS(meta=(DisplayName="RE Equipment"))
-class RECALLINVENTORYMODULE_API URecallEquipmentTrait : public UMassExtendedEntityTraitBase
+class RECALLINVENTORYMODULE_API URecallEquipmentTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	/**
@@ -47,12 +47,12 @@ protected:
 * Trait for entities that can drop items.
 */
 UCLASS(meta=(DisplayName="RE Drop Item"))
-class RECALLINVENTORYMODULE_API URecallDropItemTrait : public UMassExtendedEntityTraitBase
+class RECALLINVENTORYMODULE_API URecallDropItemTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual void BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 protected:
 	UPROPERTY(EditAnywhere, meta=(ShowOnlyInnerProperties))

@@ -7,8 +7,8 @@
 
 #include "Simulation/Grid/RecallGridObstacleTraits.h"
 
-#include "MassExtendedEntityTemplateRegistry.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityTemplateRegistry.h"
+#include "MassEntityView.h"
 #include "Simulation/Grid/RecallGridObstacleFragments.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 #include "System/Grid/RecallGridSelectionSubsystem.h"
@@ -16,14 +16,14 @@
 //----------------------------------------------------------------------//
 // URecallGridObstacleTrait
 //----------------------------------------------------------------------//
-void URecallGridObstacleTrait::BuildTemplate(FMassExtendedEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+void URecallGridObstacleTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	BuildContext.RequireFragment<FRecallTransformFragment>();
 	
 	BuildContext.AddFragment<FRecallGridObstacleFragment>();
 	
 	BuildContext.GetMutableObjectFragmentInitializers().Add([](UObject& Owner,
-		FMassExtendedEntityView& EntityView, const EMassExtendedTranslationDirection CurrentDirection)
+		FMassEntityView& EntityView, const EMassTranslationDirection CurrentDirection)
 		{
 			auto* GridSelectionSystem = UWorld::GetSubsystem<URecallGridSelectionSubsystem>(Owner.GetWorld());
 			check(GridSelectionSystem);

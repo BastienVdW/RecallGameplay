@@ -7,7 +7,7 @@
 
 #include "RecallInteractAttributeCommandTypes.h"
 
-#include "MassExtendedEntityView.h"
+#include "MassEntityView.h"
 #include "Simulation/Attribute/RecallAttributeFragments.h"
 
 //----------------------------------------------------------------------//
@@ -15,8 +15,8 @@
 //----------------------------------------------------------------------//
 void FRecallInteractAttributeCommand::OnExecute(const FRecallInteractContext& Context) const
 {
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(Target);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(Target);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 	FRecallAttributeFragment* AttributeFragmentPtr = TargetView.GetFragmentDataPtr<FRecallAttributeFragment>();
 	if (AttributeFragmentPtr== nullptr)
 	{
@@ -34,8 +34,8 @@ void FRecallInteractAttributeCommand::OnExecute(const FRecallInteractContext& Co
 //----------------------------------------------------------------------//
 void FRecallInteractAttributeModCommand::OnExecute(const FRecallInteractContext& Context) const
 {
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(Target);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(Target);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 	FRecallAttributeFragment* AttributeFragmentPtr = TargetView.GetFragmentDataPtr<FRecallAttributeFragment>();
 	if (AttributeFragmentPtr == nullptr)
 	{

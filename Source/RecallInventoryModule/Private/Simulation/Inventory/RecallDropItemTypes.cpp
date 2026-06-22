@@ -8,8 +8,8 @@
 #include "Simulation/Inventory/RecallDropItemTypes.h"
 
 #include "Data/Inventory/RecallInventoryItemAsset.h"
-#include "MassExtendedEntityManager.h"
-#include "MassExtendedEntityView.h"
+#include "MassEntityManager.h"
+#include "MassEntityView.h"
 #include "Simulation/Collect/RecallCollectFragments.h"
 #include "Simulation/Physics/RecallPhysicsBodyFragment.h"
 #include "Simulation/Representation/RecallActorRepresentationFragments.h"
@@ -17,8 +17,8 @@
 #include "System/Random/RecallRandomNumberSubsystem.h"
 #include "Utility/Math/RecallMathUtils.h"
 
-void FRecallDropItemEntitySpawnCommand::OnSpawn(FMassExtendedEntityManager& System,
-                                                  const TArray<FMassExtendedEntityHandle>& Entities) const
+void FRecallDropItemEntitySpawnCommand::OnSpawn(FMassEntityManager& System,
+                                                  const TArray<FMassEntityHandle>& Entities) const
 {
 	if (!ensure(ItemAsset))
 	{
@@ -43,7 +43,7 @@ void FRecallDropItemEntitySpawnCommand::OnSpawn(FMassExtendedEntityManager& Syst
 	
 	const FRecallRepresentationDescBase* MeshDescPtr = ItemAsset->MeshDesc.GetPtr<FRecallRepresentationDescBase>();
 	
-	for (const FMassExtendedEntityHandle& Entity : Entities)
+	for (const FMassEntityHandle& Entity : Entities)
 	{
 		// We must add new fragments BEFORE we access the entity archetype through the entity view, because the archetype will change
 		if (MeshDescPtr != nullptr)
@@ -51,7 +51,7 @@ void FRecallDropItemEntitySpawnCommand::OnSpawn(FMassExtendedEntityManager& Syst
 			System.AddFragmentToEntity(Entity, FRecallActorRepresentationFragment::StaticStruct());
 		}
 		
-		const FMassExtendedEntityView EntityView(System, Entity);
+		const FMassEntityView EntityView(System, Entity);
 		
 		FRecallPhysicsBodyFragment* BodyFragmentPtr = EntityView.GetFragmentDataPtr<FRecallPhysicsBodyFragment>();
 		

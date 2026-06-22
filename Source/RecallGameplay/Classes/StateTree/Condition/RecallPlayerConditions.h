@@ -15,7 +15,7 @@ struct RECALLGAMEPLAY_API FRecallStateTreeWasInputJustPressedConditionInstanceDa
 {
 	GENERATED_BODY()
 };
-STATETREE_POD_INSTANCEDATA(FRecallStateTreeWasInputJustPressedConditionInstanceData);
+UE_STATETREE_ZEROED_TRIVIALLY_COPIED_NO_DESTRUCTOR_INSTANCEDATA(FRecallStateTreeWasInputJustPressedConditionInstanceData);
 
 USTRUCT(DisplayName="Was Input Pressed")
 struct RECALLGAMEPLAY_API FRecallStateTreeWasInputJustPressedCondition : public FRecallPlayerConditionBase
@@ -46,7 +46,7 @@ struct RECALLGAMEPLAY_API FRecallStateTreeIsInputHeldConditionInstanceData
 {
 	GENERATED_BODY()
 };
-STATETREE_POD_INSTANCEDATA(FRecallStateTreeIsInputHeldConditionInstanceData);
+UE_STATETREE_ZEROED_TRIVIALLY_COPIED_NO_DESTRUCTOR_INSTANCEDATA(FRecallStateTreeIsInputHeldConditionInstanceData);
 
 USTRUCT(DisplayName="Is Input Held")
 struct RECALLGAMEPLAY_API FRecallStateTreeIsInputHeldCondition : public FRecallPlayerConditionBase

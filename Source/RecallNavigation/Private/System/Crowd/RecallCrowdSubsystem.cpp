@@ -9,7 +9,7 @@
 
 #include "Crowd/RecallCrowdManager.h"
 #include "EngineUtils.h"
-#include "MassExtendedEntityUtils.h"
+#include "MassEntityUtils.h"
 #include "RecallCrowdSnapshotTypes.h"
 #include "Crowd/RecallCrowdAgent.h"
 

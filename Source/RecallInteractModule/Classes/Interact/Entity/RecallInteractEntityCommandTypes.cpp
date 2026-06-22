@@ -7,16 +7,16 @@
 
 #include "RecallInteractEntityCommandTypes.h"
 
-#include "MassExtendedEntityTypes.h"
-#include "MassExtendedEntityView.h"
+#include "Mass/EntityElementTypes.h"
+#include "MassEntityView.h"
 #include "Chaos/PBDRigidClusteringAlgo.h"
 #include "Simulation/Transform/RecallTransformFragments.h"
 #include "System/Entity/RecallEntityAsyncSpawnSubsystem.h"
 
 void FRecallInteractSpawnEntityEventCommand::OnExecute(const FRecallInteractContext& Context) const
 {
-	const FMassExtendedEntityHandle TargetEntity = Context.GetTargetEntity(ParentTarget);
-	const FMassExtendedEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
+	const FMassEntityHandle TargetEntity = Context.GetTargetEntity(ParentTarget);
+	const FMassEntityView TargetView(Context.GetEntityManagerChecked(), TargetEntity);
 
 	const FRecallTransformFragment* TargetTransformFragmentPtr = TargetView.GetFragmentDataPtr<FRecallTransformFragment>();
 	if (TargetTransformFragmentPtr == nullptr)
