@@ -77,7 +77,7 @@ bool FRecallLabelTrackEditor::SupportsSequence(UMovieSceneSequence* InSequence) 
 	}
 
 
-	static UClass* LevelSequencerClass = FindObject<UClass>(nullptr, TEXT("/Script/LevelSequence.LevelSequence"), true);
+	static UClass* LevelSequencerClass = FindObject<UClass>(nullptr, TEXT("/Script/LevelSequence.LevelSequence"), EFindObjectFlags::ExactClass);
 	bool bValidClasses = true;
 
 
