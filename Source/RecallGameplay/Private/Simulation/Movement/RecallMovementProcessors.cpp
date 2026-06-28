@@ -31,6 +31,7 @@ URecallMovementProcessor::URecallMovementProcessor()
 	ProcessingPhase = EMassProcessingPhase::StartPhysics;
 	ExecutionOrder.ExecuteInGroup = Recall::Movement::ProcessorGroupNames::StartPhysics::Update;
 	ExecutionOrder.ExecuteAfter.Add(Recall::Physics::ProcessorGroupNames::Initialize);
+	ExecutionOrder.ExecuteBefore.Add(Recall::Physics::ProcessorGroupNames::StartSimulation);
 }
 
 void URecallMovementProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

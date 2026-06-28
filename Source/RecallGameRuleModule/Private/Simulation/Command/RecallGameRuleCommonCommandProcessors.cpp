@@ -6,6 +6,7 @@
 
 
 #include "RecallGameRuleCommonCommandProcessors.h"
+#include "Simulation/Physics/RecallPhysicsProcessorGroupTypes.h"
 
 #include "Desync/RecallDesyncLog.h"
 #include "GameplayTag/RecallGameplayTagTypes.h"
@@ -265,6 +266,7 @@ URecallGameRuleMoveToPositionProcessor::URecallGameRuleMoveToPositionProcessor()
 {
     ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
     ProcessingPhase = EMassProcessingPhase::StartPhysics;
+	ExecutionOrder.ExecuteBefore.Add(Recall::Physics::ProcessorGroupNames::StartSimulation);
 }
 
 void URecallGameRuleMoveToPositionProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)

@@ -6,6 +6,7 @@
 
 
 #include "RecallNavLinkProcessors.h"
+#include "Simulation/Physics/RecallPhysicsProcessorGroupTypes.h"
 
 #include "MassExecutionContext.h"
 #include "NavigationSystem.h"
@@ -104,6 +105,7 @@ URecallNavLinkTraversalProcessor::URecallNavLinkTraversalProcessor()
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ProcessingPhase = EMassProcessingPhase::StartPhysics;
+	ExecutionOrder.ExecuteBefore.Add(Recall::Physics::ProcessorGroupNames::StartSimulation);
 }
 
 void URecallNavLinkTraversalProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)

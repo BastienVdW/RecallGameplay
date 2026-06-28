@@ -6,6 +6,7 @@
 
 
 #include "RecallPositionAnimationProcessor.h"
+#include "Simulation/Physics/RecallPhysicsProcessorGroupTypes.h"
 
 #include "MassExecutionContext.h"
 #include "Simulation/Animation/RecallPositionAnimationFragments.h"
@@ -41,6 +42,7 @@ URecallPositionAnimationProcessor::URecallPositionAnimationProcessor()
 {
     ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
     ProcessingPhase = EMassProcessingPhase::StartPhysics;
+	ExecutionOrder.ExecuteBefore.Add(Recall::Physics::ProcessorGroupNames::StartSimulation);
 }
 
 void URecallPositionAnimationProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)

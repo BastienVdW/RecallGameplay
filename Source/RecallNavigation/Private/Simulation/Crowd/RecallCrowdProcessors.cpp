@@ -192,6 +192,7 @@ URecallCrowdAgentSetBlackboardProcessor::URecallCrowdAgentSetBlackboardProcessor
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ProcessingPhase = EMassProcessingPhase::StartPhysics;
 	ExecutionOrder.ExecuteAfter.Add(Recall::Movement::ProcessorGroupNames::StartPhysics::Update);
+	ExecutionOrder.ExecuteBefore.Add(Recall::Physics::ProcessorGroupNames::StartSimulation);
 }
 
 void URecallCrowdAgentSetBlackboardProcessor::InitializeInternal(UObject& Owner, const TSharedRef<FMassEntityManager>& InEntityManager)
@@ -275,6 +276,7 @@ URecallCrowdAgentGetBlackboardProcessor::URecallCrowdAgentGetBlackboardProcessor
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::All);
 	ProcessingPhase = EMassProcessingPhase::EndPhysics;
+	ExecutionOrder.ExecuteAfter.Add(Recall::Physics::ProcessorGroupNames::EndSimulation);
 	ExecutionOrder.ExecuteBefore.Add(Recall::Physics::ProcessorGroupNames::CopyLocation);
 }
 
