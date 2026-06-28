@@ -357,11 +357,11 @@ void URecallActorAnimationRepresentationProcessor::Execute(FMassEntityManager& E
 					if (BodyList.IsValidIndex(EntityIndex))
 					{
 						const FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
-						const TWeakPtr<const FRecallPhysicsBody> Body = PhysicsSystem.GetBody(BodyFragment.BodyHandle);
+						const FConstRecallPhysicsBodyView Body = PhysicsSystem.GetBody(BodyFragment.BodyHandle);
 						if (Body.IsValid())
 						{							
 							AnimInstance->PhysicsVelocity = Recall::Math::Utils::UnitsPerFrameToPerSecond(
-								Body.Pin()->GetLinearVelocity());
+								Body.GetLinearVelocity());
 						}
 					}
 

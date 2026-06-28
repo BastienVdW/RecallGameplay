@@ -130,7 +130,7 @@ void FRecallImpulseTask::ApplyImpulse(FStateTreeExecutionContext& Context, float
 	URecallPhysicsSubsystem& PhysicsSystem = Context.GetExternalData(PhysicsSystemHandle);
 	const FRecallPhysicsBodyFragment& BodyFragment = Context.GetExternalData(BodyFragmentHandle);
 
-	const TWeakPtr<FRecallPhysicsBody> Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
+	const FRecallPhysicsBodyView Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
 	if (!Body.IsValid())
 	{
 		return;
@@ -157,15 +157,15 @@ void FRecallImpulseTask::ApplyImpulse(FStateTreeExecutionContext& Context, float
 	{
 		if (bUse2DVelocity)
 		{
-			Body.Pin()->SetLinearVelocity2DFromImpulse(Direction.GetSafeNormal() * InstanceData.Force, bIgnoreMass);
+			Body.SetLinearVelocity2DFromImpulse(Direction.GetSafeNormal() * InstanceData.Force, bIgnoreMass);
 		}
 		else
 		{			
-			Body.Pin()->SetLinearVelocityFromImpulse(Direction.GetSafeNormal() * InstanceData.Force, bIgnoreMass);
+			Body.SetLinearVelocityFromImpulse(Direction.GetSafeNormal() * InstanceData.Force, bIgnoreMass);
 		}
 	}
 	else
 	{
-		Body.Pin()->AddImpulse(Direction.GetSafeNormal() * InstanceData.Force, bIgnoreMass);
+		Body.AddImpulse(Direction.GetSafeNormal() * InstanceData.Force, bIgnoreMass);
 	}
 }

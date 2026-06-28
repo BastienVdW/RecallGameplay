@@ -249,11 +249,11 @@ void URecallCrowdAgentSetBlackboardProcessor::Execute(FMassEntityManager& Entity
 			AgentBlackboard.Location = TransformFragment.Position;
 			AgentBlackboard.bDirtyLocation = false;
 
-			const TWeakPtr<const FRecallPhysicsBody> Body = PhysicsSystem.GetBody(BodyFragment.BodyHandle);
+			const FConstRecallPhysicsBodyView Body = PhysicsSystem.GetBody(BodyFragment.BodyHandle);
 			if (ensure(Body.IsValid()))
 			{
 				AgentBlackboard.VelocityCentimetersPerSecond = Recall::Math::Utils::UnitsPerFrameToPerSecond(
-					Body.Pin()->GetLinearVelocity());
+					Body.GetLinearVelocity());
 				AgentBlackboard.bDirtyVelocity = false;
 			}
 
@@ -316,7 +316,7 @@ void URecallCrowdAgentGetBlackboardProcessor::Execute(FMassEntityManager& Entity
 			}
 
 			const FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
-			const TWeakPtr<FRecallPhysicsBody> Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
+			const FRecallPhysicsBodyView Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
 			if (!ensure(Body.IsValid()))
 			{
 				continue;
@@ -327,7 +327,7 @@ void URecallCrowdAgentGetBlackboardProcessor::Execute(FMassEntityManager& Entity
 #if RECALL_DESYNC_LOG
 				RECALL_DESYNC_LOG_VEC(Context.GetWorld(), GetAgentBlackboardLocation, AgentBlackboard.Location);
 #endif // RECALL_DESYNC_LOG
-				Body.Pin()->SetPosition(AgentBlackboard.Location);
+				Body.SetPosition(AgentBlackboard.Location);
 			}
 
 			if (AgentBlackboard.HasVelocityChanged())
@@ -335,7 +335,7 @@ void URecallCrowdAgentGetBlackboardProcessor::Execute(FMassEntityManager& Entity
 #if RECALL_DESYNC_LOG
 				RECALL_DESYNC_LOG_VEC(Context.GetWorld(), GetAgentBlackboardVelocity, AgentBlackboard.VelocityCentimetersPerSecond);
 #endif // RECALL_DESYNC_LOG
-				Body.Pin()->SetLinearVelocity(Recall::Math::Utils::UnitsPerSecondToPerFrame(
+				Body.SetLinearVelocity(Recall::Math::Utils::UnitsPerSecondToPerFrame(
 					AgentBlackboard.VelocityCentimetersPerSecond));
 			}
 		}

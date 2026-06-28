@@ -7,13 +7,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Physics/RecallPhysicsObjects.h"
 
 struct FRecallMovementContext
 {
 	struct FMassExecutionContext& ExecutionContext;
 	struct FRecallMovementFragment& MovementFragment;
 	const struct FRecallMovementSharedFragment& MovementConstSharedFragment;
-	const TWeakPtr<class FRecallPhysicsBody>& PhysicsBody;
+	const FRecallPhysicsBodyView& PhysicsBody;
 	const struct FRecallPhysicsCharacterFragment* CharacterFragmentPtr = nullptr;
 	struct FRecallGameplayTagFragment* const GameplayTagsFragmentPtr = nullptr;
 	const struct FRecallAttributeFragment* const AttributeFragmentPtr = nullptr;

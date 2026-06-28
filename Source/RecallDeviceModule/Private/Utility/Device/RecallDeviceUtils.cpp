@@ -11,10 +11,13 @@
 #include "MassEntityConfigAsset.h"
 #include "MassEntityView.h"
 #include "MassExecutionContext.h"
+#include "Components/MeshComponent.h"
 #include "Data/Device/RecallDeviceAsset.h"
 #include "Device/RecallDeviceCostTypes.h"
 #include "Device/RecallDeviceCostContextTypes.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Physics/RecallPhysicsObjects.h"
+#include "Physics/JPRPhysicsBody.h"
 #include "Simulation/Device/RecallDeviceFragments.h"
 #include "Simulation/Device/RecallDeviceTypes.h"
 #include "Simulation/GameplayTag/RecallGameplayTagFragments.h"
@@ -120,7 +123,7 @@ bool CheckDevicePosition(const FMassEntityManager& EntityManager, const URecallP
 	
 	const FMassEntityView DeviceView(EntityManager, DeviceEntity);
 	const FRecallPhysicsBodyFragment* DeviceBodyFragmentPtr = DeviceView.GetFragmentDataPtr<FRecallPhysicsBodyFragment>();
-	const TWeakPtr<const FRecallPhysicsBody> Body = DeviceBodyFragmentPtr != nullptr ?
+	const FConstRecallPhysicsBodyView Body = DeviceBodyFragmentPtr != nullptr ?
 		PhysicsSystem.GetBody(DeviceBodyFragmentPtr->BodyHandle) : nullptr;
 	if (!Body.IsValid())
 	{

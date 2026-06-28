@@ -94,7 +94,7 @@ void HandleMovement(const FRecallMovementContext& MovementContext)
 		const float MovementSpeedModifier = GetMovementSpeedModifier(MovementContext);
 		const float MovementSpeed = MovementSettings.GetSpeed();
 
-		FVector2D Velocity2D = MovementContext.PhysicsBody.Pin()->GetLinearVelocity2D();
+		FVector2D Velocity2D = MovementContext.PhysicsBody.GetLinearVelocity2D();
 
 		float VelSpeed = 0.0f;
 		FVector2D VelDirection = FVector2D::ZeroVector;
@@ -134,7 +134,7 @@ void HandleMovement(const FRecallMovementContext& MovementContext)
 			}
 		}
 		
-		MovementContext.PhysicsBody.Pin()->SetLinearVelocity2D(Velocity2D);
+		MovementContext.PhysicsBody.SetLinearVelocity2D(Velocity2D);
 	}
 
 	const FVector2D ControlRotationForward = MovementContext.ControllerFragmentPtr != nullptr ?
@@ -155,7 +155,7 @@ void HandleMovement(const FRecallMovementContext& MovementContext)
 	if (bWantsToMove && !ForwardVec.IsNearlyZero())
 	{
 		FQuat Rotation = FQuat::Identity;
-		MovementContext.PhysicsBody.Pin()->GetRotation(Rotation);
+		MovementContext.PhysicsBody.GetRotation(Rotation);
 
 		ForwardVec = UKismetMathLibrary::VInterpTo(Rotation.GetForwardVector(), ForwardVec,
 			MovementContext.ExecutionContext.GetDeltaTimeSeconds(), MovementSettings.RotateInterpSpeed);
@@ -164,7 +164,7 @@ void HandleMovement(const FRecallMovementContext& MovementContext)
 		const FRotator NewRotation = UKismetMathLibrary::MakeRotationFromAxes(ForwardVec, RightVec, FVector::UpVector);
 
 
-		MovementContext.PhysicsBody.Pin()->SetRotation(NewRotation);
+		MovementContext.PhysicsBody.SetRotation(NewRotation);
 	}
 }
 
@@ -188,7 +188,7 @@ void HandleJump(const FRecallMovementContext& MovementContext)
 		const float JumpZVelocityCentimetersPerSecond = MovementContext.MovementConstSharedFragment.MovementSettings.JumpZVelocityCentimetersPerSecond;
 		const float JumpZVelocityCentimetersPerFrame = Recall::Math::Utils::UnitsPerSecondToPerFrame(JumpZVelocityCentimetersPerSecond);
 		
-		MovementContext.PhysicsBody.Pin()->SetLinearZVelocity(JumpZVelocityCentimetersPerFrame);
+		MovementContext.PhysicsBody.SetLinearZVelocity(JumpZVelocityCentimetersPerFrame);
 	}
 }
 

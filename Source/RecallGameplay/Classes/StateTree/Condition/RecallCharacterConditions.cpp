@@ -31,8 +31,8 @@ bool FRecallCharacterStandingCondition::TestCondition(FStateTreeExecutionContext
 
 	bool bResult = true;
 
-	const TWeakPtr<const FRecallPhysicsCharacterVirtualBody> CharacterVirtualBody = StaticCastWeakPtr<const FRecallPhysicsCharacterVirtualBody>(
-		PhysicsSystem.GetBody(BodyFragment.BodyHandle));
+	const TWeakPtr<const FRecallPhysicsCharacterVirtualBody> CharacterVirtualBody = PhysicsSystem
+		.GetBody(BodyFragment.BodyHandle).GetBody<FRecallPhysicsCharacterVirtualBody>();
 	if (CharacterVirtualBody.IsValid())
 	{
 		bResult = CharacterVirtualBody.Pin()->IsStanding();

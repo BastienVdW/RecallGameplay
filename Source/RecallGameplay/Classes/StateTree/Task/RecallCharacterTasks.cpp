@@ -116,8 +116,8 @@ EStateTreeRunStatus FRecallCharacterVirtualStanceTask::EnterState(FStateTreeExec
 	const FRecallPhysicsBodyFragment& BodyFragment = Context.GetExternalData(BodyFragmentHandle);
 	URecallPhysicsSubsystem& PhysicsSystem = Context.GetExternalData(PhysicsSystemHandle);
 
-	const TWeakPtr<FRecallPhysicsCharacterVirtualBody> CharacterVirtualBody = StaticCastWeakPtr<FRecallPhysicsCharacterVirtualBody>(
-		PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle));
+	const FRecallPhysicsBodyView BodyView = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
+	const TWeakPtr<FRecallPhysicsCharacterVirtualBody> CharacterVirtualBody = BodyView.GetBody<FRecallPhysicsCharacterVirtualBody>();
 	if (!CharacterVirtualBody.IsValid())
 	{
 		return EStateTreeRunStatus::Failed;

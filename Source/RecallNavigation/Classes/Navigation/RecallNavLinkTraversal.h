@@ -7,6 +7,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Physics/RecallPhysicsObjects.h"
 
 #include "RecallNavLinkTraversal.generated.h"
 
@@ -16,7 +17,7 @@ struct FRecallNavLinkTraversalContext
 	const struct FMassEntityHandle& Entity;
 	const struct FRecallTransformFragment& TransformFragment;
 	const struct FRecallNavLinkTraversalFragment& NavLinkTraversalFragment;
-	const TWeakPtr<class FRecallPhysicsBody> PhysicsBody;
+	const FRecallPhysicsBodyView PhysicsBody;
 
 	UWorld* GetWorld() const;
 };

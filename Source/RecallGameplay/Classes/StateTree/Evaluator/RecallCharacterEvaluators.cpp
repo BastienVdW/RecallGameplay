@@ -34,8 +34,8 @@ void FRecallCharacterEvaluator::Tick(FStateTreeExecutionContext& Context, const 
 	const URecallPhysicsSubsystem& PhysicsSystem = Context.GetExternalData(PhysicsSystemHandle);
 	const FRecallPhysicsBodyFragment& BodyFragment = Context.GetExternalData(BodyFragmentHandle);
 
-	const TWeakPtr<const FRecallPhysicsCharacterVirtualBody> CharacterVirtualBody = StaticCastWeakPtr<const FRecallPhysicsCharacterVirtualBody>(
-		PhysicsSystem.GetBody(BodyFragment.BodyHandle));
+	const TWeakPtr<const FRecallPhysicsCharacterVirtualBody> CharacterVirtualBody = PhysicsSystem
+		.GetBody(BodyFragment.BodyHandle).GetBody<FRecallPhysicsCharacterVirtualBody>();
 	if (CharacterVirtualBody.IsValid())
 	{
 		InstanceData.bStanding = CharacterVirtualBody.Pin()->IsStanding();

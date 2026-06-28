@@ -64,8 +64,8 @@ void URecallVehicleRepresentationProcessor::Execute(FMassEntityManager& EntityMa
 			}
 
 			const FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
-			const TWeakPtr<const FRecallPhysicsBody> Body = PhysicsSystem.GetBody(BodyFragment.BodyHandle);
-			const TWeakPtr<const FRecallPhysicsVehicleBody> Vehicle = StaticCastWeakPtr<const FRecallPhysicsVehicleBody>(Body);
+			const FConstRecallPhysicsBodyView Body = PhysicsSystem.GetBody(BodyFragment.BodyHandle);
+			const TWeakPtr<const FRecallPhysicsVehicleBody> Vehicle = StaticCastWeakPtr<const FRecallPhysicsVehicleBody>(Body.GetBody());
 			if (!Vehicle.IsValid())
 			{
 				continue;

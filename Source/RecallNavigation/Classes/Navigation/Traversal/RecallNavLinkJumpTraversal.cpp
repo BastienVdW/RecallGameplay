@@ -28,7 +28,7 @@ void FRecallNavLinkJumpTraversal::OnEnter(const FRecallNavLinkTraversalContext& 
 		LaunchVelocityPerSecond, StartPos, EndPos, 0, ArcParam))
 	{
 		const FVector LaunchVelocityPerFrame = Recall::Math::Utils::UnitsPerSecondToPerFrame(LaunchVelocityPerSecond);
-		Context.PhysicsBody.Pin()->SetLinearVelocity(LaunchVelocityPerFrame);
+		Context.PhysicsBody.SetLinearVelocity(LaunchVelocityPerFrame);
 	}
 }
 

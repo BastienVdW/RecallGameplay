@@ -78,7 +78,7 @@ void URecallMovementProcessor::Execute(FMassEntityManager& EntityManager, FMassE
 		ParallelFor(Context.GetNumEntities(), [&](int32 EntityIndex)
 		{
 			const FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
-			const TWeakPtr<FRecallPhysicsBody> PhysicsBody = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
+			const FRecallPhysicsBodyView PhysicsBody = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
 			if (!ensure(PhysicsBody.IsValid()) || !PhysicsBody.Pin()->IsEnabled())
 			{
 				return;

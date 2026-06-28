@@ -42,7 +42,7 @@ namespace Recall::Animation::Utils
             URecallPhysicsSubsystem* PhysicsSystem = UWorld::GetSubsystem<URecallPhysicsSubsystem>(EntityManager.GetWorld());
             check(PhysicsSystem);
             
-            const TWeakPtr<FRecallPhysicsBody> Body = PhysicsSystem->GetMutableBody(PhysicsBodyFragment->BodyHandle);
+            const FRecallPhysicsBodyView Body = PhysicsSystem->GetMutableBody(PhysicsBodyFragment->BodyHandle);
             if (Body.IsValid())
             {
                 Body.Pin()->Desactivate();
@@ -86,7 +86,7 @@ namespace Recall::Animation::Utils
             URecallPhysicsSubsystem* PhysicsSystem = UWorld::GetSubsystem<URecallPhysicsSubsystem>(EntityManager.GetWorld());
             check(PhysicsSystem);
             
-            const TWeakPtr<FRecallPhysicsBody> Body = PhysicsSystem->GetMutableBody(PhysicsBodyFragment->BodyHandle);
+            const FRecallPhysicsBodyView Body = PhysicsSystem->GetMutableBody(PhysicsBodyFragment->BodyHandle);
             if (Body.IsValid())
             {
                 Body.Pin()->Activate();

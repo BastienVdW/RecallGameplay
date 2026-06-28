@@ -87,7 +87,7 @@ void URecallNavLinkConstructor::Execute(FMassEntityManager& EntityManager, FMass
 			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			const FRecallTransformFragment& TransformFragment = TransformList[EntityIndex];
 			const FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
-			const TWeakPtr<FRecallPhysicsBody> Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
+			const FRecallPhysicsBodyView Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
 			
 			const FRecallNavLinkTraversalContext TraversalContext{ Context, Entity,
 				TransformFragment, NavLinkTraversalFragment, Body };
@@ -151,7 +151,7 @@ void URecallNavLinkTraversalProcessor::Execute(FMassEntityManager& EntityManager
 			const FMassEntityHandle Entity = Context.GetEntity(EntityIndex);
 			const FRecallTransformFragment& TransformFragment = TransformList[EntityIndex];
 			const FRecallPhysicsBodyFragment& BodyFragment = BodyList[EntityIndex];
-			const TWeakPtr<FRecallPhysicsBody> Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
+			const FRecallPhysicsBodyView Body = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
 
 			const FRecallNavLinkTraversalContext TraversalContext{ Context, Entity,
 				TransformFragment, NavLinkTraversalFragment, Body };

@@ -106,7 +106,7 @@ EStateTreeRunStatus FRecallRotateTask::Tick(FStateTreeExecutionContext& Context,
 	const FRecallPhysicsBodyFragment& BodyFragment = Context.GetExternalData(BodyFragmentHandle);
 	URecallPhysicsSubsystem& PhysicsSystem = Context.GetExternalData(PhysicsSystemHandle);
 
-	const TWeakPtr<FRecallPhysicsBody> PhysicsBody = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
+	const FRecallPhysicsBodyView PhysicsBody = PhysicsSystem.GetMutableBody(BodyFragment.BodyHandle);
 	if (!ensure(PhysicsBody.IsValid()))
 	{
 		return EStateTreeRunStatus::Failed;
@@ -114,11 +114,11 @@ EStateTreeRunStatus FRecallRotateTask::Tick(FStateTreeExecutionContext& Context,
 
 	FVector BodyPosition = FVector::ZeroVector;
 	FQuat BodyRotation = FQuat::Identity;
-	PhysicsBody.Pin()->GetPositionAndRotation(BodyPosition, BodyRotation);
+	PhysicsBody.GetPositionAndRotation(BodyPosition, BodyRotation);
 
 	const FQuat Rotation = GetTargetRotation(Context, BodyPosition, BodyRotation);
 
-	PhysicsBody.Pin()->SetRotation(Rotation);
+	PhysicsBody.SetRotation(Rotation);
 
 	return Super::Tick(Context, DeltaTime);
 }
