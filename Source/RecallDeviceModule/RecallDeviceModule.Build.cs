@@ -21,6 +21,7 @@ public class RecallDeviceModule : ModuleRules
 			"MassCore",
 			"MassEntity",
 			"MassSpawner",
+			"JoltPhysicsRuntime",
 			"RecallSimulation",
 			"RecallPhysicsModule",
 			"RecallSignals",

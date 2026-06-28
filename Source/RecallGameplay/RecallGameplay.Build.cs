@@ -22,6 +22,7 @@ public class RecallGameplay : ModuleRules
 			"MassCore",
 			"MassEntity",
 			"MassSpawner",
+			"JoltPhysicsRuntime",
 			"RecallCore",
 			"RecallSimulation",
 			"RecallPhysicsModule",
